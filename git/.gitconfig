@@ -1,0 +1,13 @@
+[user]
+	name = Duncan Mac-Vicar P.
+	email = dmacvicar@suse.de
+[color]
+	ui = true
+[core]
+	whitespace = cr-at-eol
+[push]
+	default = simple
+[code]
+	editor = gedit
+[alias]
+	root = !pwd
