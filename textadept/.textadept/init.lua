@@ -7,19 +7,29 @@ trailing_ind = _SCINTILLA.next_indic_number()
 
 -- mark trailing spaces
 function highlight_trailing_spaces()
-  local text = buffer:get_text()
+  --_G.print('----')
+  --_G.print(buffer.filename)
+  local top_line = buffer.first_visible_line
+  local start_pos = buffer:position_from_line(top_line)
+  local bottom_line = top_line + buffer.lines_on_screen + 1
+  local end_pos = buffer:position_from_line(bottom_line)
 
-  -- TODO: only do it in the visible area, I haven't figured out yet
+  --_G.print('top_line:'..top_line.. ' bottom_line:'..bottom_line..' start_pos:'..start_pos..' end_pos:' ..end_pos)
 
-  --local start_pos = buffer:position_from_line(buffer.first_visible_line)
-  --local end_pos = buffer.line_end_position[buffer.first_visible_line  + buffer.lines_on_screen + 1]
-  --local text = buffer:text_range(start_pos, end_pos)
+  local text
+  if (start_pos >= 0 and end_pos >= 0) and (end_pos >= start_pos) then
+    text = buffer:text_range(start_pos, end_pos)
+  else
+    text = buffer:get_text()
+    start_pos = 0
+    end_pos = buffer.length
+  end
 
   local saved_indicator_current = buffer.indicator_current
   buffer.indicator_current = trailing_ind
-  buffer:indicator_clear_range(0, buffer.length)
+  buffer:indicator_clear_range(start_pos, end_pos - start_pos)
   for s, e in text:gmatch('()[ \t]+()\r?\n') do
-    buffer:indicator_fill_range(s - 1, e - (s - 1))
+    buffer:indicator_fill_range(start_pos + s - 1, e - (s - 1))
   end
   buffer.indicator_current = saved_indicator_current
 end
