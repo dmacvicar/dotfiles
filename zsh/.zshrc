@@ -10,5 +10,7 @@ alias irb="rbenv exec pry"
 
 # -n in gnome3 sends the window to the background
 # why?
-export VISUAL="sublime_text_3 -w"
+export VISUAL="textadept -f -n"
+export EDITOR="$VISUAL"
+
 
