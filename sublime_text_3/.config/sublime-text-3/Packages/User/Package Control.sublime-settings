@@ -3,7 +3,9 @@
 	"installed_packages":
 	[
 		"CMake",
+		"LESS",
 		"Package Control",
+		"Python Checker",
 		"RPM Spec Syntax",
 		"Rust",
 		"SublimeLinter",

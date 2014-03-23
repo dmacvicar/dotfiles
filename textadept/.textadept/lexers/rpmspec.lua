@@ -36,9 +36,9 @@ local macros = token(l.VARIABLE, P('%') * (l.word + l.delimited_range('{}', true
 local line_with_macros = (macros + token(l.STRING, (l.nonnewline - P('%'))^1))^1
 
 local normal_prop = properties * P(':')
-local indexed_prop = l.word_match({'Source', 'Patch'}) * l.dec_num * P(':')
+local indexed_prop = P('Source') * l.dec_num * P(':')
 
-local pkg_prop_name = token(l.KEYWORD, normal_prop + indexed_prop)
+local pkg_prop_name = token(l.KEYWORD, l.starts_line(indexed_prop + normal_prop))
 
 local pkg_prop_def = pkg_prop_name * ws * line_with_macros * l.newline
 
@@ -58,7 +58,9 @@ local build_section_decl = token(l.FUNCTION, P('%') * l.word_match({
 -- %(if|else|endif|define|global|undefine|ifos|ifnos)
 
 local bash_with_macros = l.load('bash')
-table.insert(bash_with_macros._rules, 1, {'macros', macros})
+--bash_with_macros._rules[1] = {'macros', macros}
+--
+table.insert(bash_with_macros._rules, {'macros', macros})
 
 M._rules = {
   {'whitespace', ws},

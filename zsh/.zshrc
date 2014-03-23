@@ -10,7 +10,11 @@ alias irb="rbenv exec pry"
 
 # -n in gnome3 sends the window to the background
 # why?
-export VISUAL="textadept -f -n"
-export EDITOR="$VISUAL"
+export TERM=xterm-256color
+alias e="emacs-nox"
+alias vi="emacs-nox"
+
+export EDITOR="emacs-nox"
+export VISUAL="emacs-nox"
 
 
