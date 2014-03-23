@@ -4,7 +4,7 @@
 	branch = master
 
 [submodule "emacs/.emacs.d"]
-        path = emacs/.emacs.d
-        url = https://github.com/bbatsov/prelude.git
+	path = emacs/.emacs.d
+	url = https://github.com/bbatsov/prelude.git
         branch = master
 
