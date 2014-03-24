@@ -7,4 +7,3 @@
 	path = emacs/.emacs.d
 	url = https://github.com/bbatsov/prelude.git
         branch = master
-
