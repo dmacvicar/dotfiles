@@ -120,6 +120,11 @@ Missing packages are installed automatically."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Behavior
 ;;
+;; annoying scrolling
+(setq scroll-step 1)
+(setq scroll-conservatively 10000)
+(setq auto-window-vscroll nil)
+;;
 (flycheck-mode)
 (setq flycheck-highlighting-mode 'lines)
 (add-hook 'after-init-hook #'global-flycheck-mode)
