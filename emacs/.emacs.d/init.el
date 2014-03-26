@@ -18,7 +18,6 @@
     tabbar-ruler
     linum
     highlight-indentation
-    smooth-scroll
     nav
     projectile
     flx-ido
@@ -207,9 +206,6 @@ Missing packages are installed automatically."
 ;(setq tabbar-ruler-popup-scrollbar t) ; If you want to only show the
 (require 'tabbar-ruler)
 (tabbar-ruler-group-by-projectile-project)
-
-(require 'smooth-scroll)
-(smooth-scroll-mode t)
 
 (mapc
   (lambda (face)
