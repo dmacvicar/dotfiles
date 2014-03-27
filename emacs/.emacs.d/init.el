@@ -7,6 +7,9 @@
 ;;             '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives
+             '("gnu" . "http://elpa.gnu.org/packages/") t)
+
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents))
@@ -21,7 +24,8 @@
     nav
     projectile
     flx-ido
-    ido-vertical-mode)
+    ido-vertical-mode
+    less-css-mode)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
@@ -266,3 +270,12 @@ Missing packages are installed automatically."
 ; only open the speedbar by default in X11
 ;;(when window-system
 ;;   (sr-speedbar-open))
+
+;; language specific tweaks
+
+;;; Colourise CSS colour literals
+(when (eval-when-compile (>= emacs-major-version 24))
+  ;; rainbow-mode needs color.el, bundled with Emacs >= 24.
+  (require-package 'rainbow-mode)
+  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
+    (add-hook hook 'rainbow-mode)))
