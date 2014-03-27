@@ -115,6 +115,8 @@ Missing packages are installed automatically."
 (powerline-default-theme)
 
 (load-theme 'zenburn t)
+(setq show-trailing-whitespace t)
+(setq-default show-trailing-whitespace t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Behavior
@@ -167,6 +169,9 @@ Missing packages are installed automatically."
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
+
+; never use tabs
+(setq-default indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;Backup files
