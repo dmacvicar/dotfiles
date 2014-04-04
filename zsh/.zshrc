@@ -17,4 +17,9 @@ alias vi="emacs-nox"
 export EDITOR="emacs-nox"
 export VISUAL="emacs-nox"
 
+# On NFS I lets put rbenv locally
+local homefs=$(cat /proc/self/mounts | grep $HOME | cut -f 3 -d ' ')
+if [ $homefs = 'nfs' ]; then
+  export RBENV_ROOT=/space/rbenv
+fi
 
