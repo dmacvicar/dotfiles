@@ -25,7 +25,8 @@
     projectile
     flx-ido
     ido-vertical-mode
-    less-css-mode)
+    less-css-mode
+    xclip)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
@@ -125,6 +126,10 @@ Missing packages are installed automatically."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Behavior
 ;;
+
+;; X11 keyboard in console
+(xclip-mode 1)
+
 ;; annoying scrolling
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
