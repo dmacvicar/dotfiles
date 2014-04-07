@@ -26,7 +26,8 @@
     flx-ido
     ido-vertical-mode
     less-css-mode
-    xclip)
+    xclip
+    multi-term)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
