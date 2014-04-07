@@ -131,10 +131,51 @@ Missing packages are installed automatically."
 (xclip-mode 1)
 
 ;; annoying scrolling
-(setq scroll-step 1)
-(setq scroll-conservatively 10000)
-(setq auto-window-vscroll nil)
-;;
+;(setq scroll-step 1)
+;(setq scroll-conservatively 10000)
+;(setq auto-window-vscroll nil)
+;(setq scroll-margin 1
+;scroll-conservatively 0
+;scroll-up-aggressively 0.01
+;scroll-down-aggressively 0.01)
+
+;; FIX Scrolling
+;; from
+;; http://web.archive.org/web/20061025212623/http://www.cs.utexas.edu/users/hllu/EmacsSmoothScrolling.html
+;; only thing that works
+(setq truncate-lines t)
+
+(defun point-of-beginning-of-bottom-line ()
+  (save-excursion
+    (move-to-window-line -1)
+    (point)))
+
+(defun point-of-beginning-of-line ()
+  (save-excursion
+    (beginning-of-line)
+    (point)))
+
+(defun next-one-line () (interactive)
+  (if (= (point-of-beginning-of-bottom-line) (point-of-beginning-of-line))
+      (progn (scroll-up 1)
+             (next-line 1))
+    (next-line 1)))
+
+(defun point-of-beginning-of-top-line ()
+  (save-excursion
+    (move-to-window-line 0)
+    (point)))
+
+(defun previous-one-line () (interactive)
+  (if (= (point-of-beginning-of-top-line) (point-of-beginning-of-line))
+      (progn (scroll-down 1)
+             (previous-line 1))
+    (previous-line 1)))
+
+(global-set-key (kbd "<down>") 'next-one-line)
+(global-set-key (kbd "<up>") 'previous-one-line)
+
+;;;;;;;;;;;;;;
 (flycheck-mode)
 (setq flycheck-highlighting-mode 'lines)
 (add-hook 'after-init-hook #'global-flycheck-mode)
@@ -284,3 +325,11 @@ Missing packages are installed automatically."
   (require-package 'rainbow-mode)
   (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
     (add-hook hook 'rainbow-mode)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Specific languages
+
+(defun my-c-mode-hook ()
+  (setq c-basic-offset 4)
+  (c-set-offset 'substatement-open 0))
+(add-hook 'c-mode-common-hook 'my-c-mode-hook)
