@@ -129,7 +129,8 @@ Missing packages are installed automatically."
 
 ;; X11 keyboard in console
 (xclip-mode 1)
-
+; enable projectile globally
+(projectile-global-mode)
 ;; annoying scrolling
 ;(setq scroll-step 1)
 ;(setq scroll-conservatively 10000)
