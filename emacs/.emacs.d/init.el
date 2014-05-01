@@ -3,6 +3,12 @@
 ;;
 (require 'cl)
 (require 'package)
+
+;; do this early
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+;;(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
 ;;(add-to-list 'package-archives
 ;;             '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (add-to-list 'package-archives
@@ -19,7 +25,7 @@
     flycheck-pos-tip
     powerline
     tabbar-ruler
-    linum
+;;    linum
     highlight-indentation
     nav
     projectile
@@ -27,7 +33,8 @@
     ido-vertical-mode
     less-css-mode
     xclip
-    multi-term)
+    multi-term
+    rust-mode)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
@@ -89,9 +96,6 @@ Missing packages are installed automatically."
 (set-default-font "DejaVu Sans Mono")
 ;(set-face-attribute 'default nil :height 100)
 
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
-(menu-bar-mode -1)
 ;; the blinking cursor is nothing, but an annoyance
 (blink-cursor-mode -1)
 ;; disable startup screen
@@ -112,9 +116,10 @@ Missing packages are installed automatically."
 ;(set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
 
 ; line numbers
-(add-hook 'find-file-hook (lambda () (linum-mode 1)))
-(linum-mode t)
-(setq linum-format " %d ")
+;; banned for slowness
+;;(add-hook 'find-file-hook (lambda () (linum-mode 1)))
+;;(linum-mode t)
+;;(setq linum-format " %d ")
 
 ; improved bar at the botton
 (require 'powerline)
@@ -130,52 +135,17 @@ Missing packages are installed automatically."
 
 ;; X11 keyboard in console
 (xclip-mode 1)
-; enable projectile globally
+
+;;;; scrolling
+(setq scroll-step 1)
+(setq scroll-conservatively 10000)
+(setq auto-window-vscroll nil)
+;; for smooth scrolling and disabling the automatical recentering of emacs when moving the cursor
+(setq scroll-margin 1
+scroll-up-aggressively 0.01
+scroll-down-aggressively 0.01)
+
 (projectile-global-mode)
-;; annoying scrolling
-;(setq scroll-step 1)
-;(setq scroll-conservatively 10000)
-;(setq auto-window-vscroll nil)
-;(setq scroll-margin 1
-;scroll-conservatively 0
-;scroll-up-aggressively 0.01
-;scroll-down-aggressively 0.01)
-
-;; FIX Scrolling
-;; from
-;; http://web.archive.org/web/20061025212623/http://www.cs.utexas.edu/users/hllu/EmacsSmoothScrolling.html
-;; only thing that works
-(setq truncate-lines t)
-
-(defun point-of-beginning-of-bottom-line ()
-  (save-excursion
-    (move-to-window-line -1)
-    (point)))
-
-(defun point-of-beginning-of-line ()
-  (save-excursion
-    (beginning-of-line)
-    (point)))
-
-(defun next-one-line () (interactive)
-  (if (= (point-of-beginning-of-bottom-line) (point-of-beginning-of-line))
-      (progn (scroll-up 1)
-             (next-line 1))
-    (next-line 1)))
-
-(defun point-of-beginning-of-top-line ()
-  (save-excursion
-    (move-to-window-line 0)
-    (point)))
-
-(defun previous-one-line () (interactive)
-  (if (= (point-of-beginning-of-top-line) (point-of-beginning-of-line))
-      (progn (scroll-down 1)
-             (previous-line 1))
-    (previous-line 1)))
-
-(global-set-key (kbd "<down>") 'next-one-line)
-(global-set-key (kbd "<up>") 'previous-one-line)
 
 ;;;;;;;;;;;;;;
 (flycheck-mode)
@@ -194,6 +164,7 @@ Missing packages are installed automatically."
 (flx-ido-mode 1)
 ;; disable ido faces to see flx highlights.
 (setq ido-use-faces nil)
+(setq ido-create-new-buffer 'always)
 
 ;; Auto refresh buffers
 (global-auto-revert-mode 1)
@@ -235,16 +206,11 @@ Missing packages are installed automatically."
       kept-old-versions 2
       version-control t)       ; use versioned backups
 
-
-(defun window-width-to-font-size (window-width)
-  ;; Insert a calculation to turn window width into 79 chars.
-)
-
-;;(setq prelude-clean-whitespace-on-save nil)
-
 (global-set-key (kbd "M-RET") 'electric-buffer-list)
+(global-set-key (kbd "C-M-j") 'electric-buffer-list)
+
 (add-hook 'Buffer-menu-mode-hook 'buffer-disable-undo)
-;; (global-set-key [(meta return)] 'electric-buffer-list)
+
 (cua-mode 1)
 (setq shift-select-mode nil)
 (setq x-alt-keysym 'meta)
@@ -257,10 +223,6 @@ Missing packages are installed automatically."
 
 ; tabs
 (setq tabbar-ruler-global-tabbar t) ; If you want tabbar
-;(setq tabbar-ruler-global-ruler t) ; if you want a global ruler
-;(setq tabbar-ruler-popup-menu t) ; If you want a popup menu.
-;(setq tabbar-ruler-popup-toolbar t) ; If you want a popup toolbar
-;(setq tabbar-ruler-popup-scrollbar t) ; If you want to only show the
 (require 'tabbar-ruler)
 (tabbar-ruler-group-by-projectile-project)
 
