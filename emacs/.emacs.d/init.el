@@ -35,6 +35,8 @@
     xclip
     multi-term
     rust-mode)
+    feature-mode)
+>>>>>>> add gherkin
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
@@ -297,3 +299,8 @@ scroll-down-aggressively 0.01)
   (setq c-basic-offset 4)
   (c-set-offset 'substatement-open 0))
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
+
+(require 'feature-mode)
+(add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
+
+
