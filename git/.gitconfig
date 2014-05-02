@@ -11,3 +11,5 @@
 	editor = gedit
 [alias]
 	root = !pwd
+[diff]
+	tool = meld
