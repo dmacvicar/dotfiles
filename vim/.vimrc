@@ -25,6 +25,9 @@ Bundle 'gmarik/vundle'
 Bundle 'jnurmine/Zenburn'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'scrooloose/syntastic'
+Bundle 'Shougo/vimproc.vim'
+Bundle 'kien/ctrlp.vim'
+Bundle 'scrooloose/nerdtree'
 "...All your other bundles...
 if iCanHazVundle == 0
   echo "Installing Bundles, please ignore key map error messages"
@@ -73,6 +76,10 @@ autocmd BufWritePre *.slim :%s/\s\+$//e
 au BufNewFile * set noeol
 au BufRead,BufNewFile *.go set filetype=go
 
+" more natural splits
+set splitbelow
+set splitright
+
 " No show command
 autocmd VimEnter * set nosc
 
@@ -113,16 +120,27 @@ nmap <leader>n :NERDTreeToggle<CR>
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
 
+" if first argument is a directory, open
+" nerdtree
+if isdirectory(argv(0))
+  bd
+  autocmd vimenter * exe "cd" argv(0)
+  autocmd VimEnter * NERDTree
+endif
+
 " Syntastic
 let g:syntastic_mode_map = { 'mode': 'passive' }
 let g:syntastic_ruby_exec = '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
 
 " CtrlP
-nnoremap <silent> t :CtrlP<cr>
-let g:ctrlp_working_path_mode = 2
-let g:ctrlp_by_filename = 1
-let g:ctrlp_max_files = 600
-let g:ctrlp_max_depth = 5
+"nnoremap <silent> t :CtrlP<cr>
+"let g:ctrlp_working_path_mode = 2
+"let g:ctrlp_by_filename = 1
+"let g:ctrlp_max_files = 600
+let g:ctrlp_max_depth = 1
+
+" Unite
+"nnoremap <C-p> :Unite file_rec/async<cr>
 
 " Go programming
 set rtp+=/usr/local/Cellar/go/1.0.3/misc/vim
