@@ -1,6 +1,8 @@
-set nocompatible
-filetype off
+set nocompatible   " Disable vi-compatibility
+set encoding=utf-8 " Necessary to show Unicode glyphs
+set modeline
 
+filetype off
 
 if &term =~ '256color'
   " disable Background Color Erase (BCE) so that color schemes
@@ -9,6 +11,7 @@ if &term =~ '256color'
   set t_ut=
 endif
 
+" bootstrap
 let iCanHazVundle=1
 let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
 if !filereadable(vundle_readme)
@@ -38,32 +41,45 @@ endif
 filetype plugin indent on
 let mapleader=","
 
-color zenburn
-
-set nocompatible   " Disable vi-compatibility
-set laststatus=2   " Always show the statusline
-set encoding=utf-8 " Necessary to show Unicode glyphs
-
-set cursorline
-set expandtab
-set modelines=0
-set shiftwidth=2
-set clipboard=unnamed
-set synmaxcol=128
-set ttyscroll=10
-set encoding=utf-8
-set tabstop=2
-set nowrap
-set number
-set expandtab
+" Behavior
+"
+" tmp files
 set nowritebackup
 set noswapfile
 set nobackup
+" search
 set hlsearch
 set ignorecase
 set smartcase
+"clipboard
+set clipboard=unnamed
+if has('unnamedplus')
+  set clipboard=unnamed,unnamedplus
+endif
+" ident
+set expandtab
+set shiftwidth=2
+set synmaxcol=128
+set ttyscroll=10
+set tabstop=2
+set nowrap
+set expandtab
 
+" Look and feel
+"
+set laststatus=2   " Always show the statusline
 set lazyredraw
+color zenburn
+set cursorline
+set number
+
+" Highlight trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
 
 " Automatic formatting
 autocmd BufWritePre *.rb :%s/\s\+$//e
