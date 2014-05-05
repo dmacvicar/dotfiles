@@ -34,7 +34,7 @@
     less-css-mode
     xclip
     multi-term
-    rust-mode)
+    rust-mode
     feature-mode)
   "A list of packages to ensure are installed at launch.")
 
