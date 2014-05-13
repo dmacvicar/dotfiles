@@ -31,6 +31,7 @@ Bundle 'scrooloose/syntastic'
 Bundle 'Shougo/vimproc.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/nerdtree'
+Bundle 'stephpy/vim-yaml'
 "...All your other bundles...
 if iCanHazVundle == 0
   echo "Installing Bundles, please ignore key map error messages"
