@@ -32,6 +32,8 @@ Bundle 'Shougo/vimproc.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/nerdtree'
 Bundle 'stephpy/vim-yaml'
+" cfengine3
+Bundle 'neilhwatson/vim_cf3'
 "...All your other bundles...
 if iCanHazVundle == 0
   echo "Installing Bundles, please ignore key map error messages"
@@ -92,6 +94,7 @@ autocmd BufWritePre *.slim :%s/\s\+$//e
 
 au BufNewFile * set noeol
 au BufRead,BufNewFile *.go set filetype=go
+au BufNewFile,BufRead _service set filetype=xml
 
 " more natural splits
 set splitbelow
