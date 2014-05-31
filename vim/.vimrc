@@ -29,9 +29,10 @@ Bundle 'jnurmine/Zenburn'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'scrooloose/syntastic'
 Bundle 'Shougo/vimproc.vim'
-Bundle 'kien/ctrlp.vim'
+Bundle 'Shougo/unite.vim'
 Bundle 'scrooloose/nerdtree'
 Bundle 'stephpy/vim-yaml'
+Bundle 'wting/rust.vim'
 " cfengine3
 Bundle 'neilhwatson/vim_cf3'
 "...All your other bundles...
@@ -157,10 +158,11 @@ let g:syntastic_ruby_exec = '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
 "let g:ctrlp_working_path_mode = 2
 "let g:ctrlp_by_filename = 1
 "let g:ctrlp_max_files = 600
-let g:ctrlp_max_depth = 1
+"let g:ctrlp_max_depth = 1
 
 " Unite
-"nnoremap <C-p> :Unite file_rec/async<cr>
+nnoremap <C-f> :Unite file_rec/async<cr>
+nnoremap <C-p> :Unite buffer<cr>
 
 " Go programming
 set rtp+=/usr/local/Cellar/go/1.0.3/misc/vim
