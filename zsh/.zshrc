@@ -24,3 +24,6 @@ export VISUAL="vim"
 
 alias e="${EDITOR}"
 #alias vi="emacs-nox"
+
+# remove all ESC key binds (for vim)
+bindkey -rpM viins '^['

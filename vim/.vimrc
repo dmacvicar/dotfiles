@@ -2,6 +2,8 @@ set nocompatible   " Disable vi-compatibility
 set encoding=utf-8 " Necessary to show Unicode glyphs
 set modeline
 set autoread
+set esckeys
+"set timeoutlen=1000 ttimeoutlen=0
 filetype off
 
 if &term =~ '256color'
@@ -104,9 +106,6 @@ set splitright
 " No show command
 autocmd VimEnter * set nosc
 
-" Quick ESC
-imap jj <ESC>
-
 " Jump to the next row on long lines
 map <Down> gj
 map <Up>   gk
@@ -153,19 +152,9 @@ endif
 let g:syntastic_mode_map = { 'mode': 'passive' }
 let g:syntastic_ruby_exec = '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
 
-" CtrlP
-"nnoremap <silent> t :CtrlP<cr>
-"let g:ctrlp_working_path_mode = 2
-"let g:ctrlp_by_filename = 1
-"let g:ctrlp_max_files = 600
-"let g:ctrlp_max_depth = 1
-
 " Unite
 nnoremap <C-f> :Unite file_rec/async<cr>
 nnoremap <C-p> :Unite buffer<cr>
-
-" Go programming
-set rtp+=/usr/local/Cellar/go/1.0.3/misc/vim
 
 " Quit with :Q
 command -nargs=0 Quit :qa!
