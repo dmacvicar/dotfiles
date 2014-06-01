@@ -1,7 +1,7 @@
 set nocompatible   " Disable vi-compatibility
 set encoding=utf-8 " Necessary to show Unicode glyphs
 set modeline
-
+set autoread
 filetype off
 
 if &term =~ '256color'
