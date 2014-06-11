@@ -35,6 +35,7 @@ Bundle 'Shougo/unite.vim'
 Bundle 'scrooloose/nerdtree'
 Bundle 'stephpy/vim-yaml'
 Bundle 'wting/rust.vim'
+Bundle 'terryma/vim-expand-region'
 " cfengine3
 Bundle 'neilhwatson/vim_cf3'
 "...All your other bundles...
@@ -45,7 +46,8 @@ if iCanHazVundle == 0
 endif
 
 filetype plugin indent on
-let mapleader=","
+"let mapleader=","
+let mapleader = "\<Space>"
 
 " Behavior
 "
@@ -115,11 +117,16 @@ nnoremap k gk
 " format the entire file
 nmap <leader>fef ggVG=
 
-" Open new buffers
-nmap <leader>s<left>   :leftabove  vnew<cr>
-nmap <leader>s<right>  :rightbelow vnew<cr>
-nmap <leader>s<up>     :leftabove  new<cr>
-nmap <leader>s<down>   :rightbelow new<cr>
+" split vertically and horizontally
+nmap <leader>\| :rightbelow vnew<cr>
+nmap <leader>- :rightbelow new<cr>
+
+" move across splits
+nnoremap <leader><Down> <C-W><C-J>
+nnoremap <leader><Up> <C-W><C-K>
+nnoremap <leader><Right> <C-W><C-L>
+nnoremap <leader><Left> <C-W><C-H>
+nmap <leader><Tab> <C-w>w
 
 " Tab between buffers
 noremap <tab> <c-w><c-w>
@@ -127,13 +134,23 @@ noremap <tab> <c-w><c-w>
 " Switch between last two buffers
 nnoremap <leader><leader> <C-^>
 
+" FIX or remove this
 " Resize buffers
-if bufwinnr(1)
-  nmap Ä <C-W><<C-W><
-  nmap Ö <C-W>><C-W>>
-  nmap ö <C-W>-<C-W>-
-  nmap ä <C-W>+<C-W>+
-endif
+"if bufwinnr(1)
+"  nmap <silent> <leader><S-Left> <C-W><<C-W><
+"  nmap <silent> <leader><S-Right> <C-W>><C-W>>
+"  nmap <silent> <leader><S-Up> <C-W>-<C-W>-
+"  nmap <silent> <leader><S-Down> <C-W>+<C-W>+
+"endif
+
+" automatically jump to the end of the text you pasted
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
+
+" vim expand region
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
 
 " NERDTree
 nmap <leader>n :NERDTreeToggle<CR>
@@ -153,8 +170,8 @@ let g:syntastic_mode_map = { 'mode': 'passive' }
 let g:syntastic_ruby_exec = '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
 
 " Unite
-nnoremap <C-f> :Unite file_rec/async<cr>
-nnoremap <C-p> :Unite buffer<cr>
+nnoremap <leader>f :Unite file_rec/async<cr>
+nnoremap <leader>p :Unite buffer<cr>
 
 " Quit with :Q
 command -nargs=0 Quit :qa!
