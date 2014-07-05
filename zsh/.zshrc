@@ -18,12 +18,11 @@ alias irb="rbenv exec pry"
 # why?
 export TERM=xterm-256color
 
-#export VISUAL="emacs-nox"
-export EDITOR="vim"
-export VISUAL="vim"
+export EDITOR="emacs-nox"
+export VISUAL="${EDITOR}"
 
 alias e="${EDITOR}"
-#alias vi="emacs-nox"
+alias vi="emacs-nox"
 
 # remove all ESC key binds (for vim)
 bindkey -rpM viins '^['

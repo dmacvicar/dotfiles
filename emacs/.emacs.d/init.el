@@ -35,6 +35,7 @@
     xclip
     multi-term
     rust-mode
+    toml-mode
     feature-mode)
   "A list of packages to ensure are installed at launch.")
 
@@ -133,6 +134,18 @@ Missing packages are installed automatically."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Behavior
 ;;
+
+;; custom shortcuts
+(global-set-key (kbd "C-c -") 'split-window-vertically)
+(global-set-key (kbd "C-c |") 'split-window-horizontally)
+(global-set-key (kbd "C-c x") 'delete-window)
+(global-set-key (kbd "C-c <left>")  'windmove-left)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+(global-set-key (kbd "C-c <up>")    'windmove-up)
+(global-set-key (kbd "C-c <down>")  'windmove-down)
+
+(windmove-default-keybindings)
+(setq windmove-wrap-around t)
 
 ;; X11 keyboard in console
 (xclip-mode 1)

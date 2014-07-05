@@ -1,4 +1,5 @@
 dotfiles
 ========
 
-Dotfiles managed with vcsh
+Dotfiles managed with stow
+
