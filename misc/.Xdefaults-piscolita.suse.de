@@ -1,0 +1,16 @@
+Rxvt.foreground: #000000
+URxvt*background: #ffffdd
+
+URxvt.saveLines:32767
+URxvt.scrollBar: false
+
+URxvt*font: xft:Consolas:size=11:antialias=false:hinting=false
+URxvt.letterSpace: -1
+
+URxvt.perl-ext-common: default,matcher
+URxvt.urlLauncher: chromium
+URxvt.matcher.button: 2
+URxvt.matcher.pattern.1: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+
+
+
