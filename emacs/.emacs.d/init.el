@@ -151,13 +151,7 @@ Missing packages are installed automatically."
 (xclip-mode 1)
 
 ;;;; scrolling
-(setq scroll-step 1)
-(setq scroll-conservatively 10000)
 (setq auto-window-vscroll nil)
-;; for smooth scrolling and disabling the automatical recentering of emacs when moving the cursor
-(setq scroll-margin 1
-scroll-up-aggressively 0.01
-scroll-down-aggressively 0.01)
 
 (projectile-global-mode)
 
@@ -212,6 +206,7 @@ scroll-down-aggressively 0.01)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;Backup files
+(setq auto-save-default nil)
 (setq backup-by-copying t      ; don't clobber symlinks
       backup-directory-alist
       '(("." . "~/.saves"))    ; don't litter my fs tree
@@ -314,5 +309,5 @@ scroll-down-aggressively 0.01)
 
 (require 'feature-mode)
 (add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
-
+(add-to-list 'auto-mode-alist '("Rakefile\\'" . ruby-mode))
 
