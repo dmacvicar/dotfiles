@@ -1,5 +1,23 @@
-Rxvt.foreground: #000000
-URxvt*background: #ffffdd
+Rxvt.foreground:  #000d18
+URxvt*background: #f0efd0
+
+URxvt*color0:	  #000d18
+URxvt*color1:     #f18c96
+URxvt*color2:     #385f38
+URxvt*color3:     #f0dfaf
+URxvt*color4:     #6c6c9c
+URxvt*color5:     #bc6c9c
+URxvt*color6:     #80d4aa
+URxvt*color7:     #ffffe0
+ 
+URxvt*color8:     #262626
+URxvt*color9:     #e89393
+URxvt*color10:    #688060
+URxvt*color11:    #c3bf9f
+URxvt*color12:    #8c8cbc
+URxvt*color13:    #bc8cbc
+URxvt*color14:    #9ece9e
+URxvt*color15:    #ffffff
 
 URxvt.saveLines:32767
 URxvt.scrollBar: false
