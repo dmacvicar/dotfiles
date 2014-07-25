@@ -311,3 +311,13 @@ Missing packages are installed automatically."
 (add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
 (add-to-list 'auto-mode-alist '("Rakefile\\'" . ruby-mode))
 
+(defun yf/light-backtrace ()
+  (with-temp-buffer
+    (let ((standard-output (current-buffer)))
+      (backtrace)
+      (goto-char (point-min))
+      (while (re-search-forward "^  (" nil t)
+        (delete-region (point-at-bol) (progn (forward-line 1) (point))))
+      (buffer-string))))
+(defadvice recenter (before backtrace activate)
+  (message "Recenter backtrace: \n%s" (yf/light-backtrace)))
