@@ -26,3 +26,7 @@ alias vi="emacs-nox"
 
 # remove all ESC key binds (for vim)
 bindkey -rpM viins '^['
+
+# color for less
+export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
+export LESS=' -R '
