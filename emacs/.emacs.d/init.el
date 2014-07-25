@@ -92,11 +92,7 @@ Missing packages are installed automatically."
                              (frame-char-height)))))))
 
 (set-frame-size-according-to-resolution)
-; For now I am setting the Mono font in gnome, so this
-; is not needed
-;(set-face-attribute 'default nil :font "Consolas:style=Regular")
-(set-default-font "DejaVu Sans Mono")
-;(set-face-attribute 'default nil :height 100)
+(set-face-attribute 'default nil :font "Consolas-11")
 
 ;; the blinking cursor is nothing, but an annoyance
 (blink-cursor-mode -1)
