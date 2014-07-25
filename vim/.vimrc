@@ -28,10 +28,10 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 " color scheme
 Bundle 'jnurmine/Zenburn'
-Bundle 'Lokaltog/vim-powerline'
-Bundle 'scrooloose/syntastic'
 Bundle 'Shougo/vimproc.vim'
 Bundle 'Shougo/unite.vim'
+Bundle 'bling/vim-airline'
+Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
 Bundle 'stephpy/vim-yaml'
 Bundle 'wting/rust.vim'
