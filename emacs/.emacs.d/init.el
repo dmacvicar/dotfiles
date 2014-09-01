@@ -22,6 +22,7 @@
 
 (defvar required-packages
   '(flycheck
+    popup
     flycheck-pos-tip
     powerline
     tabbar-ruler
@@ -151,8 +152,7 @@ Missing packages are installed automatically."
 
 (projectile-global-mode)
 
-;;;;;;;;;;;;;;
-(flycheck-mode)
+;;;;;;;;;;;;;
 (setq flycheck-highlighting-mode 'lines)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq flycheck-check-syntax-automatically '(mode-enabled save idle-change))
