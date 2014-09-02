@@ -38,7 +38,8 @@
     rust-mode
     toml-mode
     feature-mode
-    web-mode)
+    web-mode
+    yaml-mode)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
@@ -160,6 +161,7 @@ Missing packages are installed automatically."
 (eval-after-load 'flycheck
   '(custom-set-variables
    '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+
 
 ;(require 'ido-vertical-mode)
 (require 'flx-ido)
