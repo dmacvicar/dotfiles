@@ -17,6 +17,10 @@ alias irb="rbenv exec pry"
 # -n in gnome3 sends the window to the background
 # why?
 
+if ! { [ "$COLORTERM" = "gnome-terminal" ] && [ -n "$TMUX" ]; } then
+  export TERM='xterm-256color'
+fi
+
 export EDITOR="emacs-nox"
 export VISUAL="${EDITOR}"
 
