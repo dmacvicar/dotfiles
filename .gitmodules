@@ -3,7 +3,3 @@
 	url = https://github.com/sorin-ionescu/prezto.git
 	branch = master
 
-[submodule "emacs/.emacs.d"]
-	path = emacs/.emacs.d
-	url = https://github.com/bbatsov/prelude.git
-        branch = master
