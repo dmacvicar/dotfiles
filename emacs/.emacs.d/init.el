@@ -41,7 +41,8 @@
     web-mode
     yaml-mode
     rust-mode
-    flycheck-rust)
+    flycheck-rust
+    jsx-mode)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
