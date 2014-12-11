@@ -325,3 +325,16 @@ Missing packages are installed automatically."
       (buffer-string))))
 (defadvice recenter (before backtrace activate)
   (message "Recenter backtrace: \n%s" (yf/light-backtrace)))
+
+;; Hack to fix a bug with tabulated-list.el
+;; see: http://redd.it/2dgy52
+(defun tabulated-list-revert (&rest ignored)
+  "The `revert-buffer-function' for `tabulated-list-mode'.
+It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
+  (interactive)
+  (unless (derived-mode-p 'tabulated-list-mode)
+    (error "The current buffer is not in Tabulated List mode"))
+  (run-hooks 'tabulated-list-revert-hook)
+  ;; hack is here
+  ;; (tabulated-list-print t)
+  (tabulated-list-print))
