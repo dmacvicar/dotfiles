@@ -326,6 +326,9 @@ Missing packages are installed automatically."
 (defadvice recenter (before backtrace activate)
   (message "Recenter backtrace: \n%s" (yf/light-backtrace)))
 
+(require 'jsx-mode)
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
+
 ;; Hack to fix a bug with tabulated-list.el
 ;; see: http://redd.it/2dgy52
 (defun tabulated-list-revert (&rest ignored)
