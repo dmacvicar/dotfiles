@@ -1,0 +1,6 @@
+%topdir /space/packages
+%_builddir %{topdir}/build
+%_rpmdir %{topdir}/rpms
+%_sourcedir %(echo $PWD)
+%_specdir %(echo $PWD)
+%_srcrpmdir %{topdir}/rpms
