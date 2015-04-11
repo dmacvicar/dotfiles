@@ -33,9 +33,10 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'completion' \
   'prompt' \
-  'git' \
-  'history-substring-search' \
+   'git' \
   'ruby'
+# removed #  'history-substring-search'
+# crashes zsh
 
 #
 # Editor
