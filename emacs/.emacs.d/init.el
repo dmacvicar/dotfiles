@@ -45,7 +45,7 @@
     jsx-mode
     company
     irony
-    company-irony)
+    company-irony
     flycheck-pyflakes
     go-mode)
   "A list of packages to ensure are installed at launch.")
