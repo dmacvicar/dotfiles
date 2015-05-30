@@ -46,6 +46,8 @@
     company
     irony
     company-irony)
+    flycheck-pyflakes
+    go-mode)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
