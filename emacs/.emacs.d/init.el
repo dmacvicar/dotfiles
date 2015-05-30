@@ -45,7 +45,9 @@
     jsx-mode
     company
     irony
-    company-irony)
+    company-irony
+    flycheck-pyflakes
+    go-mode)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
@@ -339,6 +341,10 @@ Missing packages are installed automatically."
   '(add-to-list 'flycheck-checkers 'irony))
 
 ;;;;;;;;;;;;
+(add-hook
+ 'go-mode-hook
+ '(lambda ()
+    (setq tab-width 4)))
 
 (require 'feature-mode)
 (add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
