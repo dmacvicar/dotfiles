@@ -340,6 +340,9 @@ Missing packages are installed automatically."
 (require 'jsx-mode)
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
 
+;; Saltstack
+(add-to-list 'auto-mode-alist '("\\.sls\\'" . yaml-mode))
+
 ;; Hack to fix a bug with tabulated-list.el
 ;; see: http://redd.it/2dgy52
 (defun tabulated-list-revert (&rest ignored)
