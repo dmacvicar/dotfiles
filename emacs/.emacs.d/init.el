@@ -355,3 +355,11 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
   ;; hack is here
   ;; (tabulated-list-print t)
   (tabulated-list-print))
+
+;; tramp mode
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+              vc-ignore-dir-regexp
+              tramp-file-name-regexp))
+
+
