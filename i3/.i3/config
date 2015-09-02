@@ -156,10 +156,10 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Get volume keys working
-bindsym XF86AudioRaiseVolume exec /home/flavio/bin/pa-vol plus
-bindsym XF86AudioLowerVolume exec /home/flavio/bin/pa-vol minus
-bindsym XF86AudioMute exec /home/flavio/bin/pa-vol mute
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 1 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume 1 -5% #decrease sound volume
+bindsym XF86AudioMute exec pactl set-sink-mute 1 toggle # mute sound
 
 bindsym Control+$mod+l exec i3lock
 
