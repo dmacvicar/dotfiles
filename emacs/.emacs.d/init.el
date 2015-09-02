@@ -44,8 +44,6 @@
     flycheck-rust
     jsx-mode
     company
-    irony
-    company-irony
     flycheck-pyflakes
     go-mode)
   "A list of packages to ensure are installed at launch.")
@@ -155,6 +153,13 @@ Missing packages are installed automatically."
 (setq windmove-wrap-around t)
 
 ;; X11 keyboard in console
+(defun xclip-tramp-fix (orig-fun &rest args)
+  ;; temporary set current dir to local machine
+  (let ((default-directory "/"))
+    (apply orig-fun args)))
+
+(advice-add 'xclip-selection-value :around #'xclip-tramp-fix)
+(advice-add 'xclip-select-text :around #'xclip-tramp-fix)
 (xclip-mode 1)
 
 ;;;; scrolling
@@ -318,28 +323,6 @@ Missing packages are installed automatically."
   (c-set-offset 'substatement-open 0))
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
-(defconst my-cc-style
-  '("cc-mode"
-    (c-offsets-alist . ((innamespace . [0])))))
-(c-add-style "my-cc-mode" my-cc-style)
-
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
-
-;; replace the `completion-at-point' and `complete-symbol' bindings in
-;; irony-mode's buffers by irony-mode's function
-(defun my-irony-mode-hook ()
-  (define-key irony-mode-map [remap completion-at-point]
-    'irony-completion-at-point-async)
-  (define-key irony-mode-map [remap complete-symbol]
-    'irony-completion-at-point-async))
-(add-hook 'irony-mode-hook 'my-irony-mode-hook)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-(eval-after-load 'flycheck
-  '(add-to-list 'flycheck-checkers 'irony))
-
 ;;;;;;;;;;;;
 (add-hook
  'go-mode-hook
@@ -364,6 +347,9 @@ Missing packages are installed automatically."
 (require 'jsx-mode)
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
 
+;; Saltstack
+(add-to-list 'auto-mode-alist '("\\.sls\\'" . yaml-mode))
+
 ;; Hack to fix a bug with tabulated-list.el
 ;; see: http://redd.it/2dgy52
 (defun tabulated-list-revert (&rest ignored)
@@ -376,3 +362,11 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
   ;; hack is here
   ;; (tabulated-list-print t)
   (tabulated-list-print))
+
+;; tramp mode
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+              vc-ignore-dir-regexp
+              tramp-file-name-regexp))
+
+
