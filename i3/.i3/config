@@ -214,7 +214,7 @@ bar {
   }
 }
 
-exec --no-startup-id LC_ALL=C parcellite
+#exec --no-startup-id LC_ALL=C parcellite
 exec --no-startup-id dunst
 exec --no-startup-id nm-applet
 # disable system bell
