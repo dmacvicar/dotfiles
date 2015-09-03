@@ -1,1 +1,5 @@
-export GOPATH=/space/git/golang; export GOBIN=$GOPATH/bin; rbenv shell 2.2.1 && cd $GOPATH
+#!/bin/bash
+export RBENV_VERSION=2.2.1
+export GOPATH=/space/git/golang
+export GOBIN=$GOPATH/bin
+cd $GOPATH
