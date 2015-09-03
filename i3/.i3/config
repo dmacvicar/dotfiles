@@ -23,7 +23,7 @@ font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # clear in small sizes. However, if you need a lot of unicode glyphs or
 # right-to-left text rendering, you should instead use pango for rendering and
 # chose a FreeType font, such as:
-font pango:DejaVu Sans Mono 10
+font pango: DejaVu Sans Mono 10, FontAwesome, ionicons
 
 # colors
 #class                    border    backgr.   text      indicator
@@ -62,6 +62,10 @@ bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
+# Cycle over workspaces
+bindsynm $mod+Shift+Right workspace next_on_output
+bindsynm $mod+Shift+Left workspace prev_on_output
+
 # move focused window
 bindsym $mod+Shift+j move left
 bindsym $mod+Shift+k move down
@@ -69,10 +73,10 @@ bindsym $mod+Shift+l move up
 bindsym $mod+Shift+semicolon move right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+bindsym $mod+Contro+Left move left
+bindsym $mod+Control+Down move down
+bindsym $mod+Control+Up move up
+bindsym $mod+Control+Right move right
 
 # split in horizontal orientation
 bindsym $mod+h split h
@@ -175,7 +179,7 @@ workspace_auto_back_and_forth yes
 bar {
   output VGA1
   position top
-  status_command i3status
+  status_command i3status -c ~/.i3/i3status.conf
   workspace_buttons yes
   tray_output no
   colors {
@@ -195,7 +199,7 @@ bar {
   output HDMI2
   output HDMI-2
   position top
-  status_command i3status
+  status_command i3status -c ~/.i3/i3status.conf
   #status_command ~/.i3/conky
   workspace_buttons yes
   tray_output primary
