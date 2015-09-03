@@ -53,25 +53,15 @@ bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
-# Cycle over workspaces
-bindsynm $mod+Shift+Right workspace next_on_output
-bindsynm $mod+Shift+Left workspace prev_on_output
-
-# move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Contro+Left move left
-bindsym $mod+Control+Down move down
-bindsym $mod+Control+Up move up
-bindsym $mod+Control+Right move right
+# cycle workspaces
+bindsym $mod+Shift+Left workspace prev_on_output
+bindsym $mod+Shift+Right workspace next_on_output
+# Still not sure if I like this
+bindsym $mod+Shift+Up layout toggle
+bindsym $mod+Shift+Down layout toggle
 
 # split in horizontal orientation
 bindsym $mod+h split h
-
 # split in vertical orientation
 bindsym $mod+v split v
 
@@ -127,17 +117,6 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
-
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
         bindsym Down resize grow height 10 px or 10 ppt
@@ -148,7 +127,6 @@ mode "resize" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
-
 bindsym $mod+r mode "resize"
 
 # Pulse Audio controls
@@ -215,6 +193,5 @@ exec --no-startup-id /usr/lib/gnome-settings-daemon-3.0/gnome-settings-daemon &
 #exec --no-startup-id gnome-keyring-daemon &
 #exec --no-startup-id /usr/lib/polkit-gnome-authentication-agent-1 &
 #exec --no-startup-id gnome-screensaver &
-
 
 
