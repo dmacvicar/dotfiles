@@ -2,6 +2,7 @@ local homefs=$(cat /proc/self/mounts | grep $HOME | cut -f 3 -d ' ')
 # On NFS I lets put rbenv locally
 if [ "$homefs" = "nfs" ]; then
   export RBENV_ROOT=/space/rbenv
+  export PYENV_ROOT=/space/pyenv
 fi
 
 # Source Prezto.
@@ -33,3 +34,7 @@ bindkey -rpM viins '^['
 # color for less
 export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 export LESS=' -R '
+
+setopt hist_ignore_space
+
+eval "$(pyenv init - --no-rehash zsh)"
