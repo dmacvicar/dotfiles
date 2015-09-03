@@ -15,13 +15,6 @@ alias iosc="osc -A https://api.suse.de"
 alias pry="rbenv exec pry"
 alias irb="rbenv exec pry"
 
-# -n in gnome3 sends the window to the background
-# why?
-
-if ! { [ "$COLORTERM" = "gnome-terminal" ] && [ -n "$TMUX" ]; } then
-  export TERM='xterm-256color'
-fi
-
 export EDITOR="emacs-nox"
 export VISUAL="${EDITOR}"
 
@@ -36,5 +29,4 @@ export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 export LESS=' -R '
 
 setopt hist_ignore_space
-
 eval "$(pyenv init - --no-rehash zsh)"
