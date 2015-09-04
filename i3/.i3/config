@@ -163,6 +163,7 @@ bar {
 }
 
 bar {
+  output LVDS-0
   output LVDS-1
   output LVDS1
   output HDMI2
