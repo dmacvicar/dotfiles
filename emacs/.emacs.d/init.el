@@ -161,6 +161,7 @@ Missing packages are installed automatically."
 (advice-add 'xclip-selection-value :around #'xclip-tramp-fix)
 (advice-add 'xclip-select-text :around #'xclip-tramp-fix)
 (xclip-mode 1)
+(turn-on-xclip)
 
 ;;;; scrolling
 (setq scroll-step 1)
