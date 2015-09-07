@@ -1,5 +1,0 @@
-[submodule "zsh/.zprezto"]
-	path = zsh/.zprezto
-	url = https://github.com/sorin-ionescu/prezto.git
-	branch = master
-
