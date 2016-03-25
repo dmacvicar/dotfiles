@@ -1,6 +1,6 @@
 alias e="${EDITOR}"
 alias vi="emacs-nox"
-
+alias lack="ack --pager=less"
 alias iosc="osc -A https://api.suse.de"
 alias pry="rbenv exec pry"
 alias irb="rbenv exec pry"
