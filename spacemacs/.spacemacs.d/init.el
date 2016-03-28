@@ -86,11 +86,42 @@
    ))
 
 (defun dotspacemacs/user-init ()
-  )
-
-(defun dotspacemacs/user-config ()
+  (global-unset-key (kbd "M-RET"))
   (global-set-key (kbd "M-RET") 'electric-buffer-list)
   (global-set-key (kbd "C-M-j") 'electric-buffer-list)
+  (setq x-alt-keysym 'meta)
+  (add-hook 'Buffer-menu-mode-hook 'buffer-disable-undo)
+  (global-unset-key (kbd "C-z"))
+)
+
+(defun dotspacemacs/user-config ()
+  (setq fill-column 80)
+  (setq delete-by-moving-to-trash t)
+  (delete-selection-mode 1)
+  (global-set-key (kbd "<C-tab>") 'flyspell-auto-correct-word)
+
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+
+  ;;Backup files
+  (setq auto-save-default nil)
+  (setq backup-by-copying t      ; don't clobber symlinks
+        backup-directory-alist
+        '(("." . "~/.saves"))    ; don't litter my fs tree
+        delete-old-versions t
+        kept-new-versions 6
+        kept-old-versions 2
+        version-control t)       ; use versioned backups
+
+  (mapc
+   (lambda (face)
+     (set-face-attribute face nil :weight 'normal :underline nil))
+   (face-list))
+
+  (setq inhibit-splash-screen t)
   (blink-cursor-mode -1)
   (setq show-trailing-whitespace t)
   (setq-default show-trailing-whitespace t)
@@ -122,7 +153,6 @@
 
   (set-frame-size-according-to-resolution)
   (set-face-attribute 'default nil :font "Consolas-11")
-
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
