@@ -373,3 +373,5 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 (if (file-exists-p "~/.mu4e/mu4e.suse.el")
     (load-file "~/.mu4e/mu4e.suse.el"))
 
+(provide 'init)
+;;; init.el ends here
