@@ -153,6 +153,8 @@
 
   (set-frame-size-according-to-resolution)
   (set-face-attribute 'default nil :font "Consolas-11")
+  (if (file-exists-p "~/.mu4e/mu4e.suse.el")
+      (load-file "~/.mu4e/mu4e.suse.el"))
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
