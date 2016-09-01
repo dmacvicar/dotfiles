@@ -45,7 +45,13 @@
     jsx-mode
     company
     flycheck-pyflakes
-    go-mode)
+    go-mode
+    paredit
+    magit
+    org
+    org-bullets
+    org-trello
+    calfw)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
@@ -101,7 +107,8 @@ Missing packages are installed automatically."
                              (frame-char-height)))))))
 
 (set-frame-size-according-to-resolution)
-(set-face-attribute 'default nil :font "Consolas-11")
+;(set-face-attribute 'default nil :font "Consolas-11")
+(set-face-attribute 'default nil :font "Monospace")
 
 ;; the blinking cursor is nothing, but an annoyance
 (blink-cursor-mode -1)
@@ -235,7 +242,7 @@ Missing packages are installed automatically."
 
 (add-hook 'Buffer-menu-mode-hook 'buffer-disable-undo)
 
-(cua-mode 1)
+;(cua-mode 1)
 (setq shift-select-mode nil)
 (setq x-alt-keysym 'meta)
 
@@ -345,6 +352,15 @@ Missing packages are installed automatically."
 (defadvice recenter (before backtrace activate)
   (message "Recenter backtrace: \n%s" (yf/light-backtrace)))
 
+;;; lisp
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+    (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+    (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+    (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+    (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+    (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+    (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+
 (require 'jsx-mode)
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
 
@@ -372,6 +388,19 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 
 (if (file-exists-p "~/.mu4e/mu4e.suse.el")
     (load-file "~/.mu4e/mu4e.suse.el"))
+
+;; Org mode
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+;; org-trello major mode for all .trello files
+(add-to-list 'auto-mode-alist '("\\.trello$" . org-mode))
+
+;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
+(add-hook 'org-mode-hook
+          (lambda ()
+            (let ((filename (buffer-file-name (current-buffer))))
+              (when (and filename (string= "trello" (file-name-extension filename)))
+              (org-trello-mode)))))
 
 (provide 'init)
 ;;; init.el ends here
