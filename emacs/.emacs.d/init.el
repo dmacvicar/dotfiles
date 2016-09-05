@@ -51,7 +51,8 @@
     org
     org-bullets
     org-trello
-    calfw)
+    calfw
+    markdown-mode)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
