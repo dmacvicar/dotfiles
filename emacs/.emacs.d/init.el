@@ -52,7 +52,8 @@
     org-bullets
     org-trello
     calfw
-    markdown-mode)
+    markdown-mode
+    zenburn-theme)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
@@ -83,8 +84,6 @@ Missing packages are installed automatically."
 
 ;; run package installation
 (install-required-packages)
-
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance
