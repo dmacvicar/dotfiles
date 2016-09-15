@@ -53,7 +53,8 @@
     org-trello
     calfw
     markdown-mode
-    zenburn-theme)
+    leuven-theme
+    popwin)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
@@ -139,14 +140,16 @@ Missing packages are installed automatically."
 (require 'powerline)
 (powerline-default-theme)
 
-(load-theme 'zenburn t)
+(load-theme 'leuven t)
+
 (setq show-trailing-whitespace t)
 (setq-default show-trailing-whitespace t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Behavior
 ;;
-
+(require 'popwin)
+(popwin-mode 1)
 ;; custom shortcuts
 (global-set-key (kbd "C-c -") 'split-window-vertically)
 (global-set-key (kbd "C-c |") 'split-window-horizontally)
@@ -389,6 +392,8 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 (if (file-exists-p "~/.mu4e/mu4e.suse.el")
     (load-file "~/.mu4e/mu4e.suse.el"))
 
+(setq org-src-fontify-natively t)
+(setq org-fontify-whole-heading-line t)
 ;; Org mode
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
