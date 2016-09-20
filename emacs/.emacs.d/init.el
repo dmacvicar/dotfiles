@@ -54,7 +54,8 @@
     calfw
     markdown-mode
     leuven-theme
-    popwin)
+    popwin
+    salt-mode)
   "A list of packages to ensure are installed at launch.")
 
 (defun required-packages-installed-p ()
