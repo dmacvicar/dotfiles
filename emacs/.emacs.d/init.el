@@ -396,6 +396,7 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 (setq org-fontify-whole-heading-line t)
 ;; Org mode
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(define-key org-mode-map (kbd "M-RET") nil)
 
 ;; org-trello major mode for all .trello files
 (add-to-list 'auto-mode-alist '("\\.trello$" . org-mode))
