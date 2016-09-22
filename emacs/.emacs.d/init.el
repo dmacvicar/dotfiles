@@ -390,9 +390,11 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
 
-(if (file-exists-p "~/.mu4e/mu4e.suse.el")
-    (load-file "~/.mu4e/mu4e.suse.el"))
+;; work setup
+(if (file-exists-p "~/.emacs.suse.d/init.el")
+    (load-file "~/.emacs.suse.d/init.el"))
 
+(require 'org)
 (setq org-src-fontify-natively t)
 (setq org-fontify-whole-heading-line t)
 ;; Org mode
