@@ -43,6 +43,7 @@
     rust-mode
     flycheck-rust
     jsx-mode
+    web-mode
     company
     flycheck-pyflakes
     go-mode
@@ -364,6 +365,11 @@ Missing packages are installed automatically."
     (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
     (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
     (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+
+
+;; web
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 (require 'jsx-mode)
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
