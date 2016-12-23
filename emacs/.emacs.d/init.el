@@ -42,7 +42,6 @@
     yaml-mode
     rust-mode
     flycheck-rust
-    jsx-mode
     web-mode
     company
     flycheck-pyflakes
@@ -370,9 +369,6 @@ Missing packages are installed automatically."
 ;; web
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-
-(require 'jsx-mode)
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
 
 ;; Saltstack
 (add-to-list 'auto-mode-alist '("\\.sls\\'" . yaml-mode))
