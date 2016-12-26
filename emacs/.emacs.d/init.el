@@ -1,95 +1,46 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Base
-;;
+;;; init.el --- Duncan Mac-Vicar P. emacs init
+(defconst emacs-start-time (current-time))
 (require 'cl)
-(require 'package)
-
 ;; do this early
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 ;;(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-;;(add-to-list 'package-archives
-;;             '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives
-             '("gnu" . "http://elpa.gnu.org/packages/") t)
-
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (package-initialize)
-(when (not package-archive-contents)
-  (package-refresh-contents))
 
-(defvar required-packages
-  '(flycheck
-    popup
-    flycheck-pos-tip
-    powerline
-    tabbar-ruler
-;;    linum
-    highlight-indentation
-    nav
-    projectile
-    flx-ido
-    ido-vertical-mode
-    less-css-mode
-    xclip
-    multi-term
-    rust-mode
-    toml-mode
-    feature-mode
-    web-mode
-    yaml-mode
-    rust-mode
-    flycheck-rust
-    web-mode
-    company
-    flycheck-pyflakes
-    go-mode
-    paredit
-    magit
-    org
-    org-bullets
-    org-trello
-    calfw
-    markdown-mode
-    leuven-theme
-    popwin
-    salt-mode)
-  "A list of packages to ensure are installed at launch.")
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-(defun required-packages-installed-p ()
-  "Check if all packages in `required-packages' are installed."
-  (every #'package-installed-p required-packages))
-
-(defun require-package (package)
-  "Install PACKAGE unless already installed."
-  (unless (memq package required-packages)
-    (add-to-list 'required-packages package))
-  (unless (package-installed-p package)
-    (package-install package)))
-
-(defun require-packages (packages)
-  "Ensure PACKAGES are installed.
-Missing packages are installed automatically."
-  (mapc #'require-package packages))
-
-(defun install-required-packages ()
-  "Install all packages listed in `required-packages'."
-  (unless (required-packages-installed-p)
-    ;; check for new packages (package versions)
-    (message "%s" "Emacs is now refreshing its package database...")
-    (package-refresh-contents)
-    (message "%s" " done.")
-    ;; install the missing packages
-    (require-packages required-packages)))
-
-;; run package installation
-(install-required-packages)
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish)
+(require 'bind-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Appearance
+;; Appearance & Behavior
 ;;
+(use-package ido-vertical-mode :ensure t)
+(use-package flx-ido
+  :ensure t
+  :defer t
+  :init
+  (progn
+    (setq gc-cons-threshold (* 20 (expt 2 20)) ; megabytes
+          ido-use-faces nil)
+    (setq ido-create-new-buffer 'always))
+  :config
+  (ido-mode 1)
+  (ido-everywhere 1)
+  (flx-ido-mode 1))
+
+(use-package popwin :ensure t)
+
 (defun set-frame-size-according-to-resolution ()
   (interactive)
   (when (display-graphic-p)
@@ -126,22 +77,23 @@ Missing packages are installed automatically."
   '("" invocation-name " - " (:eval (if (buffer-file-name)
                                        (abbreviate-file-name (buffer-file-name))
                                      "%b"))))
-(require 'highlight-indentation)
-(setq highlight-indentation-offset 2)
-;(set-face-background 'highlight-indentation-face "#e3e3d3")
-;(set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
 
-; line numbers
-;; banned for slowness
-;;(add-hook 'find-file-hook (lambda () (linum-mode 1)))
-;;(linum-mode t)
-;;(setq linum-format " %d ")
+(use-package highlight-indentation
+  :ensure t
+  :init
+  (setq highlight-indentation-offset 2))
 
-; improved bar at the botton
-(require 'powerline)
-(powerline-default-theme)
+(use-package powerline
+  :ensure t
+  :config
+  (progn
+    (powerline-default-theme))
+)
 
-(load-theme 'leuven t)
+(use-package leuven-theme
+  :ensure t
+  :config
+  (load-theme 'leuven t))
 
 (setq show-trailing-whitespace t)
 (setq-default show-trailing-whitespace t)
@@ -149,8 +101,12 @@ Missing packages are installed automatically."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Behavior
 ;;
-(require 'popwin)
-(popwin-mode 1)
+(use-package popwin
+  :ensure t
+  :config
+  (popwin-mode 1)
+)
+
 ;; custom shortcuts
 (global-set-key (kbd "C-c -") 'split-window-vertically)
 (global-set-key (kbd "C-c |") 'split-window-horizontally)
@@ -171,34 +127,47 @@ Missing packages are installed automatically."
 
 (advice-add 'xclip-selection-value :around #'xclip-tramp-fix)
 (advice-add 'xclip-select-text :around #'xclip-tramp-fix)
-(xclip-mode 1)
-(turn-on-xclip)
+(use-package xclip
+  :ensure t
+  :config
+  (progn (xclip-mode 1) (turn-on-xclip))
+)
 
 ;;;; scrolling
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
 (setq auto-window-vscroll nil)
 
-(projectile-global-mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Common programming and tools
+;;
+(use-package multi-term :ensure t)
 
-;;;;;;;;;;;;;
-(setq flycheck-highlighting-mode 'lines)
-(add-hook 'after-init-hook #'global-flycheck-mode)
-(setq flycheck-check-syntax-automatically '(mode-enabled save idle-change))
-(eval-after-load 'flycheck
-  '(custom-set-variables
-   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+(use-package projectile
+  :ensure t
+  :config (projectile-global-mode t)
+  :diminish projectile-mode
+)
 
+(use-package company
+  :ensure t
+  :config (add-hook 'prog-mode-hook 'company-mode))
 
-;(require 'ido-vertical-mode)
-(require 'flx-ido)
-(ido-mode 1)
-;(ido-vertical-mode 1)
-(ido-everywhere 1)
-(flx-ido-mode 1)
-;; disable ido faces to see flx highlights.
-(setq ido-use-faces nil)
-(setq ido-create-new-buffer 'always)
+(use-package magit :ensure t)
+
+(use-package flycheck
+  :ensure t
+  :defer t
+  :init
+  (defun my-flycheck-prog-mode-hook ()
+    (flycheck-mode t))
+  (add-hook 'prog-mode-hook 'my-flycheck-prog-mode-hook))
+
+(use-package flycheck-pos-tip
+  :ensure t
+  :after (flycheck)
+  :config
+  (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)))
 
 ;; Auto refresh buffers
 (global-auto-revert-mode 1)
@@ -250,16 +219,20 @@ Missing packages are installed automatically."
 (setq shift-select-mode nil)
 (setq x-alt-keysym 'meta)
 
-(require 'nav)
-(nav-disable-overeager-window-splitting)
+(use-package nav
+  :ensure t
+  :config
+  (nav-disable-overeager-window-splitting))
 
 ; highlight the current line
 (global-hl-line-mode t)
 
 ; tabs
 (setq tabbar-ruler-global-tabbar t) ; If you want tabbar
-(require 'tabbar-ruler)
-(tabbar-ruler-group-by-projectile-project)
+(use-package tabbar-ruler
+  :ensure t
+  :config
+  (tabbar-ruler-group-by-projectile-project))
 
 (mapc
   (lambda (face)
@@ -310,69 +283,99 @@ Missing packages are installed automatically."
 	     (if (saved-session)
 		 (if (y-or-n-p "Restore desktop? ")
 		     (session-restore)))))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; only open the speedbar by default in X11
-;;(when window-system
-;;   (sr-speedbar-open))
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; language specific tweaks
+;;
+;; C, C++ and other compiled languages
+(use-package rust-mode
+  :ensure t
+  :config
+  (progn
+    (use-package flycheck-rust :ensure t :after (flycheck))))
 
-;;; Colourise CSS colour literals
-(when (eval-when-compile (>= emacs-major-version 24))
-  ;; rainbow-mode needs color.el, bundled with Emacs >= 24.
-  (require-package 'rainbow-mode)
-  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
-    (add-hook hook 'rainbow-mode)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Specific languages
-
-;;;;;; c and c++
+(use-package go-mode
+  :ensure t
+  :config
+  (progn
+    (add-hook 'go-mode-hook '(lambda () (setq tab-width 4)))))
 
 (defun my-c-mode-hook ()
   (setq c-basic-offset 4)
   (c-set-offset 'substatement-open 0))
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
-;;;;;;;;;;;;
-(add-hook
- 'go-mode-hook
- '(lambda ()
-    (setq tab-width 4)))
+;; Scripting languages
+(use-package rinari :ensure t)
+(use-package bundler :ensure t)
+(use-package robe
+  :ensure t
+  :init
+  (progn (add-hook 'ruby-mode-hook 'robe-mode)
+         (push 'company-robe company-backends)))
+;;         (add-hook 'robe-mode-hook 'ac-robe-setup)
+;;         (add-hook 'ruby-mode-hook 'auto-complete-mode)))
 
-(require 'feature-mode)
-(add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
-(add-to-list 'auto-mode-alist '("Rakefile\\'" . ruby-mode))
+(use-package python
+  :ensure t
+  :config
+  (progn
+    (setq-default python-indent 4)
+    (use-package flycheck-pyflakes
+      :ensure t
+      :defer t
+      :after (flycheck))))
 
-(defun yf/light-backtrace ()
-  (with-temp-buffer
-    (let ((standard-output (current-buffer)))
-      (backtrace)
-      (goto-char (point-min))
-      (while (re-search-forward "^  (" nil t)
-        (delete-region (point-at-bol) (progn (forward-line 1) (point))))
-      (buffer-string))))
-(defadvice recenter (before backtrace activate)
-  (message "Recenter backtrace: \n%s" (yf/light-backtrace)))
+(use-package feature-mode
+  :ensure t
+  :mode ("\\.feature$" . feature-mode))
 
-;;; lisp
-(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-    (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-    (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-    (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-    (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-    (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-    (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+;; web development
+(use-package web-mode
+  :ensure t
+  :mode (("\\.erb\\'" . web-mode) ("\\.html?\\'" . web-mode))
+  :config
+    (setq web-mode-enable-css-colorization t)
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-style-padding 2)
+    (setq web-mode-script-padding 2))
+(use-package less-css-mode :ensure t)
+;;; Colourise CSS colour literals
+(use-package rainbow-mode
+  :if (eval-when-compile (>= emacs-major-version 24))
+  :ensure t
+  :config
+  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
+    (add-hook hook 'rainbow-mode)))
 
+;; markup formats
+(use-package yaml-mode
+  :ensure t
+  :mode (("\\.yml$" . yaml-mode) ("\\.sls\\'" . yaml-mode)))
+(use-package salt-mode :ensure t)
+(use-package markdown-mode :ensure t)
+(use-package toml-mode :ensure t)
 
-;; web
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Other functionality (org, calendar)
+(use-package calfw :ensure t)
 
-;; Saltstack
-(add-to-list 'auto-mode-alist '("\\.sls\\'" . yaml-mode))
+(use-package org
+  :ensure t
+  :config
+  (progn           
+    (setq org-src-fontify-natively t)
+    (setq org-fontify-whole-heading-line t)
+    (setq org-pretty-entities t)
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+    (define-key org-mode-map (kbd "M-RET") nil)))
 
+;; work setup
+(if (file-exists-p "~/.emacs.suse.d/init.el")
+    (load-file "~/.emacs.suse.d/init.el"))
+
+;; Hacks
+;;
 ;; Hack to fix a bug with tabulated-list.el
 ;; see: http://redd.it/2dgy52
 (defun tabulated-list-revert (&rest ignored)
@@ -392,28 +395,15 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
 
-;; work setup
-(if (file-exists-p "~/.emacs.suse.d/init.el")
-    (load-file "~/.emacs.suse.d/init.el"))
-
-(require 'org)
-(setq org-src-fontify-natively t)
-(setq org-fontify-whole-heading-line t)
-(setq org-pretty-entities t)
-
-;; Org mode
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-(define-key org-mode-map (kbd "M-RET") nil)
-
-;; org-trello major mode for all .trello files
-(add-to-list 'auto-mode-alist '("\\.trello$" . org-mode))
-
-;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
-(add-hook 'org-mode-hook
-          (lambda ()
-            (let ((filename (buffer-file-name (current-buffer))))
-              (when (and filename (string= "trello" (file-name-extension filename)))
-              (org-trello-mode)))))
-
+(when window-system
+  (let
+    ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
+    (message "Loading %s...done (%.3fs)" load-file-name elapsed))
+  (add-hook 'after-init-hook
+    `(lambda ()
+       (let ((elapsed (float-time (time-subtract (current-time)
+                                                 emacs-start-time))))
+         (message "Loading %s...done (%.3fs) [after-init]"
+                  ,load-file-name elapsed)))
+    t))
 (provide 'init)
-;;; init.el ends here
