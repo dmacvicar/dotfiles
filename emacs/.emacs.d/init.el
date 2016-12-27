@@ -25,7 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance & Behavior
 ;;
-(use-package flx-ido
+(use-package ido
   :ensure t
   :defer t
   :init
@@ -36,7 +36,11 @@
   :config
   (ido-mode 1)
   (ido-everywhere 1)
-  (flx-ido-mode 1))
+  (use-package flx-ido
+    :ensure t
+    :defer t
+    :config
+    (flx-ido-mode 1)))
 
 (use-package popwin :ensure t)
 
