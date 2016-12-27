@@ -25,7 +25,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance & Behavior
 ;;
-(use-package ido-vertical-mode :ensure t)
 (use-package flx-ido
   :ensure t
   :defer t
