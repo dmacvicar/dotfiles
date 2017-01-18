@@ -364,6 +364,10 @@
 (use-package salt-mode :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package toml-mode :ensure t)
+(use-package vue-mode
+  :ensure t
+  :config
+  (setq js-indent-level 2))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Other functionality (org, calendar)
