@@ -301,7 +301,13 @@
   :ensure t
   :config
   (progn
-    (add-hook 'go-mode-hook '(lambda () (setq tab-width 4)))))
+    (use-package company-go
+      :ensure t)
+    (add-hook 'go-mode-hook
+              (lambda ()
+                (setq tab-width 4)
+                (set (make-local-variable 'company-backends) '(company-go))
+                (company-mode)))))
 
 (defun my-c-mode-hook ()
   (setq c-basic-offset 4)
