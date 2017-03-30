@@ -380,6 +380,7 @@
     (setq org-src-fontify-natively t)
     (setq org-fontify-whole-heading-line t)
     (setq org-pretty-entities t)
+    (setq org-return-follows-link t)
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
     (define-key org-mode-map (kbd "M-RET") nil)))
 
