@@ -396,7 +396,9 @@
     (setq org-pretty-entities t)
     (setq org-return-follows-link t)
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-    (define-key org-mode-map (kbd "M-RET") nil)))
+    (define-key org-mode-map (kbd "M-RET") nil)
+    (use-package kanban
+      :ensure t)))
 
 ;; work setup
 (if (file-exists-p "~/.emacs.suse.d/init.el")
