@@ -25,6 +25,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance & Behavior
 ;;
+(use-package f
+  :ensure t)
+
+(use-package perspeen
+  :ensure t
+  :init
+  (setq perspeen-use-tab t)
+  :config
+  (perspeen-mode))
+
 (use-package ido
   :ensure t
   :defer t
