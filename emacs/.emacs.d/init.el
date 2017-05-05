@@ -73,8 +73,8 @@
                              (frame-char-height)))))))
 
 (set-frame-size-according-to-resolution)
-;(set-face-attribute 'default nil :font "Consolas-11")
-(set-face-attribute 'default nil :font "Monospace")
+(if window-system
+  (set-face-attribute 'default nil :font "Monospace"))
 
 ;; the blinking cursor is nothing, but an annoyance
 (blink-cursor-mode -1)
