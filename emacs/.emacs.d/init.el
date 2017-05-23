@@ -48,6 +48,16 @@
 ; so that vc mode do not ask again
 (setq vc-follow-symlinks t)
 
+; recent files
+(use-package recentf
+  :ensure t
+  :bind ("C-x C-r" . recentf-open-files)
+  :init
+  :config
+  (progn
+    ; Save the list every 5 minutes
+    (recentf-mode 1) (run-at-time nil (* 5 60) 'recentf-save-list)))
+
 (use-package f
   :ensure t)
 

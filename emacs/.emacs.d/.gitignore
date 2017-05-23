@@ -3,4 +3,5 @@ auto-save-list
 elpa
 *.lock
 custom.el
+recentf
 
