@@ -38,6 +38,9 @@
   (kill-buffer (current-buffer)))
 (global-set-key (kbd "C-x k") 'dmacvicar/kill-this-buffer)
 
+; allow y or n answers
+(fset 'yes-or-no-p 'y-or-n-p)
+
 ; disable function keys
 (dotimes (i 12)
   (global-unset-key (kbd (format "<f%d>" (+ i 1)))))
