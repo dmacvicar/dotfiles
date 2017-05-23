@@ -31,6 +31,20 @@
    (when (file-exists-p custom-file)
        (load custom-file :noerror))
 
+; http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead/
+(defun dmacvicar/kill-this-buffer ()
+  "Kill the current buffer."
+  (interactive)
+  (kill-buffer (current-buffer)))
+(global-set-key (kbd "C-x k") 'dmacvicar/kill-this-buffer)
+
+; disable function keys
+(dotimes (i 12)
+  (global-unset-key (kbd (format "<f%d>" (+ i 1)))))
+
+; disable overwrite mode
+(define-key global-map [(insert)] nil)
+
 (use-package f
   :ensure t)
 
