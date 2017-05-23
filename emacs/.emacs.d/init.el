@@ -45,6 +45,9 @@
 ; disable overwrite mode
 (define-key global-map [(insert)] nil)
 
+; so that vc mode do not ask again
+(setq vc-follow-symlinks t)
+
 (use-package f
   :ensure t)
 
