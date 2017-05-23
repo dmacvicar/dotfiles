@@ -113,6 +113,7 @@
 (blink-cursor-mode -1)
 ;; disable startup screen
 (setq inhibit-startup-screen t)
+(setq-default inhibit-startup-message t)
 ;; mode line settings
 (line-number-mode t)
 (column-number-mode t)
