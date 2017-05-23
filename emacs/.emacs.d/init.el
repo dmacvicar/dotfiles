@@ -19,6 +19,7 @@
 
 (eval-when-compile
   (require 'use-package))
+; Diminished modes are minor modes with no modeline display
 (require 'diminish)
 (require 'bind-key)
 
