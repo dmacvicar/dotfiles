@@ -12,18 +12,13 @@
 set $mod Mod4
 
 exec_always --no-startup-id ~/.i3/dock.sh
+
 bindsym $mod+F12 exec --no-startup-id ~/.i3/dock.sh
 bindsym $mod+Shift+F12 exec xrandr --auto
 exec_always --no-startup-id setxkbmap -option ctrl:nocaps
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below. ISO 10646 = Unicode
-font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-# The font above is very space-efficient, that is, it looks good, sharp and
-# clear in small sizes. However, if you need a lot of unicode glyphs or
-# right-to-left text rendering, you should instead use pango for rendering and
-# chose a FreeType font, such as:
-font pango: DejaVu Sans Mono 10, FontAwesome, ionicons
+font pango:NotoSans-Regular 8
+#, FontAwesome, ionicons
 
 # colors
 #class                    border    backgr.   text      indicator
@@ -62,8 +57,11 @@ bindsym $mod+Shift+Down layout toggle
 
 # split in horizontal orientation
 bindsym $mod+h split h
+bindsym $mod+| split h
+
 # split in vertical orientation
 bindsym $mod+v split v
+bindsym $mod+- split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
@@ -144,44 +142,8 @@ bindsym XF86AudioNext exec mocp -f
 workspace_auto_back_and_forth yes
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-
 bar {
-  output VGA1
-  position top
-  status_command i3status -c ~/.i3/i3status.conf
-  workspace_buttons yes
-  tray_output no
-  colors {
-    separator #666666
-    background #333333
-    statusline #bbbbbb
-    focused_workspace #888888 #dddddd #222222
-    active_workspace #333333 #555555 #bbbbbb
-    inactive_workspace #333333 #555555 #bbbbbb
-    urgent_workspace #2f343a #900000 #ffffff
-  }
-}
-
-bar {
-  output LVDS-0
-  output LVDS-1
-  output LVDS1
-  output HDMI2
-  output HDMI-2
-  position top
-  status_command i3status -c ~/.i3/i3status.conf
-  #status_command ~/.i3/conky
-  workspace_buttons yes
-  tray_output primary
-  colors {
-    separator #666666
-    background #333333
-    statusline #bbbbbb
-    focused_workspace #888888 #dddddd #222222
-    active_workspace #333333 #555555 #bbbbbb
-    inactive_workspace #333333 #555555 #bbbbbb
-    urgent_workspace #2f343a #900000 #ffffff
-  }
+  i3bar_command $HOME/.i3/polybar.sh
 }
 
 #exec --no-startup-id LC_ALL=C parcellite
@@ -190,9 +152,15 @@ exec --no-startup-id nm-applet
 # disable system bell
 exec --no-startup-id xset b off
 
-exec --no-startup-id /usr/lib/gnome-settings-daemon-3.0/gnome-settings-daemon &
+exec --no-startup-id /usr/lib/gnome-settings-daemon-3.0/gsd-keyboard &
+exec --no-startup-id /usr/lib/gnome-settings-daemon-3.0/gsd-xsettings &
+
 #exec --no-startup-id gnome-keyring-daemon &
 #exec --no-startup-id /usr/lib/polkit-gnome-authentication-agent-1 &
 #exec --no-startup-id gnome-screensaver &
+
+#exec --no-startup-id xmodmap -e "remove lock = Caps_Lock"
+#exec --no-startup-id xmodmap -e "keycode 66 = Control_L"
+#exec --no-startup-id xmodmap -e "add control = Control_L"
 
 

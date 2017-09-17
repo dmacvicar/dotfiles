@@ -1,7 +1,9 @@
 displayCount=$((`xrandr -q|grep " connected"|wc -l`))
 intDisplay=$(xrandr -q | grep " connected" | grep "LVDS" | awk '{print $1}')
-ext1Display=$(xrandr -q |  grep -P 'HDMI(.*)1' | awk '{print $1}')
-ext2Display=$(xrandr -q |  grep -P 'VGA(.*)1' | awk '{print $1}')
+ext1Display=$(xrandr -q | grep " connected" |  grep -P 'HDMI(.*)1' | awk '{print $1}')
+ext2Display=$(xrandr -q | grep " connected" |  grep -P 'VGA(.*)1' | awk '{print $1}')
+
+echo "${displayCount} -> Int: ${intDisplay} | Ext1: ${ext1Display} | Ext2: ${ext2Display}"
 
 xrandr --auto
 
