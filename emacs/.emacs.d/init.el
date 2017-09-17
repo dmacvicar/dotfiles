@@ -169,20 +169,6 @@
 (windmove-default-keybindings)
 (setq windmove-wrap-around t)
 
-;; X11 keyboard in console
-(defun xclip-tramp-fix (orig-fun &rest args)
-  ;; temporary set current dir to local machine
-  (let ((default-directory "/"))
-    (apply orig-fun args)))
-
-(advice-add 'xclip-selection-value :around #'xclip-tramp-fix)
-(advice-add 'xclip-select-text :around #'xclip-tramp-fix)
-(use-package xclip
-  :ensure t
-  :config
-  (progn (xclip-mode 1) (turn-on-xclip))
-)
-
 ;;;; scrolling
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
