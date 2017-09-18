@@ -10,7 +10,7 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
-
+workspace_layout tabbed
 exec_always --no-startup-id ~/.i3/dock.sh
 
 bindsym $mod+F12 exec --no-startup-id ~/.i3/dock.sh
@@ -33,7 +33,8 @@ floating_modifier $mod
 
 # start a terminal
 #bindsym $mod+Return exec urxvt-256color
-bindsym $mod+Return exec gnome-terminal --hide-menubar
+# bindsym $mod+Return exec gnome-terminal --hide-menubar
+bindsym $mod+Return exec $HOME/.i3/run-here.sh gnome-terminal --hide-menubar
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -163,4 +164,7 @@ exec --no-startup-id /usr/lib/gnome-settings-daemon-3.0/gsd-xsettings &
 #exec --no-startup-id xmodmap -e "keycode 66 = Control_L"
 #exec --no-startup-id xmodmap -e "add control = Control_L"
 
-
+for_window [class="^.*"] border pixel 4
+for_window [class="Nautilus" instance="file_progress"] floating enable
+# browser pop-ups
+for_window [window_role="pop-up"] floating enable
