@@ -15,7 +15,7 @@ exec_always --no-startup-id ~/.i3/dock.sh
 
 bindsym $mod+F12 exec --no-startup-id ~/.i3/dock.sh
 bindsym $mod+Shift+F12 exec xrandr --auto
-exec_always --no-startup-id setxkbmap -option ctrl:nocaps
+exec_always --no-startup-id setxkbmap -option ctrl:nocaps -layout "de,es,us"
 
 font pango:NotoSans-Regular 8
 #, FontAwesome, ionicons

@@ -21,7 +21,11 @@ font-2 = Termsynu:size=8:antialias=false;-2
 font-3 = FontAwesome:size=10;0
 
 modules-left = powermenu mpd
-modules-right = backlight vpncheck wireless-network wired-network battery volume date
+modules-right = keyboard_layout backlight vpncheck wireless-network wired-network battery volume date
+
+[module/keyboard_layout]
+type = internal/xkeyboard
+label = <label-layout>
 
 [module/vpncheck]
 type = custom/script
