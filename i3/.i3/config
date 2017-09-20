@@ -57,11 +57,8 @@ bindsym $mod+Shift+Right move right
 
 
 # cycle workspaces
-bindsym $mod+Shift+Left workspace prev_on_output
-bindsym $mod+Shift+Right workspace next_on_output
-# Still not sure if I like this
-bindsym $mod+Shift+Up layout toggle
-bindsym $mod+Shift+Down layout toggle
+bindsym $mod+Prior workspace prev_on_output
+bindsym $mod+Next workspace next_on_output
 
 # split in horizontal orientation
 bindsym $mod+h split h
