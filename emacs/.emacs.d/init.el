@@ -90,6 +90,10 @@
 
 (use-package popwin :ensure t)
 
+(use-package xclip
+  :ensure t
+  :config (xclip-mode 1))
+
 (defun set-frame-size-according-to-resolution ()
   (interactive)
   (when (display-graphic-p)
