@@ -413,15 +413,20 @@
 (use-package org
   :ensure t
   :config
-  (progn           
+  (progn
     (setq org-src-fontify-natively t)
     (setq org-fontify-whole-heading-line t)
     (setq org-pretty-entities t)
     (setq org-return-follows-link t)
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
     (define-key org-mode-map (kbd "M-RET") nil)
-    (use-package kanban
-      :ensure t)))
+    (use-package kanban :ensure t)
+    (use-package ob-go :ensure t)
+    (use-package ob-diagrams :ensure t)
+    (use-package ox-gfm :ensure t)
+    (use-package ox-reveal :ensure t)
+    (use-package htmlize :ensure t)
+    ))
 
 ;; work setup
 (if (file-exists-p "~/.emacs.suse.d/init.el")
