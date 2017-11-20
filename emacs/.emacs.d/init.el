@@ -32,6 +32,9 @@
    (when (file-exists-p custom-file)
        (load custom-file :noerror))
 
+; scratch mode settings
+(setq initial-major-mode 'text-mode)
+
 ; http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead/
 (defun dmacvicar/kill-this-buffer ()
   "Kill the current buffer."
