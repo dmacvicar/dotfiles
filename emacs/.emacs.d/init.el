@@ -75,23 +75,6 @@
   :config
   (perspeen-mode))
 
-(use-package ido
-  :ensure t
-  :defer t
-  :init
-  (progn
-    (setq gc-cons-threshold (* 20 (expt 2 20)) ; megabytes
-          ido-use-faces nil)
-    (setq ido-create-new-buffer 'always))
-  :config
-  (ido-mode 1)
-  (ido-everywhere 1)
-  (use-package flx-ido
-    :ensure t
-    :defer t
-    :config
-    (flx-ido-mode 1)))
-
 (use-package popwin :ensure t)
 
 (use-package xclip
@@ -187,6 +170,38 @@
 ;;
 (use-package multi-term :ensure t)
 
+
+(use-package ag
+  :ensure t
+  :config
+  (add-hook 'ag-mode-hook 'toggle-truncate-lines)
+  (setq ag-highlight-search t)
+  (setq ag-reuse-buffers 't))
+
+(use-package ivy
+  :ensure t
+  :diminish ivy-mode
+  :config
+  (progn
+    (ivy-mode 1)
+    (bind-key "C-c C-r" 'ivy-resume)
+    (use-package ivy-rich
+    :ensure t
+    :config
+    (progn
+      (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
+      (setq ivy-virtual-abbreviate 'full
+       ivy-rich-switch-buffer-align-virtual-buffer t)
+      (setq ivy-rich-path-style 'abbrev)))))
+
+(use-package counsel
+  :ensure t
+  :bind
+  ("M-x" . counsel-M-x)
+;  ("C-z f" . counsel-describe-function)
+;  ("C-z v" . counsel-describe-variable)
+  ("C-c k" . counsel-ag))
+
 (use-package projectile
   :ensure t
   :config (projectile-global-mode t)
@@ -254,8 +269,10 @@
       kept-old-versions 2
       version-control t)       ; use versioned backups
 
-(global-set-key (kbd "M-RET") 'electric-buffer-list)
-(global-set-key (kbd "C-M-j") 'electric-buffer-list)
+;(global-set-key (kbd "M-RET") 'electric-buffer-list)
+;(global-set-key (kbd "C-M-j") 'electric-buffer-list)
+(global-set-key (kbd "M-RET") 'ivy-switch-buffer)
+(global-set-key (kbd "C-M-j") 'ivy-switch-buffer)
 
 (add-hook 'Buffer-menu-mode-hook 'buffer-disable-undo)
 
