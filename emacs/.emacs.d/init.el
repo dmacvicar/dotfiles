@@ -186,13 +186,15 @@
     (ivy-mode 1)
     (bind-key "C-c C-r" 'ivy-resume)
     (use-package ivy-rich
-    :ensure t
-    :config
-    (progn
-      (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
-      (setq ivy-virtual-abbreviate 'full
-       ivy-rich-switch-buffer-align-virtual-buffer t)
-      (setq ivy-rich-path-style 'abbrev)))))
+      :ensure t
+      :init
+      (progn
+        (setq ivy-virtual-abbreviate 'full)
+        (setq ivy-rich-switch-buffer-align-virtual-buffer t)
+        (setq ivy-rich-path-style 'abbrev))
+      :config
+      (progn
+        (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))))
 
 (use-package counsel
   :ensure t
@@ -204,9 +206,20 @@
 
 (use-package projectile
   :ensure t
-  :config (projectile-global-mode t)
-  :diminish projectile-mode
-)
+  :init
+  (progn
+    (setq projectile-mode-line
+          '(:eval (format " [%s]" (projectile-project-name))))
+    (setq projectile-remember-window-configs t)
+    (setq projectile-completion-system 'ivy))
+  :config
+  (progn
+    (projectile-global-mode)
+    (use-package counsel-projectile
+      :ensure t
+      :config
+      (progn
+        (counsel-projectile-on)))))
 
 (use-package company
   :ensure t
