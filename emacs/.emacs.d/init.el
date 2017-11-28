@@ -441,6 +441,12 @@
     (setq org-return-follows-link t)
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
     (define-key org-mode-map (kbd "M-RET") nil)
+    (require 'org-crypt)
+    (org-crypt-use-before-save-magic)
+    (setq org-tags-exclude-from-inheritance (quote ("crypt")))
+    ;; GPG key to use for encryption
+    ;; Either the Key ID or set to nil to use symmetric encryption.
+    (setq org-crypt-key nil)
     (use-package kanban :ensure t)
     (use-package ob-go :ensure t)
     (use-package ob-diagrams :ensure t)
