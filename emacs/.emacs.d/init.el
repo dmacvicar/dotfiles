@@ -219,7 +219,7 @@
       :ensure t
       :config
       (progn
-        (counsel-projectile-on)))))
+        (counsel-projectile-mode)))))
 
 (use-package company
   :ensure t
