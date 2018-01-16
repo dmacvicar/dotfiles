@@ -448,10 +448,11 @@
   :ensure t
   :config
   (progn
-    (setq org-src-fontify-natively t)
-    (setq org-fontify-whole-heading-line t)
-    (setq org-pretty-entities t)
-    (setq org-return-follows-link t)
+    (setq org-src-fontify-natively t
+          org-fontify-whole-heading-line t
+          org-pretty-entities t
+          org-return-follows-link t
+          org-src-tab-acts-natively t)
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
     (define-key org-mode-map (kbd "M-RET") nil)
     (require 'org-crypt)
@@ -461,12 +462,21 @@
     ;; Either the Key ID or set to nil to use symmetric encryption.
     (setq org-crypt-key nil)
     (use-package kanban :ensure t)
+    (use-package ob-http :ensure t)
     (use-package ob-go :ensure t)
     (use-package ob-diagrams :ensure t)
     (use-package ox-gfm :ensure t)
     (use-package ox-reveal :ensure t)
     (use-package htmlize :ensure t)
-    ))
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((http       . t)
+       (shell      . t)
+       (js         . t)
+       (emacs-lisp . t)
+       (python     . t)
+       (ruby     . t)
+       (dot        . t)))))
 
 ;; work setup
 (if (file-exists-p "~/.emacs.suse.d/init.el")
