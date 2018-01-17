@@ -479,6 +479,8 @@
     (use-package ox-gfm :ensure t)
     (use-package ox-reveal :ensure t)
     (use-package htmlize :ensure t)
+    (use-package ob-markdown
+      :quelpa (ob-markdown :fetcher github :repo "tnoda/ob-markdown"))
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((http       . t)
