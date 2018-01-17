@@ -1,1 +1,0 @@
-.emacs.d/projectile-bookmarks.eld
