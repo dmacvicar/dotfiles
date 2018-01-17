@@ -13,10 +13,21 @@
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 (package-initialize)
-
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
+(use-package quelpa
+  :ensure t
+  :init
+  (progn
+    ;; we use quelpa mainly for non-melpa/unpublished packages
+    (setq quelpa-update-melpa-p nil)
+    (setq quelpa-checkout-melpa-p nil)))
+(use-package quelpa-use-package
+  :ensure t
+  :config
+  (setq quelpa-self-upgrade-p nil))
 
 (eval-when-compile
   (require 'use-package))
