@@ -1,4 +1,7 @@
 ;;; init.el --- Duncan Mac-Vicar P. emacs init
+;; Make startup faster by reducing the frequency of garbage
+;; collection.  The default is 800 kilobytes.  Measured in bytes.
+(setq gc-cons-threshold (* 50 1000 1000))
 (defconst emacs-start-time (current-time))
 (require 'cl)
 ;; do this early
@@ -31,6 +34,7 @@
 
 (eval-when-compile
   (require 'use-package))
+
 ; Diminished modes are minor modes with no modeline display
 (use-package diminish :ensure t)
 (require 'bind-key)
@@ -69,6 +73,7 @@
 ; recent files
 (use-package recentf
   :ensure t
+  ;; Loads after 1 second of idle time.
   :bind ("C-x C-r" . recentf-open-files)
   :init
   :config
@@ -77,9 +82,11 @@
     (recentf-mode 1) (run-at-time nil (* 5 60) 'recentf-save-list)))
 
 (use-package f
+  :defer t
   :ensure t)
 
 (use-package perspeen
+  :defer t
   :ensure t
   :init
   (setq perspeen-use-tab t)
@@ -90,6 +97,8 @@
 
 (use-package xclip
   :ensure t
+  ;; Loads after 1 second of idle time.
+  :defer 1
   :config (xclip-mode 1))
 
 (defun set-frame-size-according-to-resolution ()
@@ -179,10 +188,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Common programming and tools
 ;;
-(use-package multi-term :ensure t)
-
+(use-package multi-term
+  :defer t
+  :ensure t)
 
 (use-package ag
+  :defer t
   :ensure t
   :config
   (add-hook 'ag-mode-hook 'toggle-truncate-lines)
@@ -208,6 +219,8 @@
         (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))))
 
 (use-package counsel
+  :after ivy
+  :diminish
   :ensure t
   :bind
   ("M-x" . counsel-M-x)
@@ -217,6 +230,8 @@
 
 (use-package projectile
   :ensure t
+  ;; Loads after 1 second of idle time.
+  :defer 1
   :init
   (progn
     (setq projectile-mode-line
@@ -236,15 +251,20 @@
   :ensure t
   :config (add-hook 'prog-mode-hook 'company-mode))
 
-(use-package magit :ensure t)
+(use-package magit
+  :defer t
+  :ensure t)
 
 (use-package flycheck
   :ensure t
   :defer t
   :init
-  (defun my-flycheck-prog-mode-hook ()
-    (flycheck-mode t))
-  (add-hook 'prog-mode-hook 'my-flycheck-prog-mode-hook))
+  (progn
+    (setq flycheck-command-wrapper-function
+          (lambda (command)
+            (append '("bundle" "exec") command))))
+  :config
+  (global-flycheck-mode))
 
 (use-package flycheck-pos-tip
   :ensure t
@@ -374,22 +394,29 @@
 ;;
 ;; C, C++ and other compiled languages
 (use-package rust-mode
+  :defer t
   :ensure t
   :config
   (progn
-    (use-package flycheck-rust :ensure t :after (flycheck))))
+    (use-package flycheck-rust
+      :hook rust-mode
+      :after (flycheck)
+      :ensure t)))
 
 (use-package go-mode
+  :defer t
   :ensure t
-  :config
+  :init
   (progn
     (use-package company-go
-      :ensure t)
-    (add-hook 'go-mode-hook
-              (lambda ()
-                (setq tab-width 4)
-                (set (make-local-variable 'company-backends) '(company-go))
-                (company-mode)))))
+      :hook go-mode
+      :ensure t))
+  :config
+  (add-hook 'go-mode-hook
+            (lambda ()
+              (setq tab-width 4)
+              (set (make-local-variable 'company-backends) '(company-go))
+              (company-mode))))
 
 (defun my-c-mode-hook ()
   (setq c-basic-offset 4)
@@ -397,17 +424,19 @@
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
 ;; Scripting languages
-(use-package rinari :ensure t)
-(use-package bundler :ensure t)
+(use-package rinari
+  :hook ruby-mode
+  :ensure t)
 (use-package robe
+  :hook (ruby-mode . robe-mode)
   :ensure t
   :init
-  (progn (add-hook 'ruby-mode-hook 'robe-mode)
-         (push 'company-robe company-backends)))
-;;         (add-hook 'robe-mode-hook 'ac-robe-setup)
-;;         (add-hook 'ruby-mode-hook 'auto-complete-mode)))
+  (add-hook 'ruby-mode-hook
+            (lambda ()
+              (setq-local company-backends '((company-robe))))))
 
 (use-package python
+  :defer t
   :ensure t
   :config
   (progn
@@ -430,32 +459,55 @@
     (setq web-mode-markup-indent-offset 2)
     (setq web-mode-style-padding 2)
     (setq web-mode-script-padding 2))
-(use-package less-css-mode :ensure t)
+
+(use-package less-css-mode
+  :defer t
+  :ensure t)
+
 ;;; Colourise CSS colour literals
 (use-package rainbow-mode
   :if (eval-when-compile (>= emacs-major-version 24))
   :ensure t
-  :config
-  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
-    (add-hook hook 'rainbow-mode)))
+  :hook ((css-mode html-mode sass-mode) . rainbow-mode))
 
 ;; markup formats
 (use-package yaml-mode
   :ensure t
   :mode (("\\.yml$" . yaml-mode) ("\\.sls\\'" . yaml-mode)))
-(use-package salt-mode :ensure t)
-(use-package markdown-mode :ensure t)
-(use-package toml-mode :ensure t)
+(use-package salt-mode
+  :defer t
+  :ensure t)
+(use-package markdown-mode
+  :defer t
+  :ensure t)
+(use-package toml-mode
+  :defer t
+  :ensure t)
 (use-package vue-mode
+  :defer t
   :ensure t
   :config
   (setq js-indent-level 2))
 
+(use-package ponylang-mode
+  :defer t
+  :ensure t
+  :config
+  (progn
+    (add-hook
+     'ponylang-mode-hook
+     (lambda ()
+       (set-variable 'indent-tabs-mode nil)
+       (set-variable 'tab-width 2)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Other functionality (org, calendar)
-(use-package calfw :ensure t)
+(use-package calfw
+  :defer t
+  :ensure t)
 
 (use-package org
+  :defer t
   :ensure t
   :config
   (progn
@@ -464,7 +516,6 @@
           org-pretty-entities t
           org-return-follows-link t
           org-src-tab-acts-natively t)
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
     (define-key org-mode-map (kbd "M-RET") nil)
     (require 'org-crypt)
     (org-crypt-use-before-save-magic)
@@ -472,24 +523,58 @@
     ;; GPG key to use for encryption
     ;; Either the Key ID or set to nil to use symmetric encryption.
     (setq org-crypt-key nil)
-    (use-package kanban :ensure t)
-    (use-package ob-http :ensure t)
-    (use-package ob-go :ensure t)
-    (use-package ob-diagrams :ensure t)
-    (use-package ox-gfm :ensure t)
-    (use-package ox-reveal :ensure t)
-    (use-package htmlize :ensure t)
+    (use-package org-bullets
+      :ensure t
+      :hook (org-mode . org-bullets-mode))
+    ;; Avoid `org-babel-do-load-languages' since it does an eager require.
+    (use-package ob-ruby
+      :defer t
+      :ensure org-plus-contrib
+      :commands (org-babel-execute:ruby))
+    (use-package ob-python
+      :defer t
+      :ensure org-plus-contrib
+      :commands (org-babel-execute:python))
     (use-package ob-markdown
-      :quelpa (ob-markdown :fetcher github :repo "tnoda/ob-markdown"))
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((http       . t)
-       (shell      . t)
-       (js         . t)
-       (emacs-lisp . t)
-       (python     . t)
-       (ruby     . t)
-       (dot        . t)))))
+      :defer t
+      :ensure org-plus-contrib
+      :quelpa (ob-markdown :fetcher github :repo "tnoda/ob-markdown")
+      :commands
+      (org-babel-execute:markdown
+       org-babel-expand-body:markdown))
+    (use-package ob-go
+      :defer t
+      :ensure org-plus-contrib
+      :commands
+      (org-babel-execute:go
+       org-babel-expand-body:go))
+    (use-package ob-http
+      :defer t
+      :ensure org-plus-contrib
+      :commands
+      (org-babel-execute:http
+       org-babel-expand-body:http))
+    (use-package ob-shell
+      :defer t
+      :ensure org-plus-contrib
+      :commands
+      (org-babel-execute:sh
+       org-babel-expand-body:sh
+       org-babel-execute:bash
+       org-babel-expand-body:bash))
+    (use-package ob-diagrams
+      :defer t
+      :ensure org-plus-contrib
+      :commands (org-babel-execute:diagrams))
+    (use-package ox-gfm
+      :defer t
+      :ensure t)
+    (use-package ox-reveal
+      :defer t
+      :ensure t)
+    (use-package htmlize
+      :defer t
+      :ensure t)))
 
 ;; work setup
 (if (file-exists-p "~/.emacs.suse.d/init.el")
@@ -516,15 +601,15 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
 
-(when window-system
-  (let
-    ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
-    (message "Loading %s...done (%.3fs)" load-file-name elapsed))
-  (add-hook 'after-init-hook
-    `(lambda ()
-       (let ((elapsed (float-time (time-subtract (current-time)
-                                                 emacs-start-time))))
-         (message "Loading %s...done (%.3fs) [after-init]"
-                  ,load-file-name elapsed)))
-    t))
+;; Use a hook so the message doesn't get clobbered by other messages.
+;; (add-hook 'emacs-startup-hook
+;;           (lambda ()
+;;             (message "Emacs ready in %s with %d garbage collections."
+;;                      (format "%.2f seconds"
+;;                              (float-time
+;;                               (time-subtract after-init-time before-init-time)))
+;;                      gcs-done)))
+
+;; Make gc pauses faster by decreasing the threshold.
+(setq gc-cons-threshold (* 2 1000 1000))
 (provide 'init)
