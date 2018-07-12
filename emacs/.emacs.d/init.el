@@ -479,7 +479,8 @@
   :ensure t)
 (use-package markdown-mode
   :defer t
-  :ensure t)
+  :ensure t
+  :bind (:map markdown-mode-map ("M-RET" . nil)))
 (use-package toml-mode
   :defer t
   :ensure t)
