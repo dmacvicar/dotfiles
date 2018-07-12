@@ -490,6 +490,13 @@
   :config
   (setq js-indent-level 2))
 
+(use-package hcl-mode
+  :defer t
+  :ensure t)
+(use-package terraform-mode
+  :defer t
+  :ensure t)
+
 (use-package ponylang-mode
   :defer t
   :ensure t
