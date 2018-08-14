@@ -242,9 +242,8 @@
     (projectile-global-mode)
     (use-package counsel-projectile
       :ensure t
-      :config
-      (progn
-        (counsel-projectile-mode)))))
+      :preface (setq projectile-keymap-prefix (kbd "C-c p"))
+      :hook (after-init . counsel-projectile-mode))))
 
 (use-package company
   :ensure t
