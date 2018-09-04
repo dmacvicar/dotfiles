@@ -205,17 +205,16 @@
   :config
   (progn
     (ivy-mode 1)
-    (bind-key "C-c C-r" 'ivy-resume)
-    (use-package ivy-rich
-      :ensure t
-      :init
-      (progn
-        (setq ivy-virtual-abbreviate 'full)
-        (setq ivy-rich-switch-buffer-align-virtual-buffer t)
-        (setq ivy-rich-path-style 'abbrev))
-      :config
-      (progn
-        (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))))
+    (bind-key "C-c C-r" 'ivy-resume)))
+
+(use-package ivy-rich
+  :ensure t
+  :after ivy
+  :init
+  (progn
+    (setq ivy-virtual-abbreviate 'full)
+    (setq ivy-rich-switch-buffer-align-virtual-buffer t)
+    (setq ivy-rich-path-style 'abbrev)))
 
 (use-package counsel
   :after ivy
