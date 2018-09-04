@@ -593,6 +593,12 @@
       :defer t
       :ensure t)))
 
+;; Other tools and browsers
+(use-package hackernews
+  :defer t
+  :ensure t)
+
+
 ;; work setup
 (if (file-exists-p "~/.emacs.suse.d/init.el")
     (load-file "~/.emacs.suse.d/init.el"))
