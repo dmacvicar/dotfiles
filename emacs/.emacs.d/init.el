@@ -260,6 +260,27 @@
   :ensure t
   :config (add-hook 'prog-mode-hook 'company-mode))
 
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :defer t
+  :init
+  (add-hook 'prog-mode-hook #'lsp)
+  :hook 'lsp-ui-mode)
+
+(use-package lsp-ui
+  :ensure t
+  :defer t
+  ;(add-hook 'prog-mode-hook #'lsp)
+  :after flycheck)
+
+(use-package company-lsp
+  :commands company-lsp
+  :ensure t
+  :defer t
+  :config
+  (push 'company-lsp company-backends))
+
 (use-package magit
   :defer t
   :ensure t)
@@ -267,11 +288,11 @@
 (use-package flycheck
   :ensure t
   :defer t
-  :init
-  (progn
-    (setq flycheck-command-wrapper-function
-          (lambda (command)
-            (append '("bundle" "exec") command))))
+  ;:init
+  ;(progn
+  ;  (setq flycheck-command-wrapper-function
+  ;        (lambda (command)
+  ;          (append '("bundle" "exec") command))))
   :config
   (global-flycheck-mode))
 
@@ -415,16 +436,10 @@
 (use-package go-mode
   :defer t
   :ensure t
-  :init
-  (progn
-    (use-package company-go
-      :hook go-mode
-      :ensure t))
   :config
   (add-hook 'go-mode-hook
             (lambda ()
               (setq tab-width 4)
-              (set (make-local-variable 'company-backends) '(company-go))
               (company-mode))))
 
 (defun my-c-mode-hook ()
