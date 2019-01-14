@@ -383,9 +383,11 @@
 (global-hl-line-mode t)
 
 ; tabs
-(setq tabbar-ruler-global-tabbar t) ; If you want tabbar
 (use-package tabbar-ruler
   :ensure t
+  :after projectile
+  :init
+  (setq tabbar-ruler-global-tabbar t)
   :config
   (tabbar-ruler-group-by-projectile-project))
 
