@@ -19,6 +19,8 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+;; quelpa extends use-package to grab directly from git repositores that
+;; are not yet published on elpa/melpa repos
 (use-package quelpa
   :ensure t
   :init
@@ -260,6 +262,45 @@
   :ensure t
   :config (add-hook 'prog-mode-hook 'company-mode))
 
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :defer t
+  :init
+  (add-hook 'prog-mode-hook #'lsp)
+  (setq lsp-prefer-flymake nil)
+  (setq lsp-enable-xref nil)
+  (setq lsp-eldoc-enable-hover nil)
+  (setq lsp-eldoc-enable-signature-help nil)
+  (setq lsp-eldoc-render-all nil)
+  (setq lsp-eldoc-enable-signature-help nil)
+  (setq lsp-eldoc-prefer-signature-help nil)
+  (setq lsp-enable-on-type-formatting nil)
+  (setq lsp-enable-completion-at-point nil)
+  :config
+  ; Override built in Ruby configuration to work with bundled solargraph
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection
+    (lsp-stdio-connection '("bundle" "exec" "solargraph" "stdio"))
+    :major-modes '(enh-ruby-mode)
+    :priority 10
+    :multi-root t
+    :server-id 'ruby-solargraph))
+  :hook 'lsp-ui-mode)
+
+(use-package lsp-ui
+  :ensure t
+  :defer t
+  :after flycheck)
+
+(use-package company-lsp
+  :commands company-lsp
+  :ensure t
+  :defer t
+  :config
+  (push 'company-lsp company-backends))
+
 (use-package magit
   :defer t
   :ensure t)
@@ -415,16 +456,10 @@
 (use-package go-mode
   :defer t
   :ensure t
-  :init
-  (progn
-    (use-package company-go
-      :hook go-mode
-      :ensure t))
   :config
   (add-hook 'go-mode-hook
             (lambda ()
               (setq tab-width 4)
-              (set (make-local-variable 'company-backends) '(company-go))
               (company-mode))))
 
 (defun my-c-mode-hook ()
@@ -433,16 +468,41 @@
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
 ;; Scripting languages
-(use-package rinari
-  :hook ruby-mode
-  :ensure t)
-(use-package robe
-  :hook (ruby-mode . robe-mode)
+
+(use-package enh-ruby-mode
+  :ensure t
+  :interpreter "ruby"
+  :defer 2
+  :mode ("\\.rake\\'" . enh-ruby-mode)
+  :mode ("\\Rakefile\\'" . enh-ruby-mode)
+  :mode ("\\.gemspec\\'" . enh-ruby-mode)
+  :mode ("\\.ru\\'" . enh-ruby-mode)
+  :mode ("Gemfile\\'" . enh-ruby-mode)
+  :mode ("Guardfile\\'" . enh-ruby-mode)
+  :mode ("Capfile\\'" . enh-ruby-mode)
+  :mode ("\\.thor\\'" . enh-ruby-mode)
+  :mode ("\\.rabl\\'" . enh-ruby-mode)
+  :mode ("Thorfile\\'" . enh-ruby-mode)
+  :mode ("Vagrantfile\\'" . enh-ruby-mode)
+  :mode ("\\.jbuilder\\'" . enh-ruby-mode)
+  :mode ("Podfile\\'" . enh-ruby-mode)
+  :mode ("\\.podspec\\'" . enh-ruby-mode)
+  :mode ("Puppetfile\\'" . enh-ruby-mode)
+  :mode ("Berksfile\\'" . enh-ruby-mode)
+  :mode ("Appraisals\\'" . enh-ruby-mode)
+  :mode ("\\.rb\\'" . enh-ruby-mode)
+  :config
+  (setq ruby-deep-indent-paren nil)
+  (add-hook 'ruby-mode-hook 'rbenv-use-corresponding))
+
+(use-package rbenv
   :ensure t
   :init
-  (add-hook 'ruby-mode-hook
-            (lambda ()
-              (setq-local company-backends '((company-robe))))))
+  (progn
+    (setq
+     rbenv-modeline-function 'rbenv--modeline-plain
+     rbenv-show-active-ruby-in-modeline nil)
+    (global-rbenv-mode)))
 
 (use-package python
   :defer t
