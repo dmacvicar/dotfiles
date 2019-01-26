@@ -581,6 +581,16 @@
        (set-variable 'indent-tabs-mode nil)
        (set-variable 'tab-width 2)))))
 
+(use-package ess
+  :defer t
+  :ensure t)
+(use-package ess-R-data-view
+  :defer t
+  :ensure t)
+(use-package ess-view
+  :defer t
+  :ensure t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Other functionality (org, calendar)
 (use-package calfw
