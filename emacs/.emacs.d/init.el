@@ -267,7 +267,11 @@
   :commands lsp
   :defer t
   :init
-  (add-hook 'prog-mode-hook #'lsp)
+  (add-hook 'go-mode-hook #'lsp)
+  (add-hook 'ruby-mode-hook #'lsp)
+  (add-hook 'c-mode-hook #'lsp)
+  (add-hook 'c++-mode-hook #'lsp)
+
   (setq lsp-prefer-flymake nil)
   (setq lsp-enable-xref nil)
   (setq lsp-eldoc-enable-hover nil)
