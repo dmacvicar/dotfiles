@@ -140,10 +140,14 @@
                                        (abbreviate-file-name (buffer-file-name))
                                      "%b"))))
 
-(use-package highlight-indentation
+(use-package highlight-indent-guides
   :ensure t
+  :diminish highlight-indent-guides-mode
+  :config (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   :init
-  (setq highlight-indentation-offset 2))
+  (progn
+    (setq highlight-indent-guides-method 'column))
+)
 
 (use-package powerline
   :ensure t
@@ -272,6 +276,7 @@
   (add-hook 'ruby-mode-hook #'lsp)
   (add-hook 'c-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
+  (add-hook 'python-mode-hook #'lsp)
 
   (setq lsp-prefer-flymake nil)
   (setq lsp-enable-xref nil)
