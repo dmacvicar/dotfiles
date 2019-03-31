@@ -587,6 +587,10 @@
        (set-variable 'indent-tabs-mode nil)
        (set-variable 'tab-width 2)))))
 
+(use-package lua-mode
+  :defer t
+  :ensure t)
+
 (use-package ess
   :defer t
   :ensure t)
