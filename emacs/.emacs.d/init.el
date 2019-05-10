@@ -273,7 +273,7 @@
   :init
   ; We only activate LSP mode for some languages
   (add-hook 'go-mode-hook #'lsp)
-  (add-hook 'ruby-mode-hook #'lsp)
+  (add-hook 'enh-ruby-mode-hook #'lsp)
   (add-hook 'c-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
   (add-hook 'python-mode-hook #'lsp)
