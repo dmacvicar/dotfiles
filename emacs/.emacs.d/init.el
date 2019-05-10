@@ -277,16 +277,19 @@
   (add-hook 'c-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
   (add-hook 'python-mode-hook #'lsp)
-
-  (setq lsp-prefer-flymake nil)
-  (setq lsp-enable-xref nil)
-  (setq lsp-eldoc-enable-hover nil)
-  (setq lsp-eldoc-enable-signature-help nil)
-  (setq lsp-eldoc-render-all nil)
-  (setq lsp-eldoc-enable-signature-help nil)
-  (setq lsp-eldoc-prefer-signature-help nil)
-  (setq lsp-enable-on-type-formatting nil)
-  (setq lsp-enable-completion-at-point nil)
+  :custom
+  (lsp-auto-guess-root t)
+  (lsp-solargraph-diagnostics t)
+  (lsp-enable-snippet nil)
+  (lsp-prefer-flymake nil)
+  (lsp-enable-xref nil)
+  (lsp-eldoc-enable-hover nil)
+  (lsp-eldoc-enable-signature-help nil)
+  (lsp-eldoc-render-all nil)
+  (lsp-eldoc-enable-signature-help nil)
+  (lsp-eldoc-prefer-signature-help nil)
+  (lsp-enable-on-type-formatting nil)
+  (lsp-enable-completion-at-point nil)
   :config
   ; Override built in Ruby configuration to work with bundled solargraph
   (lsp-register-client
