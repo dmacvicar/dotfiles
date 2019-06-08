@@ -482,6 +482,13 @@
   (c-set-offset 'substatement-open 0))
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
+;; Java family of languages
+(use-package kotlin-mode
+  :defer t
+  :ensure t
+  :config
+  (setq kotlin-tab-width 2))
+
 ;; Scripting languages
 
 (use-package enh-ruby-mode
