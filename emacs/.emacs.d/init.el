@@ -487,7 +487,7 @@
   :defer t
   :ensure t
   :config
-  (setq kotlin-tab-width 2))
+  (setq kotlin-tab-width 4))
 
 ;; Scripting languages
 
