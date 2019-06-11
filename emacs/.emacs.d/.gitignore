@@ -15,3 +15,5 @@ elpa
 custom.el
 recentf
 smex-items
+abbrev_defs
+irony
