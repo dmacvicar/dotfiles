@@ -49,7 +49,9 @@
        (load custom-file :noerror))
 
 ; scratch mode settings
+; I want an empty text file, and not a lisp buffer with a comment
 (setq initial-major-mode 'text-mode)
+(setq initial-scratch-message "")
 
 ; http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead/
 (defun dmacvicar/kill-this-buffer ()
