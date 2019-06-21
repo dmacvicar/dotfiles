@@ -650,6 +650,10 @@
       :ensure t
       :hook (org-mode . org-bullets-mode))
     ;; Avoid `org-babel-do-load-languages' since it does an eager require.
+    (use-package ob-C
+      :defer t
+      :ensure org-plus-contrib
+      :commands (org-babel-execute:C))
     (use-package ob-ruby
       :defer t
       :ensure org-plus-contrib
