@@ -173,10 +173,16 @@
   (popwin-mode 1)
 )
 
-;; custom shortcuts
-(global-set-key (kbd "C-c -") 'split-window-vertically)
-(global-set-key (kbd "C-c |") 'split-window-horizontally)
-(global-set-key (kbd "C-c x") 'delete-window)
+;; Window splitting functions
+
+;; Try to simulate text terminal tmux setup
+(global-set-key (kbd "C-c -") (lambda ()
+                                (interactive) (split-window-vertically) (other-window 1) (switch-to-buffer "*scratch*")))
+(global-set-key (kbd "C-c |") (lambda ()
+                                (interactive) (split-window-horizontally) (other-window 1) (switch-to-buffer "*scratch*")))
+(global-set-key (kbd "C-c x") (lambda () (interactive)
+                                (kill-buffer (current-buffer))
+                                (if (one-window-p) () (delete-window))))
 (global-set-key (kbd "C-c <left>")  'windmove-left)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
 (global-set-key (kbd "C-c <up>")    'windmove-up)
