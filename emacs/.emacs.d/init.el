@@ -654,6 +654,10 @@
       :defer t
       :ensure org-plus-contrib
       :commands (org-babel-execute:python))
+    (use-package ob-octave
+      :defer t
+      :ensure org-plus-contrib
+      :commands (org-babel-execute:octave))
     (use-package ob-markdown
       :defer t
       :ensure org-plus-contrib
