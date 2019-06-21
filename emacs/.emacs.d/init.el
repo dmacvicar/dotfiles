@@ -630,6 +630,8 @@
 (use-package org
   :defer t
   :ensure t
+  :hook
+  (org-babel-after-execute . org-redisplay-inline-images)
   :config
   (progn
     (setq org-src-fontify-natively t
