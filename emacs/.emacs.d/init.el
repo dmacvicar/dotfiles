@@ -730,14 +730,14 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
 
-;; Use a hook so the message doesn't get clobbered by other messages.
-;; (add-hook 'emacs-startup-hook
-;;           (lambda ()
-;;             (message "Emacs ready in %s with %d garbage collections."
-;;                      (format "%.2f seconds"
-;;                              (float-time
-;;                               (time-subtract after-init-time before-init-time)))
-;;                      gcs-done)))
+(when (getenv "EMACS_PROFILE_START")
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (message "Emacs ready in %s with %d garbage collections."
+                       (format "%.2f seconds"
+                               (float-time
+                                (time-subtract after-init-time before-init-time)))
+                       gcs-done))))
 
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
