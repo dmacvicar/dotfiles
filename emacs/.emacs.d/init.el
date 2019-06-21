@@ -730,6 +730,23 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
 
+;; https://stackoverflow.com/a/16779511/203718
+;; Used to create a completely new shell in the current buffer
+;; like I do in tmux
+(defun new-shell ()
+  (interactive)
+  (let (
+        (currentbuf (get-buffer-window (current-buffer)))
+        (newbuf     (generate-new-buffer-name "*shell*"))
+        )
+   (generate-new-buffer newbuf)
+   (set-window-dedicated-p currentbuf nil)
+   (set-window-buffer currentbuf newbuf)
+   (shell newbuf)
+  )
+)
+(global-set-key (kbd "C-c s") 'new-shell)
+
 (when (getenv "EMACS_PROFILE_START")
   (add-hook 'emacs-startup-hook
             (lambda ()
