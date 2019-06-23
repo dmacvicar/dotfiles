@@ -9,12 +9,13 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-(require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
-(package-initialize)
+;; Handle changed initialization behavior in emacs 27.x affecting
+;; package-initialize so that it works with both <26.x and >27.x
+;; https://www.reddit.com/r/emacs/comments/9rj5ou/packageinitialize_and_emacs27/
+(when (eval-when-compile (version< emacs-version "27"))
+  (load "~/.emacs.d/early-init.el")
+  (package-initialize))
+
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
