@@ -167,6 +167,9 @@
 
 (use-package leuven-theme
   :ensure t
+  :custom
+  (leuven-scale-outline-headlines nil)
+  (leuven-scale-org-agenda-structure nil)
   :config
   (load-theme 'leuven t))
 
