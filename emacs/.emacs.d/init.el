@@ -408,15 +408,6 @@
 ; highlight the current line
 (global-hl-line-mode t)
 
-; tabs
-(use-package tabbar-ruler
-  :ensure t
-  :after projectile
-  :init
-  (setq tabbar-ruler-global-tabbar t)
-  :config
-  (tabbar-ruler-group-by-projectile-project))
-
 (mapc
   (lambda (face)
     (set-face-attribute face nil :weight 'normal :underline nil))
