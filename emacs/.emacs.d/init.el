@@ -753,6 +753,12 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 ;; https://stackoverflow.com/a/16779511/203718
 ;; Used to create a completely new shell in the current buffer
 ;; like I do in tmux
+(use-package shx
+  :defer t
+  :ensure t
+  :hook (shell-mode . shx-mode)
+)
+
 (defun new-shell ()
   (interactive)
   (let (
