@@ -96,8 +96,12 @@
   :config
   (perspeen-rename-ws "main")
   :bind
-  ("S-M-<left>" . perspeen-previous-ws)
-  ("S-M-<right>" . perspeen-next-ws))
+  ("C-c S-<left>" . perspeen-previous-ws)
+  ("C-c S-<right>" . perspeen-next-ws)
+  ("C-c C" . perspeen-create-ws)
+  ("C-c X" . perspeen-delete-ws)
+  ("S-<XF86Back>" . perspeen-next-ws)
+  ("S-<XF86Forward>" . perspeen-next-ws))
 
 (use-package popwin :ensure t)
 
@@ -179,22 +183,29 @@
 )
 
 ;; Window splitting functions
-
-;; Try to simulate text terminal tmux setup
-(global-set-key (kbd "C-c -") (lambda ()
-                                (interactive) (split-window-vertically) (other-window 1) (switch-to-buffer "*scratch*")))
-(global-set-key (kbd "C-c |") (lambda ()
-                                (interactive) (split-window-horizontally) (other-window 1) (switch-to-buffer "*scratch*")))
-(global-set-key (kbd "C-c x") (lambda () (interactive)
-                                (kill-buffer (current-buffer))
-                                (if (one-window-p) () (delete-window))))
-(global-set-key (kbd "C-c <left>")  'windmove-left)
-(global-set-key (kbd "C-c <right>") 'windmove-right)
-(global-set-key (kbd "C-c <up>")    'windmove-up)
-(global-set-key (kbd "C-c <down>")  'windmove-down)
-
-(windmove-default-keybindings)
-(setq windmove-wrap-around t)
+(use-package windmove
+  ;; :defer 4
+  :ensure t
+  :config
+  ;; use command key on Mac
+  ;;(::windmove-default-keybindings 'super)
+  ;; wrap around at edges
+  (setq windmove-wrap-around t)
+  :bind
+  (("C-c -" . (lambda ()
+               (interactive) (split-window-vertically) (other-window 1) (switch-to-buffer "*scratch*")))
+  ("C-c |" . (lambda ()
+               (interactive) (split-window-horizontally) (other-window 1) (switch-to-buffer "*scratch*")))
+  ("C-c x" . (lambda ()
+               (interactive) (kill-buffer (current-buffer)) (if (one-window-p) () (delete-window))))
+  ("C-c 0" . (lambda ()
+               (interactive) (if (one-window-p) () (delete-window))))
+  ("C-c <left>" . windmove-left)
+  ("C-c <right>" . windmove-right)
+  ("C-c <up>" . windmove-up)
+  ("C-c <down>" . windmove-down)))
+(bind-key "<XF86Back>" (lambda () (interactive) (other-window -1)))
+(bind-key "<XF86Forward>" (lambda () (interactive) (other-window 1)))
 
 ;;;; scrolling
 (setq scroll-step 1)
