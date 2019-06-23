@@ -88,13 +88,18 @@
   :defer t
   :ensure t)
 
+; We only load perspeen when in graphical mode, as we lack tmux
 (use-package perspeen
-  :defer t
+  :if window-system
   :ensure t
   :init
-  (setq perspeen-use-tab t)
+  (perspeen-mode)
+  (setq perspeen-use-tab nil)
   :config
-  (perspeen-mode))
+  (perspeen-rename-ws "main")
+  :bind
+  ("S-M-<left>" . perspeen-previous-ws)
+  ("S-M-<right>" . perspeen-next-ws))
 
 (use-package popwin :ensure t)
 
