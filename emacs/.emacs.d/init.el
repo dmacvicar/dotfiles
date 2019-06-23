@@ -753,11 +753,23 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 ;; https://stackoverflow.com/a/16779511/203718
 ;; Used to create a completely new shell in the current buffer
 ;; like I do in tmux
+(use-package xterm-color
+  :defer t
+  :ensure t
+  :init
+  (setq comint-output-filter-functions
+      (remove 'ansi-color-process-output comint-output-filter-functions))
+  :hook (shell-mode . (lambda ()
+                        ;; Disable font-locking in this buffer to improve performance
+                        (font-lock-mode -1)
+                        ;; Prevent font-locking from being re-enabled in this buffer
+                        (make-local-variable 'font-lock-function)
+                        (setq font-lock-function (lambda (_) nil))
+                        (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t))))
 (use-package shx
   :defer t
   :ensure t
-  :hook (shell-mode . shx-mode)
-)
+  :hook (shell-mode . shx-mode))
 
 (defun new-shell ()
   (interactive)
