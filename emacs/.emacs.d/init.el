@@ -662,6 +662,10 @@
       :defer t
       :ensure org-plus-contrib
       :commands (org-babel-execute:octave))
+    (use-package ob-gnuplot
+      :defer t
+      :ensure org-plus-contrib
+      :commands (org-babel-execute:gnuplot))
     (use-package ob-markdown
       :defer t
       :ensure org-plus-contrib
