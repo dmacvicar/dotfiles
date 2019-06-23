@@ -1,13 +1,4 @@
 ;;; init.el --- Duncan Mac-Vicar P. emacs init
-;; Make startup faster by reducing the frequency of garbage
-;; collection.  The default is 800 kilobytes.  Measured in bytes.
-(setq gc-cons-threshold (* 50 1000 1000))
-(defconst emacs-start-time (current-time))
-(require 'cl)
-;; do this early
-(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 ;; Handle changed initialization behavior in emacs 27.x affecting
 ;; package-initialize so that it works with both <26.x and >27.x
@@ -15,6 +6,12 @@
 (when (eval-when-compile (version< emacs-version "27"))
   (load "~/.emacs.d/early-init.el")
   (package-initialize))
+
+(require 'cl)
+;; do this early
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
