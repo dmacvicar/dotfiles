@@ -96,12 +96,16 @@
   :config
   (perspeen-rename-ws "main")
   :bind
-  ("C-c S-<left>" . perspeen-previous-ws)
-  ("C-c S-<right>" . perspeen-next-ws)
-  ("C-c C" . perspeen-create-ws)
-  ("C-c X" . perspeen-delete-ws)
-  ("S-<XF86Back>" . perspeen-next-ws)
-  ("S-<XF86Forward>" . perspeen-next-ws))
+  ("C-x c" . perspeen-create-ws)
+  ; like tmux close window
+  ("C-x &" . perspeen-delete-ws)
+  ; X230 has these keys next to arrows
+  ("C-x <next>" . perspeen-next-ws)
+  ("C-x <prior>" . perspeen-previous-ws)
+  ; X220 has these keys next to arrows, so for convenience
+  ("C-x <XF86Back>" . perspeen-previous-ws)
+  ("C-x <XF86Forward>" . perspeen-next-ws))
+
 
 (use-package popwin :ensure t)
 
@@ -195,18 +199,16 @@
   ;; wrap around at edges
   (setq windmove-wrap-around t)
   :bind
-  (("C-c -" . (lambda ()
+  (("C-x -" . (lambda ()
                (interactive) (split-window-vertically) (other-window 1) (switch-to-buffer "*scratch*")))
-  ("C-c |" . (lambda ()
+  ("C-x |" . (lambda ()
                (interactive) (split-window-horizontally) (other-window 1) (switch-to-buffer "*scratch*")))
-  ("C-c x" . (lambda ()
+  ("C-x x" . (lambda ()
                (interactive) (kill-buffer (current-buffer)) (if (one-window-p) () (delete-window))))
-  ("C-c 0" . (lambda ()
-               (interactive) (if (one-window-p) () (delete-window))))
-  ("C-c <left>" . windmove-left)
-  ("C-c <right>" . windmove-right)
-  ("C-c <up>" . windmove-up)
-  ("C-c <down>" . windmove-down)))
+  ("C-x <left>" . windmove-left)
+  ("C-x <right>" . windmove-right)
+  ("C-x <up>" . windmove-up)
+  ("C-x <down>" . windmove-down)))
 (bind-key "<XF86Back>" (lambda () (interactive) (other-window -1)))
 (bind-key "<XF86Forward>" (lambda () (interactive) (other-window 1)))
 
