@@ -105,7 +105,8 @@
   ; X220 has these keys next to arrows, so for convenience
   ("C-x <XF86Back>" . perspeen-previous-ws)
   ("C-x <XF86Forward>" . perspeen-next-ws))
-
+(bind-key* "M-S-<right>" #'perspeen-next-ws)
+(bind-key* "M-S-<left>" #'perspeen-previous-ws)
 
 (use-package popwin :ensure t)
 
@@ -204,11 +205,15 @@
   ("C-x |" . (lambda ()
                (interactive) (split-window-horizontally) (other-window 1) (switch-to-buffer "*scratch*")))
   ("C-x x" . (lambda ()
-               (interactive) (kill-buffer (current-buffer)) (if (one-window-p) () (delete-window))))
-  ("C-x <left>" . windmove-left)
-  ("C-x <right>" . windmove-right)
-  ("C-x <up>" . windmove-up)
-  ("C-x <down>" . windmove-down)))
+               (interactive) (kill-buffer (current-buffer)) (if (one-window-p) () (delete-window))))))
+(bind-key* "M-<left>" #'windmove-left)
+(bind-key* "M-<right>" #'windmove-right)
+(bind-key* "M-<up>" #'windmove-up)
+(bind-key* "M-<down>" #'windmove-down)
+(bind-key* "<XF86Back>" (lambda () (interactive) (other-window -1)))
+(bind-key* "<XF86Forward>" (lambda () (interactive) (other-window 1)))
+
+
 (bind-key "<XF86Back>" (lambda () (interactive) (other-window -1)))
 (bind-key "<XF86Forward>" (lambda () (interactive) (other-window 1)))
 
