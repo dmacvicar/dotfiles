@@ -108,7 +108,12 @@
 (bind-key* "M-S-<right>" #'perspeen-next-ws)
 (bind-key* "M-S-<left>" #'perspeen-previous-ws)
 
-(use-package popwin :ensure t)
+(use-package popwin
+  :ensure t
+  :config
+  (push "*Org-QL-Agenda*" popwin:special-display-config)
+  (popwin-mode 1)
+)
 
 (use-package xclip
   :ensure t
@@ -180,15 +185,6 @@
 
 (setq show-trailing-whitespace t)
 (setq-default show-trailing-whitespace t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Behavior
-;;
-(use-package popwin
-  :ensure t
-  :config
-  (popwin-mode 1)
-)
 
 ;; Window splitting functions
 (use-package windmove
