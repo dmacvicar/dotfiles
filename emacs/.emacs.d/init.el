@@ -581,6 +581,9 @@
   :hook ((css-mode html-mode sass-mode) . rainbow-mode))
 
 ;; markup formats
+(use-package polymode
+  :defer t
+  :ensure t)
 (use-package yaml-mode
   :ensure t
   :mode (("\\.yml$" . yaml-mode) ("\\.sls\\'" . yaml-mode)))
@@ -591,6 +594,10 @@
   :defer t
   :ensure t
   :bind (:map markdown-mode-map ("M-RET" . nil)))
+(use-package poly-markdown
+  :defer t
+  :ensure t
+  :hook (markdown-mode . poly-markdown-mode))
 (use-package toml-mode
   :defer t
   :ensure t)
