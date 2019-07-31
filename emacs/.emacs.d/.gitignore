@@ -17,3 +17,9 @@ recentf
 smex-items
 abbrev_defs
 irony
+.lsp-session-*
+bookmarks
+emacs-libvterm
+hackernews
+transient
+url
