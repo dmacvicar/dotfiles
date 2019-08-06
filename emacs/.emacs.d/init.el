@@ -650,13 +650,15 @@
   :ensure t
   :hook
   (org-babel-after-execute . org-redisplay-inline-images)
+  (org-mode . visual-line-mode)
   :config
   (progn
     (setq org-src-fontify-natively t
           org-fontify-whole-heading-line t
           org-pretty-entities t
           org-return-follows-link t
-          org-src-tab-acts-natively t)
+          org-src-tab-acts-natively t
+          org-bullets-bullet-list '("⁖"))
     (define-key org-mode-map (kbd "M-RET") nil)
     (require 'org-crypt)
     (org-crypt-use-before-save-magic)
