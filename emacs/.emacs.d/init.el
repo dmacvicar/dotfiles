@@ -737,11 +737,16 @@
       :defer t
       :ensure t)))
 
+(use-package poly-org
+  :defer t
+  :ensure t
+  :hook
+  (org-mode . poly-org-mode))
+
 ;; Other tools and browsers
 (use-package hackernews
   :defer t
   :ensure t)
-
 
 ;; work setup
 (if (file-exists-p "~/.emacs.suse.d/init.el")
