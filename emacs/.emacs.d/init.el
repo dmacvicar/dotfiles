@@ -112,6 +112,7 @@
   :ensure t
   :config
   (push "*Org-QL-Agenda*" popwin:special-display-config)
+  (push "*calfw:details*" popwin:special-display-config)
   (popwin-mode 1)
 )
 
