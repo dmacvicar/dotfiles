@@ -113,6 +113,7 @@
   :config
   (push "*Org-QL-Agenda*" popwin:special-display-config)
   (push 'cfw:details-mode  popwin:special-display-config)
+  (push 'calendar-mode  popwin:special-display-config)
   (popwin-mode 1)
 )
 
