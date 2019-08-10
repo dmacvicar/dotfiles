@@ -640,6 +640,19 @@
   :defer t
   :ensure t)
 
+(use-package smartparens
+  :init
+  (progn
+    (use-package smartparens-config)
+    (use-package smartparens-html)
+    (smartparens-global-mode 1)
+    (show-smartparens-global-mode 1))
+  :ensure t
+  :config
+  (progn
+    (setq smartparens-strict-mode 1)
+    (setq sp-highlight-pair-overlay nil)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Other functionality (org, calendar)
 (use-package calfw
