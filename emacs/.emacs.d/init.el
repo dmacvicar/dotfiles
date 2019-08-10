@@ -252,7 +252,6 @@
     (setq ivy-rich-switch-buffer-align-virtual-buffer t)
     (setq ivy-rich-path-style 'abbrev)))
 
-
 ;; This is needed to order M-x by most recent commands
 (use-package smex
   :defer t
