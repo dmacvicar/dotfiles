@@ -527,7 +527,8 @@
 (use-package enh-ruby-mode
   :ensure t
   :interpreter "ruby"
-  :defer 2
+  :after projectile
+  :defer t
   :mode ("\\.rake\\'" . enh-ruby-mode)
   :mode ("\\Rakefile\\'" . enh-ruby-mode)
   :mode ("\\.gemspec\\'" . enh-ruby-mode)
