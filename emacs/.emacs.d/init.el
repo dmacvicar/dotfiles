@@ -275,8 +275,6 @@
 
 (use-package projectile
   :ensure t
-  ;; Loads after 1 second of idle time.
-  :defer 1
   :init
   (progn
     (setq projectile-mode-line
