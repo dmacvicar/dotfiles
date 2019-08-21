@@ -364,11 +364,10 @@
 (use-package flycheck
   :ensure t
   :defer t
+  :after projectile
   :init
   (progn
-    (setq flycheck-command-wrapper-function
-          (lambda (command)
-            (append '("bundle" "exec") command))))
+    (setq flycheck-command-wrapper-function #'duncan/ruby-wrap-when-bundler-project))
   :config
   (global-flycheck-mode))
 
