@@ -321,11 +321,14 @@
   :defer t
   :init
   ; We only activate LSP mode for some languages
-  (add-hook 'go-mode-hook #'lsp)
-  (add-hook 'enh-ruby-mode-hook #'lsp)
-  (add-hook 'c-mode-hook #'lsp)
-  (add-hook 'c++-mode-hook #'lsp)
-  (add-hook 'python-mode-hook #'lsp)
+  (add-hook 'go-mode-hook #'lsp-deferred)
+  (add-hook 'enh-ruby-mode-hook #'lsp-deferred)
+  (add-hook 'c-mode-hook #'lsp-deferred)
+  (add-hook 'c++-mode-hook #'lsp-de)
+  (add-hook 'python-mode-hook #'lsp-de)
+  (add-hook 'enh-ruby-mode-hook #'(lambda ()
+                                    (if (duncan/ruby-solargraph-project-p)
+                                        (let ((lsp-solargraph-use-bundler t)) (lsp-deferred)))))
   :custom
   (lsp-auto-guess-root t)
   (lsp-solargraph-diagnostics t)
@@ -339,16 +342,7 @@
   (lsp-eldoc-prefer-signature-help nil)
   (lsp-enable-on-type-formatting nil)
   (lsp-enable-completion-at-point nil)
-  :config
-  ; Override built in Ruby configuration to work with bundled solargraph
-  (lsp-register-client
-   (make-lsp-client
-    :new-connection
-    (lsp-stdio-connection '("bundle" "exec" "solargraph" "stdio"))
-    :major-modes '(enh-ruby-mode)
-    :priority 10
-    :multi-root t
-    :server-id 'ruby-solargraph))
+  (lsp-solargraph-use-bundler t)
   :hook 'lsp-ui-mode)
 
 (use-package lsp-ui
