@@ -293,6 +293,28 @@
   :ensure t
   :config (add-hook 'prog-mode-hook 'company-mode))
 
+(defun duncan/ruby-bundler-project-root ()
+  (let ((project-root (projectile-project-root)))
+    (if
+      (and
+       (or (equal major-mode 'enh-ruby-mode) (equal major-mode 'ruby-mode))
+       (file-exists-p (concat project-root "Gemfile"))
+       (file-directory-p (concat project-root ".bundle")))
+      project-root)))
+
+(defun duncan/ruby-solargraph-project-p ()
+  (let ((project-root (duncan/ruby-bundler-project-root)) (case-fold-search t))
+    (with-temp-buffer
+      (insert-file-contents (concat project-root "Gemfile.lock"))
+      (goto-char (point-min))
+      (ignore-errors (search-forward-regexp "solargraph")))))
+
+(defun duncan/ruby-wrap-when-bundler-project (command)
+  (if
+    (duncan/ruby-bundler-project-root)
+      (append '("bundle" "exec") command)
+      command))
+
 (use-package lsp-mode
   :ensure t
   :commands lsp
