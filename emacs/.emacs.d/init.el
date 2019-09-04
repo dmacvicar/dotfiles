@@ -679,6 +679,8 @@
   :hook
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
+  :custom
+  (org-startup-indented t)
   :config
   (progn
     (setq org-src-fontify-natively t
