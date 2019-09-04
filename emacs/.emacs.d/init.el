@@ -757,6 +757,12 @@
       :defer t
       :ensure org-plus-contrib
       :commands (org-babel-execute:diagrams))
+    (use-package ob-plantuml
+      :defer t
+      :ensure org-plus-contrib
+      :custom
+      (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
+      :commands (org-babel-execute:plantuml))
     (use-package ox-gfm
       :defer t
       :ensure t)
