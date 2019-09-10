@@ -43,8 +43,8 @@
 ;;
 ; I don't want emacs to overwrite my init.el with customization
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-   (when (file-exists-p custom-file)
-       (load custom-file :noerror))
+(when (file-exists-p custom-file)
+  (load custom-file :noerror))
 
 ; scratch mode settings
 ; I want an empty text file, and not a lisp buffer with a comment
