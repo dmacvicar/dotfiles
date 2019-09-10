@@ -117,11 +117,14 @@
   (popwin-mode 1)
 )
 
-(use-package xclip
-  :ensure t
-  ;; Loads after 1 second of idle time.
-  :defer 1
-  :config (xclip-mode 1))
+(unless (display-graphic-p)
+  ; xclip is used only on terminals
+  (when (executable-find "xclip")
+  (use-package xclip
+    :ensure t
+    ;; Loads after 1 second of idle time.
+    :defer 1
+    :config (xclip-mode 1))))
 
 (defun set-frame-size-according-to-resolution ()
   (interactive)
