@@ -4,5 +4,8 @@
 (defconst emacs-start-time (current-time))
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
+; should be fixed in Emacs 26.3+
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
 (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
