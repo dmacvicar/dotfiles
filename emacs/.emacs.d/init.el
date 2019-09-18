@@ -844,19 +844,31 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
   :ensure t
   :hook (shell-mode . shx-mode))
 
-(defun new-shell ()
+(defun new-shell (name)
   (interactive)
-  (let (
-        (currentbuf (get-buffer-window (current-buffer)))
-        (newbuf     (generate-new-buffer-name "*shell*"))
-        )
-   (generate-new-buffer newbuf)
-   (set-window-dedicated-p currentbuf nil)
-   (set-window-buffer currentbuf newbuf)
-   (shell newbuf)
-  )
-)
-(global-set-key (kbd "C-c s") 'new-shell)
+  (let ((currentbuf (get-buffer-window (current-buffer)))
+        (newbuf     (generate-new-buffer-name name)))
+    (generate-new-buffer newbuf)
+    (set-window-dedicated-p currentbuf nil)
+    (set-window-buffer currentbuf newbuf)
+    (shell newbuf)))
+
+(defun shell-with-name ()
+  (interactive)
+  (let* ((shell-buffers (seq-filter (lambda (buf)
+                                      (string-match-p "*shell*" (buffer-name buf)))
+                                    (buffer-list)))
+         (shell-buffer-names (mapcar 'buffer-name shell-buffers)))
+    (ivy-read "shell buffers: "
+              shell-buffer-names
+              :action (lambda (buffer-name)
+                        (let* ((shell-buffer-exists (member buffer-name
+                                                            (mapcar 'buffer-name 
+                                                                    (buffer-list)))))
+                          (if shell-buffer-exists
+                              (switch-to-buffer buffer-name)
+                            (new-shell (concat "*shell*<" buffer-name ">"))))))))
+(global-set-key (kbd "C-c s") 'shell-with-name)
 
 (when (getenv "EMACS_PROFILE_START")
   (add-hook 'emacs-startup-hook
