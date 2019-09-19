@@ -46,6 +46,9 @@
 (when (file-exists-p custom-file)
   (load custom-file :noerror))
 
+;; don't annoy colleagues with beeps
+(setq visible-bell t)
+
 ; scratch mode settings
 ; I want an empty text file, and not a lisp buffer with a comment
 (setq initial-major-mode 'text-mode)
