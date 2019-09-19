@@ -48,6 +48,8 @@
 
 ;; don't annoy colleagues with beeps
 (setq visible-bell t)
+;; don't annoy me with dialog boxes
+(setq use-dialog-box nil)
 
 ;; scratch mode settings
 ;; I want an empty text file, and not a lisp buffer with a comment
