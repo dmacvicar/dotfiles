@@ -684,6 +684,24 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Other functionality (org, calendar)
+;; Other functionality (org, calendar, browser)
+(use-package eww
+  :defer t
+  :bind
+  ("C-x m" . browse-url-at-point)
+  :custom
+  (browse-url-browser-function
+    '((".*google.*maps.*" . browse-url-generic)
+     ;; Github goes to firefox, but not gist
+    ("http.*\/\/github.com" . browse-url-generic)
+    ("groups.google.com" . browse-url-generic)
+    ("docs.google.com" . browse-url-generic)
+    ("." . eww-browse-url)))
+  (shr-external-browser 'browse-url-generic)
+  :config
+  (add-hook 'eww-mode-hook #'toggle-word-wrap)
+  (add-hook 'eww-mode-hook #'(lambda () (setq show-trailing-whitespace nil))))
+
 (use-package calfw
   :defer t
   :ensure t)
