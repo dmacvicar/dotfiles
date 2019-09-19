@@ -702,8 +702,20 @@
     ("." . eww-browse-url)))
   (shr-external-browser 'browse-url-generic)
   :config
+  ;; do not hijack the shortcut I use to switch buffers
+  (unbind-key "M-RET" eww-mode-map)
   (add-hook 'eww-mode-hook #'toggle-word-wrap)
   (add-hook 'eww-mode-hook #'(lambda () (setq show-trailing-whitespace nil))))
+
+(use-package eww-lnum
+    :ensure t
+    :config
+    (bind-key "f" #'eww-lnum-follow eww-mode-map)
+    (bind-key "U" #'eww-lnum-universal eww-mode-map))
+
+(use-package link-hint
+  :ensure t
+  :bind ("C-c f" . link-hint-open-link))
 
 (use-package calfw
   :defer t
