@@ -34,14 +34,14 @@
 (eval-when-compile
   (require 'use-package))
 
-; Diminished modes are minor modes with no modeline display
+;; Diminished modes are minor modes with no modeline display
 (use-package diminish :ensure t)
 (require 'bind-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance & Behavior
 ;;
-; I don't want emacs to overwrite my init.el with customization
+;; I don't want emacs to overwrite my init.el with customization
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file :noerror))
@@ -49,32 +49,32 @@
 ;; don't annoy colleagues with beeps
 (setq visible-bell t)
 
-; scratch mode settings
-; I want an empty text file, and not a lisp buffer with a comment
+;; scratch mode settings
+;; I want an empty text file, and not a lisp buffer with a comment
 (setq initial-major-mode 'text-mode)
 (setq initial-scratch-message "")
 
-; http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead/
+;; http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead/
 (defun dmacvicar/kill-this-buffer ()
   "Kill the current buffer."
   (interactive)
   (kill-buffer (current-buffer)))
 (global-set-key (kbd "C-x k") 'dmacvicar/kill-this-buffer)
 
-; allow y or n answers
+;; allow y or n answers
 (fset 'yes-or-no-p 'y-or-n-p)
 
-; disable function keys
+;; disable function keys
 (dotimes (i 12)
   (global-unset-key (kbd (format "<f%d>" (+ i 1)))))
 
-; disable overwrite mode
+;; disable overwrite mode
 (define-key global-map [(insert)] nil)
 
-; so that vc mode do not ask again
+;; so that vc mode do not ask again
 (setq vc-follow-symlinks t)
 
-; recent files
+;; recent files
 (use-package recentf
   :ensure t
   ;; Loads after 1 second of idle time.
@@ -82,14 +82,14 @@
   :init
   :config
   (progn
-    ; Save the list every 5 minutes
+    ;; Save the list every 5 minutes
     (recentf-mode 1) (run-at-time nil (* 5 60) 'recentf-save-list)))
 
 (use-package f
   :defer t
   :ensure t)
 
-; We only load perspeen when in graphical mode, as we lack tmux
+;; We only load perspeen when in graphical mode, as we lack tmux
 (use-package perspeen
   :if window-system
   :ensure t
@@ -100,12 +100,12 @@
   (perspeen-rename-ws "main")
   :bind
   ("C-x c" . perspeen-create-ws)
-  ; like tmux close window
+  ;; like tmux close window
   ("C-x &" . perspeen-delete-ws)
-  ; X230 has these keys next to arrows
+  ;; X230 has these keys next to arrows
   ("C-x <next>" . perspeen-next-ws)
   ("C-x <prior>" . perspeen-previous-ws)
-  ; X220 has these keys next to arrows, so for convenience
+  ;; X220 has these keys next to arrows, so for convenience
   ("C-x <XF86Back>" . perspeen-previous-ws)
   ("C-x <XF86Forward>" . perspeen-next-ws))
 (bind-key* "M-S-<right>" #'perspeen-next-ws)
@@ -276,8 +276,8 @@
   :ensure t
   :bind
   ("M-x" . counsel-M-x)
-;  ("C-z f" . counsel-describe-function)
-;  ("C-z v" . counsel-describe-variable)
+  ;;("C-z f" . counsel-describe-function)
+  ;;("C-z v" . counsel-describe-variable)
   ("C-c k" . counsel-ag))
 
 (use-package projectile
@@ -411,7 +411,7 @@
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
-; never use tabs
+;; never use tabs
 (setq-default indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -425,14 +425,14 @@
       kept-old-versions 2
       version-control t)       ; use versioned backups
 
-;(global-set-key (kbd "M-RET") 'electric-buffer-list)
-;(global-set-key (kbd "C-M-j") 'electric-buffer-list)
+;;(global-set-key (kbd "M-RET") 'electric-buffer-list)
+;;(global-set-key (kbd "C-M-j") 'electric-buffer-list)
 (global-set-key (kbd "M-RET") 'ivy-switch-buffer)
 (global-set-key (kbd "C-M-j") 'ivy-switch-buffer)
 
 (add-hook 'Buffer-menu-mode-hook 'buffer-disable-undo)
 
-;(cua-mode 1)
+;;(cua-mode 1)
 (setq shift-select-mode nil)
 (setq x-alt-keysym 'meta)
 
@@ -441,7 +441,7 @@
   :config
   (nav-disable-overeager-window-splitting))
 
-; highlight the current line
+;; highlight the current line
 (global-hl-line-mode t)
 
 (mapc
