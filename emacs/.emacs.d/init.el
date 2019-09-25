@@ -116,6 +116,7 @@
 (use-package popwin
   :ensure t
   :config
+  (push '("\\*Org QL View*" :regexp t) popwin:special-display-config)
   (push "*Org-QL-Agenda*" popwin:special-display-config)
   (push 'cfw:details-mode  popwin:special-display-config)
   (push 'calendar-mode  popwin:special-display-config)
