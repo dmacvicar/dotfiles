@@ -124,6 +124,9 @@
   (popwin-mode 1)
 )
 
+(use-package all-the-icons
+  :ensure t)
+
 (unless (display-graphic-p)
   ; xclip is used only on terminals
   (when (executable-find "xclip")
