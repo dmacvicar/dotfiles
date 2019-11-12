@@ -761,97 +761,107 @@
   (org-mode . visual-line-mode)
   :custom
   (org-startup-indented t)
+  (org-src-fontify-natively t)
+  (org-fontify-whole-heading-line t)
+  (org-pretty-entities t)
+  (org-return-follows-link t)
+  (org-src-tab-acts-natively t)
+  (org-bullets-bullet-list '("⁖"))
+  (org-crypt-key nil "symmetric encryption")
+  (org-tags-exclude-from-inheritance (quote ("crypt")))
+  ;; Does not work in org-ql yet :-(
+  (org-agenda-category-icon-alist
+   `(("emacs" ,(list (all-the-icons-fileicon "emacs")) nil nil :ascent center)))
+  ;;(org-agenda-prefix-format "○ ")
   :config
-  (progn
-    (setq org-src-fontify-natively t
-          org-fontify-whole-heading-line t
-          org-pretty-entities t
-          org-return-follows-link t
-          org-src-tab-acts-natively t
-          org-bullets-bullet-list '("⁖"))
-    (define-key org-mode-map (kbd "M-RET") nil)
-    (require 'org-crypt)
-    (org-crypt-use-before-save-magic)
-    (setq org-tags-exclude-from-inheritance (quote ("crypt")))
-    ;; GPG key to use for encryption
-    ;; Either the Key ID or set to nil to use symmetric encryption.
-    (setq org-crypt-key nil)
-    (use-package org-super-agenda
-      :ensure t
-      :defer t)
-    (use-package org-ql
-      :ensure t
-      :defer t)
-    (use-package org-bullets
-      :ensure t
-      :hook (org-mode . org-bullets-mode))
-    ;; Avoid `org-babel-do-load-languages' since it does an eager require.
-    (use-package ob-C
-      :defer t
-      :ensure org-plus-contrib
-      :commands (org-babel-execute:C))
-    (use-package ob-ruby
-      :defer t
-      :ensure org-plus-contrib
-      :commands (org-babel-execute:ruby))
-    (use-package ob-python
-      :defer t
-      :ensure org-plus-contrib
-      :commands (org-babel-execute:python))
-    (use-package ob-octave
-      :defer t
-      :ensure org-plus-contrib
-      :commands (org-babel-execute:octave))
-    (use-package ob-gnuplot
-      :defer t
-      :ensure org-plus-contrib
-      :commands (org-babel-execute:gnuplot))
-    (use-package ob-markdown
-      :defer t
-      :ensure org-plus-contrib
-      :quelpa (ob-markdown :fetcher github :repo "tnoda/ob-markdown")
-      :commands
-      (org-babel-execute:markdown
-       org-babel-expand-body:markdown))
-    (use-package ob-go
-      :defer t
-      :ensure org-plus-contrib
-      :commands
-      (org-babel-execute:go
-       org-babel-expand-body:go))
-    (use-package ob-http
-      :defer t
-      :ensure org-plus-contrib
-      :commands
-      (org-babel-execute:http
-       org-babel-expand-body:http))
-    (use-package ob-shell
-      :defer t
-      :ensure org-plus-contrib
-      :commands
-      (org-babel-execute:sh
-       org-babel-expand-body:sh
-       org-babel-execute:bash
-       org-babel-expand-body:bash))
-    (use-package ob-diagrams
-      :defer t
-      :ensure org-plus-contrib
-      :commands (org-babel-execute:diagrams))
-    (use-package ob-plantuml
-      :defer t
-      :ensure org-plus-contrib
-      :custom
-      (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
-      :commands (org-babel-execute:plantuml))
-    (use-package ox-gfm
-      :defer t
-      :ensure t)
-    (use-package ox-reveal
-      :defer t
-      :ensure t)
-    (use-package htmlize
-      :defer t
-      :ensure t)))
+  (hi-lock-mode)
+  (highlight-regexp "^.*:red:.*$" 'hi-red-b)
+  (define-key org-mode-map (kbd "M-RET") nil)
+  (require 'org-crypt)
+  (org-crypt-use-before-save-magic)
+    ;;; (all-the-icons-insert-icons-for 'faicon) inserts all faicon icons to check
+  (use-package org-super-agenda
+    :ensure t
+    :defer t)
+  (use-package org-ql
+    :ensure t
+    :defer t)
+  (use-package org-bullets
+    :ensure t
+    :hook (org-mode . org-bullets-mode))
+  ;; Avoid `org-babel-do-load-languages' since it does an eager require.
+  (use-package ob-C
+    :defer t
+    :ensure org-plus-contrib
+    :commands (org-babel-execute:C))
+  (use-package ob-ruby
+    :defer t
+    :ensure org-plus-contrib
+    :commands (org-babel-execute:ruby))
+  (use-package ob-python
+    :defer t
+    :ensure org-plus-contrib
+    :commands (org-babel-execute:python))
+  (use-package ob-octave
+    :defer t
+    :ensure org-plus-contrib
+    :commands (org-babel-execute:octave))
+  (use-package ob-gnuplot
+    :defer t
+    :ensure org-plus-contrib
+    :commands (org-babel-execute:gnuplot))
+  (use-package ob-markdown
+    :defer t
+    :ensure org-plus-contrib
+    :quelpa (ob-markdown :fetcher github :repo "tnoda/ob-markdown")
+    :commands
+    (org-babel-execute:markdown
+     org-babel-expand-body:markdown))
+  (use-package ob-go
+    :defer t
+    :ensure org-plus-contrib
+    :commands
+    (org-babel-execute:go
+     org-babel-expand-body:go))
+  (use-package ob-http
+    :defer t
+    :ensure org-plus-contrib
+    :commands
+    (org-babel-execute:http
+     org-babel-expand-body:http))
+  (use-package ob-shell
+    :defer t
+    :ensure org-plus-contrib
+    :commands
+    (org-babel-execute:sh
+     org-babel-expand-body:sh
+     org-babel-execute:bash
+     org-babel-expand-body:bash))
+  (use-package ob-diagrams
+    :defer t
+    :ensure org-plus-contrib
+    :commands (org-babel-execute:diagrams))
+  (use-package ob-ditaa
+    :defer t
+    :ensure org-plus-contrib
+    :custom
+    (org-ditaa-jar-path "/usr/share/java/ditaa.jar")
+    :commands (org-babel-execute:ditaa))
+  (use-package ob-plantuml
+    :defer t
+    :ensure org-plus-contrib
+    :custom
+    (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
+    :commands (org-babel-execute:plantuml))
+  (use-package ox-gfm
+    :defer t
+    :ensure t)
+  (use-package ox-reveal
+    :defer t
+    :ensure t)
+  (use-package htmlize
+    :defer t
+    :ensure t))
 
 (use-package poly-org
   :defer t
