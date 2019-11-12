@@ -286,6 +286,12 @@
   ;;("C-z v" . counsel-describe-variable)
   ("C-c k" . counsel-ag))
 
+(use-package treemacs
+  :ensure t
+  :defer t
+  :config
+  (treemacs-git-mode 'deferred))
+
 (use-package projectile
   :ensure t
   :init
@@ -301,6 +307,12 @@
       :ensure t
       :preface (setq projectile-keymap-prefix (kbd "C-c p"))
       :hook (after-init . counsel-projectile-mode))))
+
+(use-package treemacs-projectile
+  :ensure t
+  :defer t
+  :after projectile
+  :after treemacs)
 
 (use-package company
   :ensure t
@@ -363,6 +375,14 @@
   :defer t
   :after flycheck)
 
+(use-package lsp-treemacs
+  :ensure t
+  :defer t
+  :after treemacs
+  :after lsp-mode
+  :config
+  (lsp-treemacs-sync-mode 1))
+
 (use-package company-lsp
   :commands company-lsp
   :ensure t
@@ -373,6 +393,12 @@
 (use-package magit
   :defer t
   :ensure t)
+
+(use-package treemacs-magit
+  :ensure t
+  :defer t
+  :after treemacs
+  :after magit)
 
 (use-package flycheck
   :ensure t
