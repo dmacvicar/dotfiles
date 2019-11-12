@@ -894,10 +894,19 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
   (tabulated-list-print))
 
 ;; tramp mode
-(setq vc-ignore-dir-regexp
-      (format "\\(%s\\)\\|\\(%s\\)"
-              vc-ignore-dir-regexp
-              tramp-file-name-regexp))
+(use-package tramp
+  :ensure t
+  :defer t
+  :config
+  (setq vc-ignore-dir-regexp
+        (format "\\(%s\\)\\|\\(%s\\)"
+                vc-ignore-dir-regexp
+                tramp-file-name-regexp))
+  ; turn off the backup feature for remote files and stop TRAMP from saving to the backup directory
+  (add-to-list 'backup-directory-alist
+               (cons tramp-file-name-regexp nil)))
+
+
 
 ;; https://stackoverflow.com/a/16779511/203718
 ;; Used to create a completely new shell in the current buffer
