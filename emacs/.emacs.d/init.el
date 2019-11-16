@@ -416,6 +416,21 @@
   :config
   (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)))
 
+(use-package lsp-java
+  :ensure t
+  :after lsp
+  :config (add-hook 'java-mode-hook 'lsp))
+
+(use-package dap-mode
+  :ensure t :after lsp-mode
+  :config
+  (dap-mode t)
+  (dap-ui-mode t))
+
+(use-package dap-java
+  :after (lsp-java))
+
+
 ;; Auto refresh buffers
 (global-auto-revert-mode 1)
 ;; Also auto refresh dired, but be quiet about it
