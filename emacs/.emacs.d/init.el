@@ -782,6 +782,10 @@
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
   :custom
+  (org-todo-keyword-faces
+   '(("RED" . (:foreground "red" :weight bold))
+     ("YELLOW" . (:foreground "#EA6300" :background "#F6FECD" (:line-width 1 :color "#EA6300") :weight bold))
+     ("GREEN" . (:foreground "#556b2f" :background "#20b2aa" (:line-width 1 :color "#556b2f") :weight bold))))
   (org-startup-indented t)
   (org-src-fontify-natively t)
   (org-fontify-whole-heading-line t)
