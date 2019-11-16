@@ -576,6 +576,13 @@
   :config
   (setq kotlin-tab-width 4))
 
+(use-package clojure-mode
+  :defer t
+  :ensure t)
+(use-package cider
+  :defer t
+  :ensure t)
+
 (use-package elisp-mode
   :defer t
   :config
