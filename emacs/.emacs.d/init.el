@@ -800,8 +800,6 @@
    `(("emacs" ,(list (all-the-icons-fileicon "emacs")) nil nil :ascent center)))
   ;;(org-agenda-prefix-format "○ ")
   :config
-  (hi-lock-mode)
-  (highlight-regexp "^.*:red:.*$" 'hi-red-b)
   (define-key org-mode-map (kbd "M-RET") nil)
   (require 'org-crypt)
   (org-crypt-use-before-save-magic)
