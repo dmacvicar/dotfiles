@@ -693,6 +693,24 @@
   :ensure t
   :config
   (setq js-indent-level 2))
+(use-package poly-vue
+  :defer t
+  :ensure t
+  :quelpa (poly-vue :fetcher github :repo "akirak/poly-vue"))
+(use-package js2-mode
+  :defer t
+  :ensure t)
+(use-package typescript-mode
+  :defer t
+  :ensure t
+  :config
+  (setq js-indent-level 2))
+(use-package tide
+  :ensure t
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save)))
 
 (use-package hcl-mode
   :defer t
