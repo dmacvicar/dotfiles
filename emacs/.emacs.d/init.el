@@ -811,7 +811,8 @@
   (org-todo-keyword-faces
    '(("RED" . (:foreground "red" :weight bold))
      ("YELLOW" . (:foreground "#EA6300" :background "#F6FECD" (:line-width 1 :color "#EA6300") :weight bold))
-     ("GREEN" . (:foreground "#556b2f" :background "#20b2aa" (:line-width 1 :color "#556b2f") :weight bold))))
+     ("GREEN" . (:foreground "#556b2f" :background "#20b2aa" (:line-width 1 :color "#556b2f") :weight bold))
+     ("SHARE" . (:foreground "#0059b3" :background "#99ccff" (:line-width 1 :color "#0059b3") :weight bold))))
   (org-startup-indented t)
   (org-src-fontify-natively t)
   (org-fontify-whole-heading-line t)
