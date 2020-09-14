@@ -78,7 +78,7 @@
 
 ;; recent files
 (use-package recentf
-  :ensure t
+  :ensure nil
   ;; Loads after 1 second of idle time.
   :bind ("C-x C-r" . recentf-open-files)
   :init
@@ -212,7 +212,7 @@
 ;; Window splitting functions
 (use-package windmove
   ;; :defer 4
-  :ensure t
+  :ensure nil
   :config
   ;; use command key on Mac
   ;;(::windmove-default-keybindings 'super)
@@ -642,7 +642,7 @@
 
 (use-package python
   :defer t
-  :ensure t
+  :ensure nil
   :config
   (progn
     (setq-default python-indent 4)
@@ -793,7 +793,7 @@
 
 (use-package org
   :defer t
-  :ensure t
+  :ensure nil
   :hook
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
