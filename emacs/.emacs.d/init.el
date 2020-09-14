@@ -553,6 +553,11 @@
 ;; language specific tweaks
 ;;
 ;; C, C++ and other compiled languages
+
+(use-package cmake-mode
+  :defer t
+  :ensure t)
+
 (use-package rust-mode
   :defer t
   :ensure t
