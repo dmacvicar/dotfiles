@@ -549,6 +549,30 @@
 		 (if (y-or-n-p "Restore desktop? ")
 		     (session-restore)))))
 
+;;; writing
+
+;;; FIXME why this one does not work?
+;;;(use-package flycheck-vale
+;;;  :defer t
+;;;  :ensure t
+;;;  :after (flycheck)
+;;;  :hook markdown-mode
+;;;  :hook org-mode
+;;;  :config
+;;;  (require 'flycheck-vale)
+;;;  (flycheck-vale-setup))
+
+(flycheck-define-checker vale
+  "A checker for prose"
+  :command ("vale" "--output" "line"
+            source)
+  :standard-input nil
+  :error-patterns
+  ((error line-start (file-name) ":" line ":" column ":" (id (one-or-more (not (any ":")))) ":" (message) line-end))
+  :modes (markdown-mode org-mode text-mode)
+  )
+(add-to-list 'flycheck-checkers 'vale 'append)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; language specific tweaks
 ;;
