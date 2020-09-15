@@ -412,9 +412,9 @@
   :ensure t
   :defer t
   :after projectile
-  :init
-  (progn
-    (setq flycheck-command-wrapper-function #'duncan/ruby-wrap-when-bundler-project))
+  :custom
+  (flycheck-command-wrapper-function #'duncan/ruby-wrap-when-bundler-project)
+  (flycheck-check-syntax-automatically '(idle-change save mode-enabled new-line))
   :config
   (global-flycheck-mode))
 
