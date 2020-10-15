@@ -827,6 +827,10 @@
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
   :custom
+  (org-latex-listings 'minted)
+  (org-latex-pdf-process
+   '("xelatex -shell-escape -interaction nonstopmode %f"
+     "xelatex -shell-escape -interaction nonstopmode %f"))
   (org-todo-keyword-faces
    '(("RED" . (:foreground "red" :weight bold))
      ("YELLOW" . (:foreground "#EA6300" :background "#F6FECD" (:line-width 1 :color "#EA6300") :weight bold))
@@ -929,6 +933,10 @@
   (use-package ox-reveal
     :defer t
     :ensure t)
+  (use-package ox-beamer
+    :defer t
+    ; bug with built-in packages
+    :ensure nil)
   (use-package htmlize
     :defer t
     :ensure t))
