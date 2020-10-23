@@ -621,7 +621,12 @@
 
 (use-package elisp-mode
   :defer t
-  :config)
+  :config
+  (use-package flycheck-elsa
+    :ensure t
+    :after (flycheck elsa)
+    :config
+    (add-hook 'emacs-lisp-mode-hook #'flycheck-elsa-setup)))
 
 ;; Scripting languages
 (use-package enh-ruby-mode
