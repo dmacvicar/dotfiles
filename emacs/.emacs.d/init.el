@@ -187,15 +187,13 @@
   :config (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   :init
   (progn
-    (setq highlight-indent-guides-method 'column))
-)
+    (setq highlight-indent-guides-method 'column)))
 
 (use-package powerline
   :ensure t
   :config
   (progn
-    (powerline-default-theme))
-)
+    (powerline-default-theme)))
 
 (use-package leuven-theme
   :ensure t
