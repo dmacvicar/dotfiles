@@ -5,6 +5,7 @@
 (setq gc-cons-threshold (* 50 1000 1000))
 (defconst emacs-start-time (current-time))
 
+(setq straight-check-for-modifications 'live)
 ;; straight bootstrap
 (defvar bootstrap-version)
 (let ((bootstrap-file
