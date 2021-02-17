@@ -1,40 +1,34 @@
 ;;; init.el --- Duncan Mac-Vicar P. emacs init
 
-;; Handle changed initialization behavior in emacs 27.x affecting
-;; package-initialize so that it works with both <26.x and >27.x
-;; https://www.reddit.com/r/emacs/comments/9rj5ou/packageinitialize_and_emacs27/
-(when (eval-when-compile (version< emacs-version "27"))
-  (load "~/.emacs.d/early-init.el")
-  (package-initialize))
+;; Make startup faster by reducing the frequency of garbage
+;; collection.  The default is 800 kilobytes.  Measured in bytes.
+(setq gc-cons-threshold (* 50 1000 1000))
+(defconst emacs-start-time (current-time))
+
+;; straight bootstrap
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
 ;; do this early
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-;; quelpa extends use-package to grab directly from git repositores that
-;; are not yet published on elpa/melpa repos
-(use-package quelpa
-  :ensure t
-  :init
-  (progn
-    ;; we use quelpa mainly for non-melpa/unpublished packages
-    (setq quelpa-update-melpa-p nil)
-    (setq quelpa-checkout-melpa-p nil)))
-(use-package quelpa-use-package
-  :ensure t
-  :config
-  (setq quelpa-self-upgrade-p nil))
-
-(eval-when-compile
-  (require 'use-package))
-
 ;; Diminished modes are minor modes with no modeline display
-(use-package diminish :ensure t)
+(use-package diminish)
 (require 'bind-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -87,13 +81,11 @@
     (recentf-mode 1) (run-at-time nil (* 5 60) 'recentf-save-list)))
 
 (use-package f
-  :defer t
-  :ensure t)
+  :defer t)
 
 ;; We only load perspeen when in graphical mode, as we lack tmux
 (use-package perspeen
   :if window-system
-  :ensure t
   :init
   (perspeen-mode)
   (setq perspeen-use-tab nil)
@@ -113,7 +105,6 @@
 (bind-key* "M-S-<left>" #'perspeen-previous-ws)
 
 (use-package popwin
-  :ensure t
   :config
   (push '("\\*Org QL View*" :regexp t) popwin:special-display-config)
   (push "*Org-QL-Agenda*" popwin:special-display-config)
@@ -123,14 +114,12 @@
   (popwin-mode 1)
 )
 
-(use-package all-the-icons
-  :ensure t)
+(use-package all-the-icons)
 
 (unless (display-graphic-p)
   ; xclip is used only on terminals
   (when (executable-find "xclip")
   (use-package xclip
-    :ensure t
     ;; Loads after 1 second of idle time.
     :defer 1
     :config (xclip-mode 1))))
@@ -174,7 +163,6 @@
                                      "%b"))))
 
 (use-package highlight-indent-guides
-  :ensure t
   :diminish highlight-indent-guides-mode
   :config (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   :init
@@ -182,13 +170,11 @@
     (setq highlight-indent-guides-method 'column)))
 
 (use-package powerline
-  :ensure t
   :config
   (progn
     (powerline-default-theme)))
 
 (use-package leuven-theme
-  :ensure t
   :custom
   (leuven-scale-outline-headlines nil)
   (leuven-scale-org-agenda-structure nil)
@@ -234,19 +220,16 @@
 ;; Common programming and tools
 ;;
 (use-package multi-term
-  :defer t
-  :ensure t)
+  :defer t)
 
 (use-package ag
   :defer t
-  :ensure t
   :config
   (add-hook 'ag-mode-hook 'toggle-truncate-lines)
   (setq ag-highlight-search t)
   (setq ag-reuse-buffers 't))
 
 (use-package ivy
-  :ensure t
   :diminish ivy-mode
   :config
   (progn
@@ -254,7 +237,6 @@
     (bind-key "C-c C-r" 'ivy-resume)))
 
 (use-package ivy-rich
-  :ensure t
   :after ivy
   :init
   (progn
@@ -264,19 +246,16 @@
 
 ;; This is needed to order M-x by most recent commands
 (use-package smex
-  :defer t
-  :ensure t)
+  :defer t)
 
 ;; better C-s
 (use-package swiper
-  :ensure t
   :defer t
   :bind ("C-s" . swiper))
 
 (use-package counsel
   :after ivy
   :diminish
-  :ensure t
   :bind
   ("M-x" . counsel-M-x)
   ;;("C-z f" . counsel-describe-function)
@@ -284,13 +263,11 @@
   ("C-c k" . counsel-ag))
 
 (use-package treemacs
-  :ensure t
   :defer t
   :config
   (treemacs-git-mode 'deferred))
 
 (use-package projectile
-  :ensure t
   :init
   (progn
     (setq projectile-mode-line
@@ -301,18 +278,15 @@
   (progn
     (projectile-global-mode)
     (use-package counsel-projectile
-      :ensure t
       :preface (setq projectile-keymap-prefix (kbd "C-c p"))
       :hook (after-init . counsel-projectile-mode))))
 
 (use-package treemacs-projectile
-  :ensure t
   :defer t
   :after projectile
   :after treemacs)
 
 (use-package company
-  :ensure t
   :config (add-hook 'prog-mode-hook 'company-mode))
 
 (defun duncan/ruby-bundler-project-root ()
@@ -338,7 +312,6 @@
       command))
 
 (use-package lsp-mode
-  :ensure t
   :commands lsp
   :defer t
   :init
@@ -368,12 +341,10 @@
   :hook 'lsp-ui-mode)
 
 (use-package lsp-ui
-  :ensure t
   :defer t
   :after flycheck)
 
 (use-package lsp-treemacs
-  :ensure t
   :defer t
   :after treemacs
   :after lsp-mode
@@ -382,23 +353,19 @@
 
 (use-package company-lsp
   :commands company-lsp
-  :ensure t
   :defer t
   :config
   (push 'company-lsp company-backends))
 
 (use-package magit
-  :defer t
-  :ensure t)
+  :defer t)
 
 (use-package treemacs-magit
-  :ensure t
   :defer t
   :after treemacs
   :after magit)
 
 (use-package flycheck
-  :ensure t
   :defer t
   :after projectile
   :custom
@@ -408,25 +375,22 @@
   (global-flycheck-mode))
 
 (use-package flycheck-pos-tip
-  :ensure t
   :after (flycheck)
   :config
   (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)))
 
 (use-package lsp-java
-  :ensure t
   :after lsp
   :config (add-hook 'java-mode-hook 'lsp))
 
 (use-package dap-mode
-  :ensure t :after lsp-mode
+  :after lsp-mode
   :config
   (dap-mode t)
   (dap-ui-mode t))
 
-(use-package dap-java
-  :after (lsp-java))
-
+;(use-package dap-java
+;  :after (lsp-java))
 
 ;; Auto refresh buffers
 (global-auto-revert-mode 1)
@@ -481,7 +445,6 @@
 (setq x-alt-keysym 'meta)
 
 (use-package nav
-  :ensure t
   :config
   (nav-disable-overeager-window-splitting))
 
@@ -560,7 +523,8 @@
   ((error line-start (file-name) ":" line ":" column ":" (id (one-or-more (not (any ":")))) ":" (message) line-end))
   :modes (markdown-mode org-mode text-mode)
   )
-(add-to-list 'flycheck-checkers 'vale 'append)
+; FIXME disable vale until finishing straight migration
+;(add-to-list 'flycheck-checkers 'vale 'append)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; language specific tweaks
@@ -568,22 +532,18 @@
 ;; C, C++ and other compiled languages
 
 (use-package cmake-mode
-  :defer t
-  :ensure t)
+  :defer t)
 
 (use-package rust-mode
   :defer t
-  :ensure t
   :config
   (progn
     (use-package flycheck-rust
       :hook rust-mode
-      :after (flycheck)
-      :ensure t)))
+      :after (flycheck))))
 
 (use-package go-mode
   :defer t
-  :ensure t
   :config
   (add-hook 'go-mode-hook
             (lambda ()
@@ -598,29 +558,26 @@
 ;; Java family of languages
 (use-package kotlin-mode
   :defer t
-  :ensure t
   :config
   (setq kotlin-tab-width 4))
 
 (use-package clojure-mode
-  :defer t
-  :ensure t)
-(use-package cider
-  :defer t
-  :ensure t)
+  :defer t)
 
-(use-package elisp-mode
-  :defer t
-  :config
-  (use-package flycheck-elsa
-    :ensure t
-    :after (flycheck elsa)
-    :config
-    (add-hook 'emacs-lisp-mode-hook #'flycheck-elsa-setup)))
+(use-package cider
+  :defer t)
+
+;(use-package elisp-mode
+;  :defer t
+;  :config
+;  (use-package flycheck-elsa
+;    :ensure t
+;    :after (flycheck elsa)
+;    :config
+;    (add-hook 'emacs-lisp-mode-hook #'flycheck-elsa-setup)))
 
 ;; Scripting languages
 (use-package enh-ruby-mode
-  :ensure t
   :interpreter "ruby"
   :after projectile
   :defer t
@@ -647,7 +604,6 @@
   (add-hook 'ruby-mode-hook 'rbenv-use-corresponding))
 
 (use-package rbenv
-  :ensure t
   :init
   (progn
     (setq
@@ -662,17 +618,20 @@
   (progn
     (setq-default python-indent 4)
     (use-package flycheck-pyflakes
-      :ensure t
       :defer t
       :after (flycheck))))
 
+(use-package nim-mode
+  :defer t)
+
+(use-package zig-mode
+  :defer t)
+
 (use-package feature-mode
-  :ensure t
   :mode ("\\.feature$" . feature-mode))
 
 ;; web development
 (use-package web-mode
-  :ensure t
   :mode (("\\.erb\\'" . web-mode) ("\\.html?\\'" . web-mode))
   :config
     (setq web-mode-enable-css-colorization t)
@@ -681,70 +640,54 @@
     (setq web-mode-script-padding 2))
 
 (use-package less-css-mode
-  :defer t
-  :ensure t)
+  :defer t)
 
 ;;; Colourise CSS colour literals
 (use-package rainbow-mode
   :if (eval-when-compile (>= emacs-major-version 24))
-  :ensure t
   :hook ((css-mode html-mode sass-mode) . rainbow-mode))
 
 ;; markup formats
 (use-package polymode
-  :defer t
-  :ensure t)
+  :defer t)
 (use-package yaml-mode
-  :ensure t
   :mode (("\\.yml$" . yaml-mode) ("\\.sls\\'" . yaml-mode)))
 (use-package salt-mode
-  :defer t
-  :ensure t)
+  :defer t)
 (use-package markdown-mode
   :defer t
-  :ensure t
   :bind (:map markdown-mode-map ("M-RET" . nil)))
 (use-package poly-markdown
   :defer t
-  :ensure t
   :hook (markdown-mode . poly-markdown-mode))
 (use-package toml-mode
-  :defer t
-  :ensure t)
+  :defer t)
 (use-package vue-mode
   :defer t
-  :ensure t
   :config
   (setq js-indent-level 2))
 (use-package poly-vue
   :defer t
-  :ensure t
-  :quelpa (poly-vue :fetcher github :repo "akirak/poly-vue"))
+  :straight (poly-vue :type git :host github :repo "akirak/poly-vue"))
 (use-package js2-mode
-  :defer t
-  :ensure t)
+  :defer t)
 (use-package typescript-mode
   :defer t
-  :ensure t
   :config
   (setq js-indent-level 2))
 (use-package tide
-  :ensure t
   :after (typescript-mode company flycheck)
   :hook ((typescript-mode . tide-setup)
          (typescript-mode . tide-hl-identifier-mode)
          (before-save . tide-format-before-save)))
 
 (use-package hcl-mode
-  :defer t
-  :ensure t)
+  :defer t)
 (use-package terraform-mode
-  :defer t
-  :ensure t)
+  :defer t)
 
 (use-package ponylang-mode
   :defer t
-  :ensure t
   :config
   (progn
     (add-hook
@@ -754,27 +697,21 @@
        (set-variable 'tab-width 2)))))
 
 (use-package lua-mode
-  :defer t
-  :ensure t)
+  :defer t)
 
 (use-package ess
-  :defer t
-  :ensure t)
+  :defer t)
 (use-package ess-R-data-view
-  :defer t
-  :ensure t)
+  :defer t)
 (use-package ess-view
-  :defer t
-  :ensure t)
-
+  :defer t)
 (use-package smartparens
   :init
   (progn
-    (use-package smartparens-config)
-    (use-package smartparens-html)
+    (require 'smartparens-config)
+    (require 'smartparens-html)
     (smartparens-global-mode 1)
     (show-smartparens-global-mode 1))
-  :ensure t
   :config
   (progn
     (setq smartparens-strict-mode 1)
@@ -789,22 +726,20 @@
   :config
   ;; do not hijack the shortcut I use to switch buffers
   (unbind-key "M-RET" eww-mode-map)
-  (add-hook 'eww-mode-hook #'toggle-word-wrap)
+
+(add-hook 'eww-mode-hook #'toggle-word-wrap)
   (add-hook 'eww-mode-hook #'(lambda () (setq show-trailing-whitespace nil))))
 
 (use-package eww-lnum
-    :ensure t
     :config
     (bind-key "f" #'eww-lnum-follow eww-mode-map)
     (bind-key "U" #'eww-lnum-universal eww-mode-map))
 
 (use-package link-hint
-  :ensure t
   :bind ("C-c f" . link-hint-open-link))
 
 (use-package calfw
-  :defer t
-  :ensure t)
+  :defer t)
 
 (use-package org
   :defer t
@@ -834,7 +769,7 @@
   ;; Does not work in org-ql yet :-(
   (org-agenda-category-icon-alist
    `(("emacs" ,(list (all-the-icons-fileicon "emacs")) nil nil :ascent center)))
-  ;;(org-agenda-prefix-format "○ ")
+  ;;(org-agenda-prefix-format "○ ")  
   :config
   ;; we have Alt-Enter map to ivy-switch-buffer
   (unbind-key "M-<return>" org-mode-map)
@@ -843,57 +778,54 @@
   (org-crypt-use-before-save-magic)
     ;;; (all-the-icons-insert-icons-for 'faicon) inserts all faicon icons to check
   (use-package org-super-agenda
-    :ensure t
     :defer t)
   (use-package org-ql
-    :ensure t
     :defer t)
   (use-package org-bullets
-    :ensure t
     :hook (org-mode . org-bullets-mode))
   ;; Avoid `org-babel-do-load-languages' since it does an eager require.
   (use-package ob-C
     :defer t
-    :ensure org-plus-contrib
-    :commands (org-babel-execute:C))
+    :requires (org-plus-contrib)
+    :commands (org-babel-execute:C org-babel-execute:C++))
   (use-package ob-ruby
     :defer t
-    :ensure org-plus-contrib
+    :requires (org-plus-contrib)
     :commands (org-babel-execute:ruby))
   (use-package ob-python
     :defer t
-    :ensure org-plus-contrib
+    :requires (org-plus-contrib)
     :commands (org-babel-execute:python))
   (use-package ob-octave
     :defer t
-    :ensure org-plus-contrib
+    :requires (org-plus-contrib)
     :commands (org-babel-execute:octave))
   (use-package ob-gnuplot
     :defer t
-    :ensure org-plus-contrib
+    :requires (org-plus-contrib)
     :commands (org-babel-execute:gnuplot))
   (use-package ob-markdown
     :defer t
-    :ensure org-plus-contrib
-    :quelpa (ob-markdown :fetcher github :repo "tnoda/ob-markdown")
+    :requires (org-plus-contrib)
+    :straight (ob-markdown :type git :host github :repo "tnoda/ob-markdown")
     :commands
     (org-babel-execute:markdown
      org-babel-expand-body:markdown))
   (use-package ob-go
     :defer t
-    :ensure org-plus-contrib
+    :requires (org-plus-contrib)
     :commands
     (org-babel-execute:go
      org-babel-expand-body:go))
   (use-package ob-http
     :defer t
-    :ensure org-plus-contrib
+    :requires (org-plus-contrib)
     :commands
     (org-babel-execute:http
      org-babel-expand-body:http))
   (use-package ob-shell
     :defer t
-    :ensure org-plus-contrib
+    :requires (org-plus-contrib)
     :commands
     (org-babel-execute:sh
      org-babel-expand-body:sh
@@ -901,54 +833,56 @@
      org-babel-expand-body:bash))
   (use-package ob-diagrams
     :defer t
-    :ensure org-plus-contrib
+    :requires (org-plus-contrib)
     :commands (org-babel-execute:diagrams))
   (use-package ob-ditaa
     :defer t
-    :ensure org-plus-contrib
+    :requires (org-plus-contrib)
     :custom
     (org-ditaa-jar-path "/usr/share/java/ditaa.jar")
     :commands (org-babel-execute:ditaa))
   (use-package ob-plantuml
     :defer t
-    :ensure org-plus-contrib
+    :requires (org-plus-contrib)
     :custom
     (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
     :commands (org-babel-execute:plantuml))
   (use-package ox-gfm
-    :defer t
-    :ensure t)
+    :defer t)
   (use-package ox-reveal
-    :defer t
-    :ensure t)
-  (use-package ox-beamer
-    :defer t
-    ; bug with built-in packages
-    :ensure nil)
+    :defer t)
+;  (use-package ox-beamer
+;    :defer t
+;    ; bug with built-in packages
+;    :ensure nil)
   (use-package htmlize
-    :defer t
-    :ensure t))
+    :defer t))
 
 (use-package poly-org
   :defer t
-  :ensure t
   :hook
   (org-mode . poly-org-mode))
 
+;; kubernetes
+(use-package kubernetes
+  :commands (kubernetes-overview))
+(use-package kubel)
+
 ;; Other tools and browsers
 (use-package hackernews
-  :defer t
-  :ensure t)
+  :defer t)
 
-;; work setup
+;; work setup. It conflicts with the home setup because of mu4e
+;; so we load one or the other
 (if (file-exists-p "~/.emacs.suse.d/init.el")
-    (load-file "~/.emacs.suse.d/init.el"))
+    (load-file "~/.emacs.suse.d/init.el")
+  (if (file-exists-p "~/.emacs.home.d/init.el")
+      (load-file "~/.emacs.home.d/init.el")))
 
 ;; Hacks
 
 ;; tramp mode
 (use-package tramp
-  :ensure t
   :defer t
   :config
   (setq vc-ignore-dir-regexp
@@ -966,7 +900,6 @@
 ;; like I do in tmux
 (use-package xterm-color
   :defer t
-  :ensure t
   :init
   (setq comint-output-filter-functions
       (remove 'ansi-color-process-output comint-output-filter-functions))
@@ -979,7 +912,6 @@
                         (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t))))
 (use-package shx
   :defer t
-  :ensure t
   :hook (shell-mode . shx-mode))
 
 (defun new-shell (name)
