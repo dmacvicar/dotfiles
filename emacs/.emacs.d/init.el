@@ -390,8 +390,10 @@
   (dap-mode t)
   (dap-ui-mode t))
 
-;(use-package dap-java
-;  :after (lsp-java))
+(use-package dap-java
+  :defer t
+  :after (lsp-java)
+  :straight (:type built-in))
 
 ;; Auto refresh buffers
 (global-auto-revert-mode 1)
