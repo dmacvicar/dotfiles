@@ -6,6 +6,7 @@
 (defconst emacs-start-time (current-time))
 
 (setq straight-check-for-modifications 'live)
+(setq straight-vc-git-default-clone-depth 1)
 ;; straight bootstrap
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -81,8 +82,7 @@
     ;; Save the list every 5 minutes
     (recentf-mode 1) (run-at-time nil (* 5 60) 'recentf-save-list)))
 
-(use-package f
-  :defer t)
+(use-package f :defer t)
 
 ;; We only load perspeen when in graphical mode, as we lack tmux
 (use-package perspeen
@@ -112,10 +112,10 @@
   (push 'cfw:details-mode  popwin:special-display-config)
   (push 'calendar-mode  popwin:special-display-config)
   (push 'ag-mode  popwin:special-display-config)
-  (popwin-mode 1)
-)
+  (popwin-mode 1))
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :defer t)
 
 (unless (display-graphic-p)
   ; xclip is used only on terminals
@@ -537,6 +537,9 @@
 (use-package cmake-mode
   :defer t)
 
+(use-package meson-mode
+  :defer t)
+
 (use-package rust-mode
   :defer t
   :config
@@ -570,14 +573,15 @@
 (use-package cider
   :defer t)
 
-;(use-package elisp-mode
-;  :defer t
-;  :config
-;  (use-package flycheck-elsa
-;    :ensure t
-;    :after (flycheck elsa)
-;    :config
-;    (add-hook 'emacs-lisp-mode-hook #'flycheck-elsa-setup)))
+(use-package elisp-mode
+  :defer t
+  :straight (:type built-in)
+  :config
+  (use-package flycheck-elsa
+    :ensure t
+    :after (flycheck elsa)
+    :config
+    (add-hook 'emacs-lisp-mode-hook #'flycheck-elsa-setup)))
 
 ;; Scripting languages
 (use-package enh-ruby-mode
@@ -708,7 +712,9 @@
   :defer t)
 (use-package ess-view
   :defer t)
+
 (use-package smartparens
+  :defer 3
   :init
   (progn
     (require 'smartparens-config)
@@ -746,7 +752,7 @@
 
 (use-package org
   :defer t
-  :straight (:type built-in)
+;  :straight (:type built-in)
   :hook
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
@@ -789,23 +795,28 @@
   ;; Avoid `org-babel-do-load-languages' since it does an eager require.
   (use-package ob-C
     :defer t
+    :straight (:type built-in)
     :requires (org-plus-contrib)
     :commands (org-babel-execute:C org-babel-execute:C++))
   (use-package ob-ruby
     :defer t
+    :straight (:type built-in)
     :requires (org-plus-contrib)
     :commands (org-babel-execute:ruby))
   (use-package ob-python
     :defer t
+    :straight (:type built-in)
     :requires (org-plus-contrib)
     :commands (org-babel-execute:python))
   (use-package ob-octave
     :defer t
     :requires (org-plus-contrib)
+    :straight (:type built-in)
     :commands (org-babel-execute:octave))
   (use-package ob-gnuplot
     :defer t
     :requires (org-plus-contrib)
+    :straight (:type built-in)
     :commands (org-babel-execute:gnuplot))
   (use-package ob-markdown
     :defer t
@@ -816,18 +827,21 @@
      org-babel-expand-body:markdown))
   (use-package ob-go
     :defer t
+    :straight (:type built-in)
     :requires (org-plus-contrib)
     :commands
     (org-babel-execute:go
      org-babel-expand-body:go))
   (use-package ob-http
     :defer t
+    :straight (:type built-in)
     :requires (org-plus-contrib)
     :commands
     (org-babel-execute:http
      org-babel-expand-body:http))
   (use-package ob-shell
     :defer t
+    :straight (:type built-in)
     :requires (org-plus-contrib)
     :commands
     (org-babel-execute:sh
@@ -836,16 +850,19 @@
      org-babel-expand-body:bash))
   (use-package ob-diagrams
     :defer t
+    :straight (:type built-in)
     :requires (org-plus-contrib)
     :commands (org-babel-execute:diagrams))
   (use-package ob-ditaa
     :defer t
+    :straight (:type built-in)
     :requires (org-plus-contrib)
     :custom
     (org-ditaa-jar-path "/usr/share/java/ditaa.jar")
     :commands (org-babel-execute:ditaa))
   (use-package ob-plantuml
     :defer t
+    :straight (:type built-in)
     :requires (org-plus-contrib)
     :custom
     (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
