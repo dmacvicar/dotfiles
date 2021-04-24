@@ -322,6 +322,7 @@
   (add-hook 'c-mode-hook #'lsp-deferred)
   (add-hook 'c++-mode-hook #'lsp-deferred)
   (add-hook 'python-mode-hook #'lsp-deferred)
+  (add-hook 'java-mode-hook #'lsp-deferred)
   (add-hook 'enh-ruby-mode-hook #'(lambda ()
                                     (if (duncan/ruby-solargraph-project-p)
                                         (let ((lsp-solargraph-use-bundler t)) (lsp-deferred)))))
@@ -343,6 +344,12 @@
 
 (use-package lsp-ui
   :defer t
+  :custom
+  (lsp-ui-doc-enable t)
+  (lsp-ui-peek-enable t)
+  (lsp-ui-sideline-enable t)
+  (lsp-ui-imenu-enable t)
+  (lsp-ui-flycheck-enable t)
   :after flycheck)
 
 (use-package lsp-treemacs
@@ -382,13 +389,20 @@
 
 (use-package lsp-java
   :after lsp
-  :config (add-hook 'java-mode-hook 'lsp))
+  :config (add-hook 'java-mode-hook 'lsp)
+  :custom
+  lsp-file-watch-ignored '(".idea" ".ensime_cache" ".eunit" "node_modules"
+                           ".git" ".hg" ".fslckout" "_FOSSIL_"
+                           ".bzr" "_darcs" ".tox" ".svn" ".stack-work"
+                           "build" "data"))
 
 (use-package dap-mode
   :after lsp-mode
   :config
   (dap-mode t)
-  (dap-ui-mode t))
+  (dap-ui-mode t)
+  (require 'dap-go)
+  (dap-go-setup))
 
 (use-package dap-java
   :defer t
