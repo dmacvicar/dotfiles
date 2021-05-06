@@ -1,4 +1,4 @@
-(package! leuven-theme :disable t)
+(package! leuven-theme)
 (package! windmove)
 
 (package! tree-sitter)
