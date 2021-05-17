@@ -1,4 +1,3 @@
-(package! leuven-theme)
 (package! windmove)
 
 (package! tree-sitter)

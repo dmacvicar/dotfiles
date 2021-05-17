@@ -24,12 +24,12 @@
 (setq show-trailing-whitespace t)
 (setq-default show-trailing-whitespace t)
 
-(use-package! leuven-theme
-  :custom
-  (leuven-scale-outline-headlines nil)
-  (leuven-scale-org-agenda-structure nil)
-  :config
-  (load-theme 'leuven t))
+;(use-package! leuven-theme
+;  :custom
+;  (leuven-scale-outline-headlines nil)
+;  (leuven-scale-org-agenda-structure nil)
+;  :config
+;  (load-theme 'leuven t))
 
 (setq show-trailing-whitespace t)
 (setq-default show-trailing-whitespace t)
@@ -73,7 +73,7 @@
 (use-package! hackernews
   :defer t)
 
-(use-package org!
+(use-package! org
   :defer t
 ;  :straight (:type built-in)
   :hook
@@ -107,80 +107,82 @@
   (unbind-key "M-<return>" org-mode-map)
   (unbind-key "M-RET" org-mode-map)
   (require 'org-crypt)
-  (org-crypt-use-before-save-magic)
+  (org-crypt-use-before-save-magic))
     ;;; (all-the-icons-insert-icons-for 'faicon) inserts all faicon icons to check
-  (use-package! org-super-agenda
-    :defer t)
-  (use-package! org-ql
-    :defer t)
-  (use-package! org-bullets
-    :hook (org-mode . org-bullets-mode))
-  ;; Avoid `org-babel-do-load-languages' since it does an eager require.
-  (use-package! ob-C
-    :defer t
-    :requires (org-plus-contrib)
-    :commands (org-babel-execute:C org-babel-execute:C++))
-  (use-package! ob-ruby
-    :defer t
-    :requires (org-plus-contrib)
-    :commands (org-babel-execute:ruby))
-  (use-package! ob-python
-    :defer t
-    :requires (org-plus-contrib)
-    :commands (org-babel-execute:python))
-  (use-package! ob-octave
-    :defer t
-    :requires (org-plus-contrib)
-    :commands (org-babel-execute:octave))
-  (use-package! ob-gnuplot
-    :defer t
-    :requires (org-plus-contrib)
-    :commands (org-babel-execute:gnuplot))
-  (use-package! ob-markdown
-    :defer t
+
+(use-package! org-super-agenda
+  :defer t)
+(use-package! org-ql
+  :defer t)
+(use-package! org-bullets
+  :hook (org-mode . org-bullets-mode))
+;; Avoid `org-babel-do-load-languages' since it does an eager require.
+(use-package! ob-C
+  :defer t
+  :requires (org-plus-contrib)
+  :commands (org-babel-execute:C org-babel-execute:C++))
+(use-package! ob-ruby
+  :defer t
+  :requires (org-plus-contrib)
+  :commands (org-babel-execute:ruby))
+(use-package! ob-python
+  :defer t
+  :requires (org-plus-contrib)
+  :commands (org-babel-execute:python))
+(use-package! ob-octave
+  :defer t
+  :requires (org-plus-contrib)
+  :commands (org-babel-execute:octave))
+(use-package! ob-gnuplot
+  :defer t
+  :requires (org-plus-contrib)
+  :commands (org-babel-execute:gnuplot))
+(use-package! ob-markdown
+  :defer t
     :requires (org-plus-contrib)
     :commands
     (org-babel-execute:markdown
      org-babel-expand-body:markdown))
-  (use-package! ob-http
-    :requires (org-plus-contrib)
-    :commands
-    (org-babel-execute:http
-     org-babel-expand-body:http))
-  (use-package! ob-shell
-    :defer t
-    :requires (org-plus-contrib)
-    :commands
-    (org-babel-execute:sh
-     org-babel-expand-body:sh
-     org-babel-execute:bash
-     org-babel-expand-body:bash))
-  (use-package! ob-diagrams
-    :defer t
-    :requires (org-plus-contrib)
-    :commands (org-babel-execute:diagrams))
-  (use-package! ob-ditaa
-    :defer t
-    :requires (org-plus-contrib)
-    :custom
-    (org-ditaa-jar-path "/usr/share/java/ditaa.jar")
-    :commands (org-babel-execute:ditaa))
-  (use-package! ob-plantuml
-    :defer t
-    :requires (org-plus-contrib)
-    :custom
-    (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
-    :commands (org-babel-execute:plantuml))
-  (use-package! ox-gfm
-    :defer t)
-  (use-package! ox-reveal
-    :defer t)
-;  (use-package ox-beamer
-;    :defer t
-;    ; bug with built-in packages
-;    :ensure nil)
-  (use-package! htmlize
-    :defer t))
+(use-package! ob-http
+  :requires (org-plus-contrib)
+  :commands
+  (org-babel-execute:http
+   org-babel-expand-body:http))
+(use-package! ob-shell
+  :defer t
+  :requires (org-plus-contrib)
+  :commands
+  (org-babel-execute:sh
+   org-babel-expand-body:sh
+   org-babel-execute:bash
+   org-babel-expand-body:bash))
+(use-package! ob-diagrams
+  :defer t
+  :requires (org-plus-contrib)
+  :commands (org-babel-execute:diagrams))
+(use-package! ob-ditaa
+  :defer t
+  :requires (org-plus-contrib)
+  :custom
+  (org-ditaa-jar-path "/usr/share/java/ditaa.jar")
+  :commands (org-babel-execute:ditaa))
+(use-package! ob-plantuml
+  :defer t
+  :requires (org-plus-contrib)
+  :custom
+  (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
+  :commands (org-babel-execute:plantuml))
+(use-package! ox-gfm
+  :defer t)
+(use-package! ox-reveal
+  :defer t)
+
+(use-package! htmlize
+  :defer t)
+
+(use-package! markdown-mode
+  :defer t
+  :bind (:map markdown-mode-map ("M-RET" . nil)))
 
 (if (file-exists-p "~/.emacs.suse.d/init.el")
     (load "~/.emacs.suse.d/init.el")
