@@ -23,13 +23,12 @@
 
 (setq show-trailing-whitespace t)
 (setq-default show-trailing-whitespace t)
-
-;(use-package! leuven-theme
-;  :custom
-;  (leuven-scale-outline-headlines nil)
-;  (leuven-scale-org-agenda-structure nil)
-;  :config
-;  (load-theme 'leuven t))
+(use-package! leuven-theme
+  :custom
+  (leuven-scale-outline-headlines nil)
+  (leuven-scale-org-agenda-structure nil)
+  :config
+  (load-theme 'leuven t))
 
 (setq show-trailing-whitespace t)
 (setq-default show-trailing-whitespace t)
