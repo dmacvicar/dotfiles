@@ -1,0 +1,6 @@
+set-option -g message-command-style 'bg=#282c34,fg=#bbc2cf'
+set-option -g message-style 'bg=#282c34,fg=#bbc2cf'
+set-option -g mode-style 'bg=#424856'
+set-option -g status-left-style 'bold'
+set-option -g status-style 'bg=#9B9C97,fg=#F0F0EF'
+set-option -g window-status-current-style 'bg=#335EA8,fg=#ffffff'
