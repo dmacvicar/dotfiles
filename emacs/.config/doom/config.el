@@ -113,8 +113,19 @@
   :defer t)
 (use-package! org-ql
   :defer t)
-(use-package! org-bullets
+
+(use-package! org-superstar              ; supersedes `org-bullets'
+  :ensure
+  :after org
+  :config
+  (setq org-superstar-remove-leading-stars t)
+  (setq org-superstar-headline-bullets-list '(" ")) ;; '("🞛" "◉" "○" "▷")
+  (setq org-superstar-item-bullet-alist
+        '((?+ . ?•)
+          (?* . ?➤)
+          (?- . ?–)))
   :hook (org-mode . org-bullets-mode))
+
 ;; Avoid `org-babel-do-load-languages' since it does an eager require.
 (use-package! ob-C
   :defer t

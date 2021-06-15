@@ -16,6 +16,14 @@
 ;(package! mu4e-icalendar :load-path mu4e-system-path)
 (package! mu4e-views)
 
+(package! poly-org)
+(package! org-superstar)
 
 (package! ob-markdown
   :recipe (:host github :repo "tnoda/ob-markdown"))
+
+(package! olivetti)
+
+
+;; hack
+;; https://github.com/magit/magit/issues/3749
