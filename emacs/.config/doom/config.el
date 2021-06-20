@@ -33,6 +33,8 @@
 (setq show-trailing-whitespace t)
 (setq-default show-trailing-whitespace t)
 
+(setq confirm-kill-emacs nil)
+
 ;; Window splitting functions
 (use-package! windmove
    :config
@@ -94,7 +96,6 @@
   (org-pretty-entities t)
   (org-return-follows-link t)
   (org-src-tab-acts-natively t)
-  (org-bullets-bullet-list '("⁖"))
   (org-crypt-key nil "symmetric encryption")
   (org-tags-exclude-from-inheritance (quote ("crypt")))
   ;; Does not work in org-ql yet :-(
@@ -124,7 +125,7 @@
         '((?+ . ?•)
           (?* . ?➤)
           (?- . ?–)))
-  :hook (org-mode . org-bullets-mode))
+  :hook (org-mode . org-superstar-mode))
 
 ;; Avoid `org-babel-do-load-languages' since it does an eager require.
 (use-package! ob-C
