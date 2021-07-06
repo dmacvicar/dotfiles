@@ -195,8 +195,8 @@
   :defer t
   :bind (:map markdown-mode-map ("M-RET" . nil)))
 
-(if (file-exists-p "~/.emacs.suse.d/init.el")
-    (load "~/.emacs.suse.d/init.el")
+(if (file-exists-p "~/.emacs.work.d/init.el")
+    (load "~/.emacs.work.d/init.el")
 (if (file-exists-p "~/.emacs.home.d/init.el")
     (load "~/.emacs.home.d/init.el")))
 
