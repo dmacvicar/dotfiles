@@ -2,7 +2,7 @@
 
 HISTCONTROL=ignoredups:ignorespace
 
-for dir in $HOME/.config/emacs/bin $HOME/go/bin; do
+for dir in $HOME/.config/emacs/bin $HOME/go/bin $HOME/.npm-global/bin; do
     test -d "$dir" && export PATH=$dir:$PATH
 done
 
