@@ -21,6 +21,7 @@
 
 (package! ob-markdown
   :recipe (:host github :repo "tnoda/ob-markdown"))
+(package! ob-http)
 
 (package! olivetti)
 

@@ -167,6 +167,9 @@
    org-babel-expand-body:sh
    org-babel-execute:bash
    org-babel-expand-body:bash))
+(use-package! ob-sql
+  :defer t
+  :commands (org-babel-execute:sql))
 (use-package! ob-diagrams
   :defer t
   :requires (org-plus-contrib)
