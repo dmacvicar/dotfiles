@@ -194,6 +194,12 @@
 (use-package! htmlize
   :defer t)
 
+(use-package! prodigy
+  :defer t)
+
+(use-package! ag
+  :defer t)
+
 (use-package! markdown-mode
   :defer t
   :bind (:map markdown-mode-map ("M-RET" . nil)))
