@@ -8,13 +8,11 @@
 (package! protobuf-mode)
 
 ;; mu4e
-(package! mu4e-views
-  :recipe
-  (:host github :repo "lordpretzel/mu4e-views"))
 (package! outlook)
 (package! mu4e-jump-to-list :disable t)
 ;(package! mu4e-contrib :load-path mu4e-system-path)
 (package! mu4e-conversation :disable t)
+(package! mu4e-column-faces)
 ;(package! org-mu4e :load-path mu4e-system-path)
 ;(package! mu4e-icalendar :load-path mu4e-system-path)
 (package! mu4e-views)

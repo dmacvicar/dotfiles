@@ -281,6 +281,10 @@
   (mu4e-views-mu4e-use-view-msg-method "text")
   (setq mu4e-views-auto-view-selected-message nil))
 
+(use-package! mu4e-column-faces
+  :after mu4e
+  :config (mu4e-column-faces-mode))
+
 ;; Contacts completion
 ;; http://pragmaticemacs.com/emacs/tweaking-email-contact-completion-in-mu4e/
 ;;need this for hash access
