@@ -1,5 +1,5 @@
 (defconst mu4e-system-path "/usr/share/emacs/site-lisp/mu4e")
-(add-to-list 'load-path mu4e-system-path)
+;;(add-to-list 'load-path mu4e-system-path)
 
 (doom! :checkers
        (spell +flyspell +hunspell +aspell +everywhere)

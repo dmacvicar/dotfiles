@@ -213,6 +213,8 @@
     (mapc 'load (file-expand-wildcards "~/.emacs.home.d/*.el")))
 
 (use-package! mu4e
+  :load-path mu4e-system-path
+  :commands 'mu4e
   :defer t
   :bind (:map mu4e-compose-mode-map ("<tab>" . dmacvicar/ivy-select-and-insert-contact))
   :custom
@@ -221,7 +223,6 @@
   (mu4e-compose-dont-reply-to-self t)
   (mu4e-view-use-gnus nil)
   (mu4e-view-prefer-html t)
-  (mu4e-html2text-command "w3m -dump -T text/html")
   (mu4e-attachment-dir (expand-file-name "~/Downloads"))
   (mu4e-update-interval 1800)
   (mu4e-view-fields '(:subject :to :from :cc :bcc :from-or-to :date :attachments :maildir :mailing-list))
@@ -230,7 +231,8 @@
   (mu4e-get-mail-command "/usr/bin/mbsync -aV")
   (message-send-mail-function 'message-send-mail-with-sendmail)
   (sendmail-program "/usr/bin/msmtp"))
-
+;; avoid yellow background with leuven when showing email
+(setq-hook! mu4e-view-mode show-trailing-whitespace nil)
 
 ;; work setup. It conflicts with the home setup because of mu4e
 ;; so we load one or the other
