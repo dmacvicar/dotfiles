@@ -5,6 +5,7 @@
 ;; lang stuff
 (package! tree-sitter)
 (package! tree-sitter-langs)
+(package! protobuf-mode)
 
 ;; mu4e
 (package! mu4e-views

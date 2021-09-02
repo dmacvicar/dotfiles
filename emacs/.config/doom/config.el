@@ -194,6 +194,9 @@
 (use-package! htmlize
   :defer t)
 
+(use-package! protobuf-mode
+  :defer t)
+
 (use-package! prodigy
   :defer t)
 
