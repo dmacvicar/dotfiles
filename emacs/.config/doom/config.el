@@ -207,10 +207,10 @@
   :defer t
   :bind (:map markdown-mode-map ("M-RET" . nil)))
 
-(if (file-exists-p "~/.emacs.work.d/init.el")
-    (load "~/.emacs.work.d/init.el")
-(if (file-exists-p "~/.emacs.home.d/init.el")
-    (load "~/.emacs.home.d/init.el")))
+(if (file-directory-p "~/.emacs.work.d")
+    (mapc 'load (file-expand-wildcards "~/.emacs.work.d/*.el")))
+(if (file-directory-p "~/.emacs.home.d")
+    (mapc 'load (file-expand-wildcards "~/.emacs.home.d/*.el")))
 
 (use-package! mu4e
   :defer t
