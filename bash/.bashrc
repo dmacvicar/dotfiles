@@ -12,3 +12,4 @@ if [ -x "$emacscmd" ]; then
 fi
 
 alias df="df -h"
+alias ls="ls --color=auto"
