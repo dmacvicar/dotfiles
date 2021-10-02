@@ -16,13 +16,17 @@
        (cc +lsp)
        (go +lsp)
        (json +lsp)
-       markdown
+       (markdown +grip)
        (org +babel +export +present +pandoc +pretty)
        (python)
        rest
        (ruby +lsp)
        sh
        yaml
+       javascript
+       (web +lsp +html +css)
+       :editor
+       (format)
        :mail
        mu4e
        :os
@@ -30,6 +34,7 @@
        tty
        :term
        shell
+       vterm
        :tools
        (eval +overlay)
        lookup
