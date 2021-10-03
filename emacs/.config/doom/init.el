@@ -15,6 +15,7 @@
        :lang
        (cc +lsp)
        (go +lsp)
+       (javascript +lsp)
        (json +lsp)
        (markdown +grip)
        (org +babel +export +present +pandoc +pretty)
@@ -23,7 +24,6 @@
        (ruby +lsp)
        sh
        yaml
-       javascript
        (web +lsp +html +css)
        :editor
        (format)

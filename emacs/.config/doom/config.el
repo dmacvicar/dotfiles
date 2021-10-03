@@ -70,6 +70,15 @@
   :hook
   (org-mode . poly-org-mode))
 
+(use-package! vue-html-mode
+  :defer t)
+                                        ;  )
+(use-package! sfc-mode
+  :defer t
+  :mode "\\.vue\\'"
+  :hook
+  (sfc-mode #'lsp))
+
 ;; Other tools and browsers
 (use-package! hackernews
   :defer t)

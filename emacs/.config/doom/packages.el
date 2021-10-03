@@ -6,6 +6,11 @@
 (package! tree-sitter)
 (package! tree-sitter-langs)
 (package! protobuf-mode)
+(package! vue-html-mode)
+; vue mode based on polymode
+; tried poly-vue too but js2-mode breaks in script tag
+(package! sfc-mode
+  :recipe (:host github :repo "gexplorer/sfc-mode"))
 
 ;; mu4e
 (package! outlook)
