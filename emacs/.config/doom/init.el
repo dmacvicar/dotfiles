@@ -24,7 +24,6 @@
        (ruby +lsp)
        sh
        yaml
-       (web +lsp +html +css)
        :editor
        (format)
        :mail

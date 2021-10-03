@@ -75,9 +75,7 @@
                                         ;  )
 (use-package! sfc-mode
   :defer t
-  :mode "\\.vue\\'"
-  :hook
-  (sfc-mode #'lsp))
+  :mode "\\.vue\\'")
 
 ;; Other tools and browsers
 (use-package! hackernews
