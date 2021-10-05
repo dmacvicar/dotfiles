@@ -63,12 +63,22 @@
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  ;; poly-mode breaks with tree-sitter (or viceversa?)
+  ;; https://github.com/emacs-tree-sitter/elisp-tree-sitter/issues/139
+  (add-hook 'tree-sitter-after-on-hook
+            (lambda ()
+              (tree-sitter-hl-mode (if (bound-and-true-p polymode-mode) -1 1)))))
 
 (use-package! poly-org
   :defer t
   :hook
   (org-mode . poly-org-mode))
+
+(use-package! poly-markdown
+  :defer t
+  :hook
+  (markdown-mode . poly-markdown-mode)
+  (gfm-mode . poly-markdown-mode))
 
 (use-package! vue-html-mode
   :defer t)

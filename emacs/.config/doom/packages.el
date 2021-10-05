@@ -5,6 +5,8 @@
 ;; lang stuff
 (package! tree-sitter)
 (package! tree-sitter-langs)
+(package! polymode)
+(package! poly-markdown)
 (package! protobuf-mode)
 (package! vue-html-mode)
 ; vue mode based on polymode
