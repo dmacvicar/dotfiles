@@ -69,6 +69,9 @@
             (lambda ()
               (tree-sitter-hl-mode (if (bound-and-true-p polymode-mode) -1 1)))))
 
+(use-package! nix-mode
+  :defer t)
+
 (use-package! poly-org
   :defer t
   :hook

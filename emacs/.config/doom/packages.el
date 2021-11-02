@@ -13,6 +13,7 @@
 ; tried poly-vue too but js2-mode breaks in script tag
 (package! sfc-mode
   :recipe (:host github :repo "gexplorer/sfc-mode"))
+(package! nix-mode)
 
 ;; mu4e
 (package! outlook)
