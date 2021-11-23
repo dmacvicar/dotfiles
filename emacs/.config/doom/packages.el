@@ -14,6 +14,7 @@
 (package! sfc-mode
   :recipe (:host github :repo "gexplorer/sfc-mode"))
 (package! nix-mode)
+(package! web-mode)
 
 ;; mu4e
 (package! outlook)
@@ -25,6 +26,7 @@
 ;(package! mu4e-icalendar :load-path mu4e-system-path)
 (package! mu4e-views)
 
+(package! org-tree-slide)
 (package! poly-org)
 (package! org-superstar)
 (package! ob-markdown

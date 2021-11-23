@@ -35,6 +35,9 @@
 
 (setq confirm-kill-emacs nil)
 
+(setq global-auto-revert-mode t)
+(setq auto-revert-use-notify t)
+
 ;; Window splitting functions
 (use-package! windmove
    :config
@@ -73,9 +76,10 @@
   :defer t)
 
 (use-package! poly-org
-  :defer t
-  :hook
-  (org-mode . poly-org-mode))
+  :defer t)
+; weird error with eieiobj
+;  :hook
+;  (org-mode . poly-org-mode))
 
 (use-package! poly-markdown
   :defer t
@@ -85,7 +89,11 @@
 
 (use-package! vue-html-mode
   :defer t)
-                                        ;  )
+
+(use-package! web-mode
+  :defer t
+  :mode "\\.qtpl\\'")
+
 (use-package! sfc-mode
   :defer t
   :mode "\\.vue\\'")
@@ -209,6 +217,8 @@
 (use-package! ox-gfm
   :defer t)
 (use-package! ox-reveal
+  :defer t)
+(use-package! org-tree-slide
   :defer t)
 
 (use-package! htmlize

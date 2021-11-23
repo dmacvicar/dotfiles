@@ -13,3 +13,5 @@ fi
 
 alias df="df -h"
 alias ls="ls --color=auto"
+
+eval "$(direnv hook bash)"
