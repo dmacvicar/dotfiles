@@ -1,5 +1,10 @@
 #!/bin/bash
 
+exists()
+{
+    command -v "$1" >/dev/null 2>&1
+}
+
 HISTCONTROL=ignoredups:ignorespace
 
 for dir in $HOME/.config/emacs/bin $HOME/go/bin $HOME/.npm-global/bin; do
@@ -14,4 +19,10 @@ fi
 alias df="df -h"
 alias ls="ls --color=auto"
 
-eval "$(direnv hook bash)"
+if exists direnv; then
+    eval "$(direnv hook bash)"
+fi
+
+if exists starship; then
+    eval "$(starship init bash)"
+fi
