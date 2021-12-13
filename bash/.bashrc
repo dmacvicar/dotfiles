@@ -23,6 +23,6 @@ if exists direnv; then
     eval "$(direnv hook bash)"
 fi
 
-if exists starship; then
+if exists starship && ! [[ -v INSIDE_EMACS ]]; then
     eval "$(starship init bash)"
 fi
