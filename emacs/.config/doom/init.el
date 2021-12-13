@@ -22,9 +22,11 @@
        (python)
        rest
        (ruby +lsp)
+       (rust +lsp)
        sh
        yaml
        :editor
+       snippets
        (format)
        :mail
        mu4e
