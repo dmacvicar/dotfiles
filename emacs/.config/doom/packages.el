@@ -15,6 +15,8 @@
   :recipe (:host github :repo "gexplorer/sfc-mode"))
 (package! nix-mode)
 (package! web-mode)
+(package! go-playground)
+(package! go-gen-test)
 
 ;; mu4e
 (package! outlook)

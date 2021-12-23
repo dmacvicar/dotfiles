@@ -98,6 +98,11 @@
   :defer t
   :mode "\\.vue\\'")
 
+(use-package! go-playground
+  :defer t)
+(use-package! go-gen-test
+  :defer t)
+
 ;; Other tools and browsers
 (use-package! hackernews
   :defer t)
