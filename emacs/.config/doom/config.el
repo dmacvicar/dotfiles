@@ -77,18 +77,13 @@
               (tree-sitter-hl-mode (if (bound-and-true-p polymode-mode) -1 1)))))
 
 (use-package! poly-org
+  :init
+  (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
   :defer t)
-; weird error with eieiobj
-;  :hook
-;  (org-mode . poly-org-mode))
 
 (use-package! poly-markdown
-  :defer t
-  :hook
-  (markdown-mode . poly-markdown-mode)
-  (gfm-mode . poly-markdown-mode))
-
-(use-package! vue-html-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.md" . poly-gfm-mode))
   :defer t)
 
 (use-package! web-mode
