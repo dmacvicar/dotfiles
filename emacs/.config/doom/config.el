@@ -18,8 +18,12 @@
 
 (duncan/set-frame-size-according-to-resolution)
 
-(global-set-key (kbd "M-RET") 'ivy-switch-buffer)
-(global-set-key (kbd "C-M-j") 'ivy-switch-buffer)
+(map! "M-RET" 'ivy-switch-buffer)
+(map! "C-M-j" 'ivy-switch-buffer)
+
+(setq recentf-exclude
+      '("/autosave$"
+        "/treemacs-persist$"))
 
 (setq show-trailing-whitespace t)
 (setq-default show-trailing-whitespace t)
