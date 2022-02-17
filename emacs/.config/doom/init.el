@@ -18,6 +18,7 @@
        (javascript +lsp)
        (json +lsp)
        (markdown +grip)
+       nix
        (org +babel +export +present +pandoc +pretty)
        (python)
        rest
