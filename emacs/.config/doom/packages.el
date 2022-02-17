@@ -8,11 +8,12 @@
 (package! polymode)
 (package! poly-markdown)
 (package! protobuf-mode)
-(package! vue-html-mode)
 ; vue mode based on polymode
 ; tried poly-vue too but js2-mode breaks in script tag
 (package! sfc-mode
   :recipe (:host github :repo "gexplorer/sfc-mode"))
+; this is just a better html mode for sfc-mode
+(package! vue-html-mode)
 (package! nix-mode)
 (package! web-mode)
 (package! go-playground)

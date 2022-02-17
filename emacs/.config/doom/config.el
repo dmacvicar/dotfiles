@@ -90,8 +90,13 @@
   :defer t
   :mode "\\.qtpl\\'")
 
+(use-package! vue-html-mode
+  :defer t)
+
 (use-package! sfc-mode
   :defer t
+  :custom
+  (sfc-template-default-mode 'vue-html-mode)
   :mode "\\.vue\\'")
 
 (use-package! go-playground
