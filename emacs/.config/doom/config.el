@@ -25,8 +25,6 @@
       '("/autosave$"
         "/treemacs-persist$"))
 
-(setq show-trailing-whitespace t)
-(setq-default show-trailing-whitespace t)
 (use-package! leuven-theme
   :custom
   (leuven-scale-outline-headlines nil)
