@@ -319,6 +319,8 @@
   :after mu4e
   :config (mu4e-column-faces-mode))
 
+; eww
+(setq-hook! eww-mode show-trailing-whitespace nil)
 ;; Contacts completion
 ;; http://pragmaticemacs.com/emacs/tweaking-email-contact-completion-in-mu4e/
 ;;need this for hash access
