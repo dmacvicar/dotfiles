@@ -321,6 +321,10 @@
 
 ; eww
 (setq-hook! eww-mode show-trailing-whitespace nil)
+(add-hook! eww-mode
+  ;; we have Alt-Enter map to ivy-switch-buffer
+  (unbind-key "M-<return>" eww-mode-map)
+  (unbind-key "M-RET" eww-mode-map))
 ;; Contacts completion
 ;; http://pragmaticemacs.com/emacs/tweaking-email-contact-completion-in-mu4e/
 ;;need this for hash access
