@@ -319,7 +319,13 @@
   :after mu4e
   :config (mu4e-column-faces-mode))
 
-; eww
+;; eww
+(use-package! shr-tag-code-highlight
+  :after shr
+  :config
+  (add-to-list 'shr-external-rendering-functions
+               '(code . shr-tag-code-highlight)))
+
 (setq-hook! eww-mode show-trailing-whitespace nil)
 (add-hook! eww-mode
   ;; we have Alt-Enter map to ivy-switch-buffer

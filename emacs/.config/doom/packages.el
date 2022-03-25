@@ -38,6 +38,11 @@
 
 (package! olivetti)
 
+;; eww
+; highlight pre code blocks, for markdown exports
+(package! shr-tag-code-highlight
+  :recipe (:host github :repo "dmacvicar/shr-tag-code-highlight.el"))
+
 ;; hack
 ;; https://github.com/magit/magit/issues/3749
 
