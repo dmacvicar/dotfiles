@@ -1,0 +1,9 @@
+custom.el
+eln-cache
+.local
+.lsp-session-*
+auto-save-list
+straight
+transient
+url
+

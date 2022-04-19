@@ -1,3 +1,40 @@
+;; -*- coding: utf-8; lexical-binding: t -*-
+
+;; make startup faster by avoiding gc pauses
+(setq gc-cons-threshold (* 50 1000 1000))
+(defconst emacs-start-time (current-time))
+
+;; bootstrap straight package manager
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+	(url-retrieve-synchronously
+	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	 'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+
+;; disable UI elements, do this early
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+(prefer-coding-system 'utf-8)
+
+(require 'bind-key)
+
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+    (load custom-file :noerror))
+
+;; nicer default frame size depending of screen
 (defun duncan/set-frame-size-according-to-resolution ()
   (interactive)
   (when (display-graphic-p)
@@ -16,32 +53,84 @@
          (cons 'height (/ (- (x-display-pixel-height) 200)
                              (frame-char-height)))))))
 
+(global-display-line-numbers-mode t)
+(column-number-mode)
+;; if you type with text selected, delete it
+(delete-selection-mode 1)
+
+;; misc defaults
+(setq inhibit-startup-screen t
+      initial-scratch-message nil
+      initial-major-mode 'text-mode
+      sentence-end-double-space nil
+      ring-bell-function 'ignore
+      visible-bell nil
+      save-interprogram-paste-before-kill t
+      use-dialog-box nil
+      mark-even-if-inactive nil
+      kill-whole-line t
+      compilation-read-command nil
+      compilation-scroll-output 'first-error
+      use-short-answers t
+      default-directory "~/src/"
+      fast-but-imprecise-scrolling t
+      load-prefer-newer t
+      confirm-kill-processes nil
+      native-comp-async-report-warnings-errors 'silent
+      truncate-string-ellipsis "…"
+
+      show-trailing-whitespace t
+      confirm-kill-emacs nil
+      global-auto-revert-mode t
+      auto-revert-use-notify t
+      global-auto-revert-non-file-buffers t
+      auto-revert-verbose nil
+      delete-by-moving-to-trash t
+      fill-column 80
+      make-backup-files nil
+      auto-save-default nil
+      create-lockfiles nil
+      recentf-exclude '("/autosave$"
+			"/treemacs-persist$")
+      frame-title-format '(""
+			   invocation-name
+			   " - "
+			   (:eval
+			    (if (buffer-file-name)
+				(abbreviate-file-name (buffer-file-name))
+			      "%b"))))
+
 (duncan/set-frame-size-according-to-resolution)
 
-(map! "M-RET" 'ivy-switch-buffer)
-(map! "C-M-j" 'ivy-switch-buffer)
+;; modeline
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
 
-(setq recentf-exclude
-      '("/autosave$"
-        "/treemacs-persist$"))
+;; completion
+(use-package ivy
+  :config
+  (ivy-mode 1))
+  ;(global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+(bind-keys*
+ ("M-RET" . ivy-switch-buffer)
+ ("C-M-j" . ivy-switch-buffer))
 
-(use-package! leuven-theme
+(use-package counsel
+  :after ivy
+  :config
+  (counsel-mode))
+
+;; teme
+(use-package leuven-theme
   :custom
   (leuven-scale-outline-headlines nil)
   (leuven-scale-org-agenda-structure nil)
   :config
   (load-theme 'leuven t))
 
-(setq show-trailing-whitespace t)
-(setq-default show-trailing-whitespace t)
-
-(setq confirm-kill-emacs nil)
-
-(setq global-auto-revert-mode t)
-(setq auto-revert-use-notify t)
-
-;; Window splitting functions
-(use-package! windmove
+;; window splitting functions
+(use-package windmove
    :config
   ;; use command key on Mac
   ;;(::windmove-default-keybindings 'super)
@@ -64,7 +153,165 @@
 (bind-key "<XF86Back>" (lambda () (interactive) (other-window -1)))
 (bind-key "<XF86Forward>" (lambda () (interactive) (other-window 1)))
 
-(use-package! tree-sitter-langs
+;; parenthesis
+(use-package paren
+  :config (show-paren-mode)
+  :custom (show-paren-style 'expression))
+
+(use-package rainbow-delimiters
+    :hook ((prog-mode . rainbow-delimiters-mode)))
+
+;; highlight undoed text
+(use-package undo-hl
+  :straight (
+    :host github
+    :repo "casouri/undo-hl")	     
+  :config
+  (add-hook 'prog-mode-hook #'undo-hl-mode)
+  (add-hook 'text-mode #'undo-hl-mode))
+
+;; text completion
+(use-package company
+  :config (add-hook 'prog-mode-hook 'company-mode))
+
+(use-package recentf
+  ;; Loads after 1 second of idle time.
+  :defer 1)
+
+;; remote file access
+(use-package tramp
+  :straight (:type built-in)
+  :defer t
+  :config
+  (setq vc-ignore-dir-regexp
+	(format "\\(%s\\)\\|\\(%s\\)"
+		vc-ignore-dir-regexp
+		tramp-file-name-regexp))
+  ;; turn off the backup feature for remote files and stop TRAMP from saving to the backup directory
+  (add-to-list 'backup-directory-alist
+	       (cons tramp-file-name-regexp nil)))
+
+;; helper to find bundler project root
+(defun duncan/ruby-bundler-project-root ()
+  (let ((project-root (projectile-project-root)))
+    (if
+	(and
+	 (or (equal major-mode 'enh-ruby-mode) (equal major-mode 'ruby-mode))
+	 (file-exists-p (concat project-root "Gemfile"))
+	 (file-directory-p (concat project-root ".bundle")))
+	project-root)))
+
+(defun duncan/ruby-solargraph-project-p ()
+  (let ((project-root (duncan/ruby-bundler-project-root)) (case-fold-search t))
+    (with-temp-buffer
+      (insert-file-contents (concat project-root "Gemfile.lock"))
+      (goto-char (point-min))
+      (ignore-errors (search-forward-regexp "solargraph")))))
+
+(defun duncan/ruby-wrap-when-bundler-project (command)
+  (if
+      (duncan/ruby-bundler-project-root)
+      (append '("bundle" "exec") command)
+          command))
+
+;; LSP
+(use-package lsp-mode
+  :commands lsp
+  :defer t
+  :init
+  (add-hook 'go-mode-hook #'lsp-deferred)
+  (add-hook 'enh-ruby-mode-hook #'lsp-deferred)
+  (add-hook 'c-mode-hook #'lsp-deferred)
+  (add-hook 'c++-mode-hook #'lsp-deferred)
+  (add-hook 'python-mode-hook #'lsp-deferred)
+  (add-hook 'java-mode-hook #'lsp-deferred)
+  (add-hook 'enh-ruby-mode-hook #'(lambda ()
+				    (if (duncan/ruby-solargraph-project-p)
+					(let ((lsp-solargraph-use-bundler t)) (lsp-deferred)))))
+  :custom
+  (lsp-auto-guess-root t)
+  (lsp-solargraph-diagnostics t)
+  (lsp-enable-snippet nil)
+  (lsp-prefer-flymake nil)
+  (lsp-enable-xref nil)
+  (lsp-eldoc-enable-hover nil)
+  (lsp-eldoc-enable-signature-help nil)
+  (lsp-eldoc-render-all nil)
+  (lsp-eldoc-enable-signature-help nil)
+  (lsp-eldoc-prefer-signature-help nil)
+  (lsp-enable-on-type-formatting nil)
+  (lsp-enable-completion-at-point nil)
+  (lsp-solargraph-use-bundler t)
+  (lsp-completion-enable t)
+  :hook 'lsp-ui-mode)
+
+(use-package lsp-ui
+  :defer t
+  :custom
+  (lsp-ui-doc-enable t)
+  (lsp-ui-peek-enable t)
+  (lsp-ui-sideline-enable t)
+  (lsp-ui-imenu-enable t)
+  (lsp-ui-flycheck-enable t)
+  :after flycheck)
+
+(use-package company-lsp
+  :commands company-lsp
+  :defer t
+  :config
+  (push 'company-lsp company-backends))
+
+(use-package flycheck
+  :defer t
+  :after projectile
+  :custom
+  (flycheck-command-wrapper-function #'duncan/ruby-wrap-when-bundler-project)
+  (flycheck-check-syntax-automatically '(idle-change save mode-enabled new-line))
+  :config
+  (global-flycheck-mode))
+
+(use-package flycheck-pos-tip
+  :after (flycheck)
+  :config
+  (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)))
+
+(use-package lsp-java
+  :after lsp
+  :config (add-hook 'java-mode-hook 'lsp)
+  :custom
+  lsp-file-watch-ignored '(".idea" ".ensime_cache" ".eunit" "node_modules"
+			   ".git" ".hg" ".fslckout" "_FOSSIL_"
+			   ".bzr" "_darcs" ".tox" ".svn" ".stack-work"
+			   "build" "data"))
+
+;; debugger
+(use-package dap-mode
+  :after lsp-mode
+  :config
+  (dap-mode t)
+  (dap-ui-mode t)
+  (require 'dap-go)
+  (dap-go-setup))
+
+(use-package dap-java
+  :defer t
+  :after (lsp-java)
+  :straight (:type built-in))
+
+;; git
+(use-package magit
+  :ensure t
+  :defer t)
+
+;; never lose your cursor
+(use-package beacon
+  :ensure t
+  :config
+  (setq beacon-push-mark 5)
+  (setq beacon-size 25))
+
+;; faster syntax hightlighting
+(use-package tree-sitter-langs
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
@@ -74,39 +321,46 @@
             (lambda ()
               (tree-sitter-hl-mode (if (bound-and-true-p polymode-mode) -1 1)))))
 
-(use-package! poly-org
+;; use lang modes inside org src blocks
+(use-package poly-org
   :init
   (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
   :defer t)
 
-(use-package! poly-markdown
+;; use lang modes inside markdow code fences
+(use-package poly-markdown
   :init
   (add-to-list 'auto-mode-alist '("\\.md" . poly-gfm-mode))
   :defer t)
 
-(use-package! web-mode
+(use-package web-mode
   :defer t
   :mode "\\.qtpl\\'")
 
-(use-package! vue-html-mode
+(use-package vue-html-mode
   :defer t)
 
-(use-package! sfc-mode
+;; vue single file component mode (uses polymode)
+(use-package sfc-mode
+  :straight (:host github :repo "gexplorer/sfc-mode")
   :defer t
   :custom
   (sfc-template-default-mode 'vue-html-mode)
   :mode "\\.vue\\'")
 
-(use-package! go-playground
+;; like play.golang.org
+(use-package go-playground
   :defer t)
-(use-package! go-gen-test
-  :defer t)
-
-;; Other tools and browsers
-(use-package! hackernews
+;; generates tests from funcs
+(use-package go-gen-test
   :defer t)
 
-(use-package! org
+;; browse HN
+(use-package hackernews
+  :defer t)
+
+;; org mode
+(use-package org
   :defer t
 ;  :straight (:type built-in)
   :hook
@@ -135,19 +389,16 @@
    `(("emacs" ,(list (all-the-icons-fileicon "emacs")) nil nil :ascent center)))
   ;;(org-agenda-prefix-format "○ ")
   :config
-  ;; we have Alt-Enter map to ivy-switch-buffer
-  (unbind-key "M-<return>" org-mode-map)
-  (unbind-key "M-RET" org-mode-map)
   (require 'org-crypt)
   (org-crypt-use-before-save-magic))
     ;;; (all-the-icons-insert-icons-for 'faicon) inserts all faicon icons to check
 
-(use-package! org-super-agenda
+(use-package org-super-agenda
   :defer t)
-(use-package! org-ql
+(use-package org-ql
   :defer t)
 
-(use-package! org-superstar              ; supersedes `org-bullets'
+(use-package org-superstar              ; supersedes `org-bullets'
   :ensure
   :after org
   :config
@@ -160,38 +411,46 @@
   :hook (org-mode . org-superstar-mode))
 
 ;; Avoid `org-babel-do-load-languages' since it does an eager require.
-(use-package! ob-C
+(use-package ob-C
+  :straight (:type built-in)
   :defer t
   :requires (org-plus-contrib)
   :commands (org-babel-execute:C org-babel-execute:C++))
-(use-package! ob-ruby
+(use-package ob-ruby
+  :straight (:type built-in)
   :defer t
   :requires (org-plus-contrib)
   :commands (org-babel-execute:ruby))
-(use-package! ob-python
+(use-package ob-python
+  :straight (:type built-in)
   :defer t
   :requires (org-plus-contrib)
   :commands (org-babel-execute:python))
-(use-package! ob-octave
+(use-package ob-octave
+  :straight (:type built-in)
   :defer t
   :requires (org-plus-contrib)
   :commands (org-babel-execute:octave))
-(use-package! ob-gnuplot
+(use-package ob-gnuplot
+  :straight (:type built-in)
   :defer t
   :requires (org-plus-contrib)
   :commands (org-babel-execute:gnuplot))
-(use-package! ob-markdown
+(use-package ob-markdown
+  :straight (:type built-in)
   :defer t
-    :requires (org-plus-contrib)
-    :commands
+  :requires (org-plus-contrib)
+  :commands
     (org-babel-execute:markdown
      org-babel-expand-body:markdown))
-(use-package! ob-http
+(use-package ob-http
+  :straight (:type built-in)
   :requires (org-plus-contrib)
   :commands
   (org-babel-execute:http
    org-babel-expand-body:http))
-(use-package! ob-shell
+(use-package ob-shell
+  :straight (:type built-in)
   :defer t
   :requires (org-plus-contrib)
   :commands
@@ -199,54 +458,63 @@
    org-babel-expand-body:sh
    org-babel-execute:bash
    org-babel-expand-body:bash))
-(use-package! ob-sql
+(use-package ob-sql
+  :straight (:type built-in)
   :defer t
   :commands (org-babel-execute:sql))
-(use-package! ob-diagrams
+(use-package ob-diagrams
   :defer t
   :requires (org-plus-contrib)
   :commands (org-babel-execute:diagrams))
-(use-package! ob-ditaa
+(use-package ob-ditaa
+  :straight (:type built-in)
   :defer t
   :requires (org-plus-contrib)
   :custom
   (org-ditaa-jar-path "/usr/share/java/ditaa.jar")
   :commands (org-babel-execute:ditaa))
-(use-package! ob-plantuml
+(use-package ob-plantuml
+  :straight (:type built-in)
   :defer t
   :requires (org-plus-contrib)
   :custom
   (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
   :commands (org-babel-execute:plantuml))
-(use-package! ox-gfm
+(use-package ox-gfm
   :defer t)
-(use-package! ox-reveal
+(use-package ox-reveal
   :defer t)
-(use-package! org-tree-slide
-  :defer t)
-
-(use-package! htmlize
+(use-package org-tree-slide
   :defer t)
 
-(use-package! protobuf-mode
+(use-package htmlize
   :defer t)
 
-(use-package! prodigy
+(use-package protobuf-mode
   :defer t)
 
-(use-package! ag
+;; start services
+(use-package prodigy
   :defer t)
 
-(use-package! markdown-mode
-  :defer t
-  :bind (:map markdown-mode-map ("M-RET" . nil)))
+;; TODO replace with rg
+(use-package ag
+  :defer t)
 
+(use-package markdown-mode
+  :defer t)
+
+;; work setup. It conflicts with the home setup because of mu4e
+;; so we load one or the other
 (if (file-directory-p "~/.emacs.work.d")
     (mapc 'load (file-expand-wildcards "~/.emacs.work.d/*.el")))
 (if (file-directory-p "~/.emacs.home.d")
     (mapc 'load (file-expand-wildcards "~/.emacs.home.d/*.el")))
 
-(use-package! mu4e
+;; email
+(defconst mu4e-system-path "/usr/share/emacs/site-lisp/mu4e")
+(use-package mu4e
+  :straight (:type built-in)
   :load-path mu4e-system-path
   :commands 'mu4e
   :defer t
@@ -266,42 +534,42 @@
   (message-send-mail-function 'message-send-mail-with-sendmail)
   (sendmail-program "/usr/bin/msmtp"))
 ;; avoid yellow background with leuven when showing email
-(setq-hook! mu4e-view-mode show-trailing-whitespace nil)
+(add-hook 'mu4e-view-mode (lambda () (setq show-trailing-whitespace nil)))
 
-;; work setup. It conflicts with the home setup because of mu4e
-;; so we load one or the other
-
-(use-package! outlook
+(use-package outlook
   :after mu4e
   :init
   (require 'outlook-mu4e))
 
-(use-package! mu4e-jump-to-list
+(use-package mu4e-jump-to-list
   :after mu4e
   :defer t)
 
-(use-package! mu4e-contrib
+(use-package mu4e-contrib
+  :straight (:type built-in)
   :after mu4e
   :defer t
   :load-path mu4e-system-path)
 
-(use-package! mu4e-conversation
+(use-package mu4e-conversation
   :after mu4e
   :defer t)
 
-(use-package! org-mu4e
+(use-package org-mu4e
+  :straight (:type built-in)
   :after mu4e
   :defer t
   :load-path mu4e-system-path)
 
-(use-package! mu4e-icalendar
+(use-package mu4e-icalendar
+  :straight (:type built-in)
   :after mu4e
   :load-path mu4e-system-path
   :config
   (require 'mu4e-icalendar)
   (mu4e-icalendar-setup))
 
-(use-package! mu4e-views
+(use-package mu4e-views
   :after mu4e
   :bind (:map mu4e-headers-mode-map
 	      ("v" . mu4e-views-mu4e-select-view-msg-method) ;; select viewing method
@@ -315,23 +583,23 @@
   (mu4e-views-mu4e-use-view-msg-method "text")
   (setq mu4e-views-auto-view-selected-message nil))
 
-(use-package! mu4e-column-faces
+(use-package mu4e-column-faces
   :after mu4e
   :config (mu4e-column-faces-mode))
 
 ;; eww
-(use-package! shr-tag-code-highlight
+(use-package shr-tag-code-highlight
+  :defer t
+  :straight (:host github :repo "dmacvicar/shr-tag-code-highlight.el")
   :after shr
   :config
   (add-to-list 'shr-external-rendering-functions
                '(code . shr-tag-code-highlight)))
 
-(setq-hook! eww-mode show-trailing-whitespace nil)
-(add-hook! eww-mode
-  ;; we have Alt-Enter map to ivy-switch-buffer
-  (unbind-key "M-<return>" eww-mode-map)
-  (unbind-key "M-RET" eww-mode-map))
-;; Contacts completion
+(add-hook 'eww-mode (lambda ()
+		      (setq show-trailing-whitespace nil)))
+
+;; contacts completion
 ;; http://pragmaticemacs.com/emacs/tweaking-email-contact-completion-in-mu4e/
 ;;need this for hash access
 (require 'subr-x)
@@ -378,3 +646,17 @@
         (unless (equal contact "")
           (kill-region start end)
           (insert contact))))))
+
+(when (getenv "EMACS_PROFILE_START")
+  (add-hook 'emacs-startup-hook
+	    (lambda ()
+	      (message "Emacs ready in %s with %d garbage collections."
+		       (format "%.2f seconds"
+			       (float-time
+				(time-subtract after-init-time before-init-time)))
+		       gcs-done))))
+
+;; Make gc pauses faster by decreasing the threshold.
+(setq gc-cons-threshold (* 2 1000 1000))
+(provide 'init)
+;;; init.el ends here
