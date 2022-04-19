@@ -72,7 +72,6 @@
       compilation-read-command nil
       compilation-scroll-output 'first-error
       use-short-answers t
-      default-directory "~/src/"
       fast-but-imprecise-scrolling t
       load-prefer-newer t
       confirm-kill-processes nil
