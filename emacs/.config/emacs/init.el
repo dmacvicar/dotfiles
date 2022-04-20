@@ -192,26 +192,28 @@
 
 ;; helper to find bundler project root
 (defun duncan/ruby-bundler-project-root ()
-  (let ((project-root (projectile-project-root)))
-    (if
-	(and
-	 (or (equal major-mode 'enh-ruby-mode) (equal major-mode 'ruby-mode))
-	 (file-exists-p (concat project-root "Gemfile"))
-	 (file-directory-p (concat project-root ".bundle")))
-	project-root)))
+  (let* ((current (project-current))
+	 (root (if current (project-root current))))
+    (if root
+	(if (and
+	     (or (equal major-mode 'enh-ruby-mode) (equal major-mode 'ruby-mode))
+	     (file-exists-p (expand-file-name "Gemfile" root))
+	     (file-directory-p (expand-file-name ".bundle" root)))
+	    root))))
 
 (defun duncan/ruby-solargraph-project-p ()
-  (let ((project-root (duncan/ruby-bundler-project-root)) (case-fold-search t))
-    (with-temp-buffer
-      (insert-file-contents (concat project-root "Gemfile.lock"))
-      (goto-char (point-min))
-      (ignore-errors (search-forward-regexp "solargraph")))))
+  (let ((root (duncan/ruby-bundler-project-root))
+	(case-fold-search t))
+    (if root
+	(with-temp-buffer
+	  (insert-file-contents (expand-file-name "Gemfile.lock" root))
+	  (goto-char (point-min))
+	  (ignore-errors (search-forward-regexp "solargraph"))))))
 
 (defun duncan/ruby-wrap-when-bundler-project (command)
-  (if
-      (duncan/ruby-bundler-project-root)
+  (if (duncan/ruby-bundler-project-root)
       (append '("bundle" "exec") command)
-          command))
+    command))
 
 ;; LSP
 (use-package lsp-mode
@@ -224,9 +226,9 @@
   (add-hook 'c++-mode-hook #'lsp-deferred)
   (add-hook 'python-mode-hook #'lsp-deferred)
   (add-hook 'java-mode-hook #'lsp-deferred)
-  (add-hook 'enh-ruby-mode-hook #'(lambda ()
-				    (if (duncan/ruby-solargraph-project-p)
-					(let ((lsp-solargraph-use-bundler t)) (lsp-deferred)))))
+  (add-hook 'ruby-mode-hook #'(lambda ()
+				(if (duncan/ruby-solargraph-project-p)
+				    (let ((lsp-solargraph-use-bundler t)) (lsp-deferred)))))
   :custom
   (lsp-auto-guess-root t)
   (lsp-solargraph-diagnostics t)
