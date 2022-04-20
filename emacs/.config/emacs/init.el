@@ -101,6 +101,10 @@
 
 (duncan/set-frame-size-according-to-resolution)
 
+(bind-keys*
+ ("M-RET" . switch-to-buffer)
+ ("C-M-j" . switch-to-buffer))
+
 ;; copy from clipboard in terminal
 (use-package xclip
   :init
@@ -112,19 +116,31 @@
   :ensure t
   :init (doom-modeline-mode 1))
 
-;; completion
-(use-package ivy
-  :config
-  (ivy-mode 1))
-  ;(global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-(bind-keys*
- ("M-RET" . ivy-switch-buffer)
- ("C-M-j" . ivy-switch-buffer))
+(use-package vertico
+  :init
+  (vertico-mode))
 
-(use-package counsel
-  :after ivy
-  :config
-  (counsel-mode))
+(use-package savehist
+  :init
+  (savehist-mode))
+
+;; complete in any order
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+;; add context to completions
+(use-package marginalia
+  :bind (("M-A" . marginalia-cycle)
+         :map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode))
 
 ;; teme
 (use-package leuven-theme
