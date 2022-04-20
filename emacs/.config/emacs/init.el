@@ -101,6 +101,12 @@
 
 (duncan/set-frame-size-according-to-resolution)
 
+;; copy from clipboard in terminal
+(use-package xclip
+  :init
+  (xclip-mode)
+  :ensure t)
+
 ;; modeline
 (use-package doom-modeline
   :ensure t
