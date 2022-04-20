@@ -176,7 +176,8 @@
 
 ;; parenthesis
 (use-package paren
-  :config (show-paren-mode)
+  :defer t
+  :hook ((prog-mode . show-paren-mode))
   :custom (show-paren-style 'expression))
 
 (use-package rainbow-delimiters
@@ -184,6 +185,7 @@
 
 ;; highlight undoed text
 (use-package undo-hl
+  :defer t
   :straight (
     :host github
     :repo "casouri/undo-hl")	     
@@ -193,10 +195,10 @@
 
 ;; text completion
 (use-package company
+  :defer t
   :config (add-hook 'prog-mode-hook 'company-mode))
 
 (use-package recentf
-  ;; Loads after 1 second of idle time.
   :defer 1)
 
 ;; remote file access
@@ -329,6 +331,7 @@
 ;; never lose your cursor
 (use-package beacon
   :ensure t
+  :defer 5
   :config
   (setq beacon-push-mark 5)
   (setq beacon-size 25))
