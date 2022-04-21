@@ -374,6 +374,14 @@
   (sfc-template-default-mode 'vue-html-mode)
   :mode "\\.vue\\'")
 
+(use-package json-mode
+  :defer t)
+(use-package yaml-mode
+  :defer t)
+
+;; go
+(use-package go-mode
+  :defer t)
 ;; like play.golang.org
 (use-package go-playground
   :defer t)
