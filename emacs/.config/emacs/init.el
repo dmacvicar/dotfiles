@@ -7,7 +7,7 @@
 ;; bootstrap straight package manager
 (defvar bootstrap-version)
 (let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" straight-base-dir))
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -30,7 +30,9 @@
 
 (require 'bind-key)
 
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(setq custom-file
+      (convert-standard-filename
+       (expand-file-name  "emacs/custom.el" (xdg-cache-home))))
 (when (file-exists-p custom-file)
     (load custom-file :noerror))
 
@@ -77,8 +79,6 @@
       confirm-kill-processes nil
       native-comp-async-report-warnings-errors 'silent
       truncate-string-ellipsis "…"
-
-      show-trailing-whitespace t
       confirm-kill-emacs nil
       global-auto-revert-mode t
       auto-revert-use-notify t
@@ -89,8 +89,6 @@
       make-backup-files nil
       auto-save-default nil
       create-lockfiles nil
-      recentf-exclude '("/autosave$"
-			"/treemacs-persist$")
       frame-title-format '(""
 			   invocation-name
 			   " - "
@@ -100,10 +98,16 @@
 			      "%b"))))
 
 (duncan/set-frame-size-according-to-resolution)
+;; not decided yet if maximizing is better?
+;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (bind-keys*
  ("M-RET" . switch-to-buffer)
  ("C-M-j" . switch-to-buffer))
+
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region))
 
 ;; copy from clipboard in terminal
 (use-package xclip
@@ -111,18 +115,61 @@
   (xclip-mode)
   :ensure t)
 
+;; recent files
+(use-package recentf
+  :straight (:type built-in)
+  :config
+  (recentf-mode)
+  :custom
+  (recentf-save-file
+   (convert-standard-filename
+       (expand-file-name  "emacs/recentf" (xdg-state-home))))
+  (recentf-max-menu-items 25)
+  (recentf-max-saved-items 25)
+  (recentf-exclude '("/autosave$"
+		     "/treemacs-persist$")))
+
+;; minibuffer history
+(use-package savehist
+  :straight (:type built-in)
+  :custom
+  (savehist-file (convert-standard-filename
+       (expand-file-name  "emacs/history" (xdg-state-home))))
+  :init
+  (savehist-mode))
+
 ;; modeline
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1))
 
+;; completion system (alternative to ivy)
 (use-package vertico
   :init
-  (vertico-mode))
+  (vertico-mode)
+  :straight (vertico
+             :files (:defaults "extensions/vertico-directory.el")
+             :includes (vertico-directory)))
 
-(use-package savehist
-  :init
-  (savehist-mode))
+;; configure directory extension
+(use-package vertico-directory
+  :straight nil
+  :ensure nil
+  :after vertico
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+;; reimpl of common emacs command using completion-system/vertico
+;; alternative to consul
+(use-package consult
+  :bind
+  ("C-s" . consult-line)
+  :defer t)
 
 ;; complete in any order
 (use-package orderless
@@ -134,13 +181,26 @@
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
-;; add context to completions
+;; add context to completions. eg. help to M-x functions
 (use-package marginalia
   :bind (("M-A" . marginalia-cycle)
          :map minibuffer-local-map
          ("M-A" . marginalia-cycle))
   :init
   (marginalia-mode))
+
+(ignore-errors (set-frame-font "JuliaMono-12"))
+
+(use-package all-the-icons)
+
+(use-package all-the-icons-dired
+  :after all-the-icons
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package shell-pop
+  :custom
+  (shell-pop-universal-key "C-t")
+  :defer t)
 
 ;; teme
 (use-package leuven-theme
@@ -174,6 +234,9 @@
 (bind-key "<XF86Back>" (lambda () (interactive) (other-window -1)))
 (bind-key "<XF86Forward>" (lambda () (interactive) (other-window 1)))
 
+;; whitespace highlight when coding
+(setq-default show-trailing-whitespace t)
+
 ;; parenthesis
 (use-package paren
   :defer t
@@ -197,9 +260,6 @@
 (use-package company
   :defer t
   :config (add-hook 'prog-mode-hook 'company-mode))
-
-(use-package recentf
-  :defer 1)
 
 ;; remote file access
 (use-package tramp
@@ -338,6 +398,7 @@
 
 ;; faster syntax hightlighting
 (use-package tree-sitter-langs
+  :ensure t
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
@@ -346,6 +407,12 @@
   (add-hook 'tree-sitter-after-on-hook
             (lambda ()
               (tree-sitter-hl-mode (if (bound-and-true-p polymode-mode) -1 1)))))
+
+;; markdown
+(use-package markdown-mode
+  :defer t
+  :ensure t
+  :mode ("\\.md\\'" . gfm-mode))
 
 ;; use lang modes inside org src blocks
 (use-package poly-org
@@ -567,8 +634,8 @@
   (mu4e-get-mail-command "/usr/bin/mbsync -aV")
   (message-send-mail-function 'message-send-mail-with-sendmail)
   (sendmail-program "/usr/bin/msmtp"))
-;; avoid yellow background with leuven when showing email
-(add-hook 'mu4e-view-mode (lambda () (setq show-trailing-whitespace nil)))
+;; do not show trailing whitespace when rendering emails
+(add-hook 'mu4e-vide-mode (lambda () (setq show-trailing-whitespace nil)))
 
 (use-package outlook
   :after mu4e
