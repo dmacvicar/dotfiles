@@ -18,6 +18,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(setq use-package-compute-statistics t)
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 
