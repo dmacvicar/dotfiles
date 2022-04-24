@@ -21,6 +21,8 @@
 (setq use-package-compute-statistics t)
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
+(eval-when-compile
+  (require 'use-package))
 
 ;; disable UI elements, do this early
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
