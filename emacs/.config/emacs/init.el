@@ -254,7 +254,7 @@
   :defer t
   :straight (
     :host github
-    :repo "casouri/undo-hl")	     
+    :repo "casouri/undo-hl")
   :config
   (add-hook 'prog-mode-hook #'undo-hl-mode)
   (add-hook 'text-mode #'undo-hl-mode))
