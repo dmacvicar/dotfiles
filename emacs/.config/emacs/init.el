@@ -402,6 +402,7 @@
 ;; faster syntax hightlighting
 (use-package tree-sitter-langs
   :ensure t
+  :defer t
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
