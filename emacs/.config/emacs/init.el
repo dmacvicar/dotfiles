@@ -108,6 +108,15 @@
  ("M-RET" . switch-to-buffer)
  ("C-M-j" . switch-to-buffer))
 
+;; use gnome secret service to store passwords
+;; TODO add keepass
+(use-package auth-source
+  :straight (:type built-in)
+  :custom
+  (auth-sources '("secrets:login"))
+  (auth-source-cache-expiry nil)
+  (auth-source-debug 'trivia))
+
 (use-package expand-region
   :ensure t
   :bind ("C-=" . er/expand-region))
