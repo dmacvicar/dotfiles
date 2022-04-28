@@ -701,6 +701,12 @@
   :after mu4e
   :config (mu4e-column-faces-mode))
 
+;; calendar
+(use-package calfw
+  :disabled
+  :ensure t
+  :defer t)
+
 ;; eww
 (use-package shr-tag-code-highlight
   :defer t
