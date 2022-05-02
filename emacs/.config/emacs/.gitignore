@@ -9,3 +9,10 @@ url
 history
 projects
 recentf
+# todo change the path in the emacs config
+# to .cache or similar
+.dap-breakpoints
+.extension/
+diary
+elpa
+excorporate
