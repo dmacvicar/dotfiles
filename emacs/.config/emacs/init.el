@@ -155,6 +155,22 @@
   :ensure t
   :init (doom-modeline-mode 1))
 
+;; popups
+(use-package popper
+  :ensure t ; or :straight t
+  :bind (("C-`"   . popper-toggle-latest)
+         ("M-`"   . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          help-mode
+          compilation-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1))
+
 ;; completion system (alternative to ivy)
 (use-package vertico
   :init
