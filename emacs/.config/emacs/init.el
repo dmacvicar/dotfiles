@@ -167,7 +167,8 @@
           "Output\\*$"
           "\\*Async Shell Command\\*"
           help-mode
-          compilation-mode))
+          compilation-mode
+	  go-test-mode))
   (popper-mode +1)
   (popper-echo-mode +1))
 
