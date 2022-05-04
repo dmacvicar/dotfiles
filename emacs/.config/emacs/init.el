@@ -168,7 +168,8 @@
           "\\*Async Shell Command\\*"
           help-mode
           compilation-mode
-	  go-test-mode))
+	  go-test-mode
+	  xref-mode))
   (popper-mode +1)
   (popper-echo-mode +1))
 
@@ -196,6 +197,9 @@
 ;; reimpl of common emacs command using completion-system/vertico
 ;; alternative to consul
 (use-package consult
+  :init
+   (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
   :bind
   ("C-s" . consult-line)
   :defer t)
