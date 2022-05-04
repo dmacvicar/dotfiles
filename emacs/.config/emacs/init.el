@@ -352,20 +352,9 @@
 				(if (duncan/ruby-solargraph-project-p)
 				    (let ((lsp-solargraph-use-bundler t)) (lsp-deferred)))))
   :custom
+  ;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
   (lsp-auto-guess-root t)
-  (lsp-solargraph-diagnostics t)
-  (lsp-enable-snippet nil)
-  (lsp-prefer-flymake nil)
-  (lsp-enable-xref nil)
-  (lsp-eldoc-enable-hover nil)
-  (lsp-eldoc-enable-signature-help nil)
-  (lsp-eldoc-render-all nil)
-  (lsp-eldoc-enable-signature-help nil)
-  (lsp-eldoc-prefer-signature-help nil)
-  (lsp-enable-on-type-formatting nil)
-  (lsp-enable-completion-at-point nil)
   (lsp-solargraph-use-bundler t)
-  (lsp-completion-enable t)
   :hook 'lsp-ui-mode)
 
 (use-package lsp-ui
