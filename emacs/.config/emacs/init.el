@@ -267,6 +267,11 @@
 (bind-key "<XF86Back>" (lambda () (interactive) (other-window -1)))
 (bind-key "<XF86Forward>" (lambda () (interactive) (other-window 1)))
 
+;; tabs 4 spaces width (we only use spaces in Go)
+(setq-default tab-width 4)
+(setq-default c-basic-offset 4)
+(setq-default indent-tabs-mode nil)
+
 ;; whitespace highlight when coding
 (setq-default show-trailing-whitespace t)
 
