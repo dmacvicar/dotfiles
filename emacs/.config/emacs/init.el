@@ -104,10 +104,6 @@
 ;; not decided yet if maximizing is better?
 ;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(bind-keys*
- ("M-RET" . switch-to-buffer)
- ("C-M-j" . switch-to-buffer))
-
 ;; use gnome secret service to store passwords
 ;; TODO add keepass
 (use-package auth-source
@@ -202,7 +198,12 @@
         xref-show-definitions-function #'consult-xref)
   :bind
   ("C-s" . consult-line)
+  ("C-x b" . consult-buffer)
   :defer t)
+
+(bind-keys*
+ ("M-RET" . consult-buffer)
+ ("C-M-j" . consult-buffer))
 
 ;; complete in any order
 (use-package orderless
