@@ -478,7 +478,11 @@
 
 ;; go
 (use-package go-mode
-  :defer t)
+  :defer t
+  :custom
+  (go-test-verbose t)
+  (gofmt-args '("-s")))
+
 ;; like play.golang.org
 (use-package go-playground
   :defer t)
