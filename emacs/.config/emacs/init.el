@@ -4,6 +4,9 @@
 (setq gc-cons-threshold (* 50 1000 1000))
 (defconst emacs-start-time (current-time))
 
+;; speedup
+(setq straight-check-for-modifications nil)
+
 ;; bootstrap straight package manager
 (defvar bootstrap-version)
 (let ((bootstrap-file
