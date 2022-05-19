@@ -164,6 +164,7 @@
   (setq popper-reference-buffers
         '("\\*Messages\\*"
           "\\*Warnings\\*"
+          "\\*Org Agenda\\*"
           "Output\\*$"
           "\\*Async Shell Command\\*"
           help-mode
