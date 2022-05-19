@@ -588,6 +588,15 @@
   :commands
   (org-babel-execute:http
    org-babel-expand-body:http))
+(use-package ob-grpc
+  :straight (ob-grpc :type git :host github :repo "shsms/ob-grpc")
+  :defer t
+  :commands
+  (org-babel-execute:grpc
+   org-babel-expand-body:grpc)
+  :bind (:map org-mode-map
+              ("C-c g i" . ob-grpc-init)
+              ("C-c g b" . ob-grpc-insert-block)))
 (use-package ob-shell
   :straight (:type built-in)
   :defer t
