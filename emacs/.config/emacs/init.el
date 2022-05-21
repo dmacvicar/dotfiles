@@ -538,7 +538,9 @@
     ;;; (all-the-icons-insert-icons-for 'faicon) inserts all faicon icons to check
 
 (use-package org-super-agenda
-  :defer t)
+  :defer t
+  :hook (org-agenda-mode . org-super-agenda-mode))
+
 (use-package org-ql
   :defer t)
 
