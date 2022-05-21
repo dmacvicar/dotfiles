@@ -494,6 +494,11 @@
 (use-package go-gen-test
   :defer t)
 
+;; rust
+(use-package rust-mode
+  :ensure t
+  :defer t)
+
 ;; browse HN
 (use-package hackernews
   :defer t)
