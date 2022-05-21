@@ -758,6 +758,22 @@
 (add-hook 'eww-mode (lambda ()
 		      (setq show-trailing-whitespace nil)))
 
+;; maps
+(use-package osm
+  :bind (("C-c m h" . osm-home)
+         ("C-c m s" . osm-search)
+         ("C-c m v" . osm-server)
+         ("C-c m t" . osm-goto)
+         ("C-c m x" . osm-gpx-show)
+         ("C-c m j" . osm-bookmark-jump))
+  :custom
+  (osm-server 'default)
+  (osm-copyright t)
+  :init
+  ;; Load Org link support
+  (with-eval-after-load 'org
+    (require 'osm-ol)))
+
 ;; contacts completion
 ;; http://pragmaticemacs.com/emacs/tweaking-email-contact-completion-in-mu4e/
 ;;need this for hash access
