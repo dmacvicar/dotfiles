@@ -499,6 +499,11 @@
   :ensure t
   :defer t)
 
+;; elixir, mostly for slides highlighting
+(use-package elixir-mode
+  :ensure t
+  :defer t)
+
 ;; browse HN
 (use-package hackernews
   :defer t)
