@@ -504,6 +504,11 @@
   :ensure t
   :defer t)
 
+;; zig
+(use-package zig-mode
+  :ensure t
+  :defer t)
+
 ;; browse HN
 (use-package hackernews
   :defer t)
