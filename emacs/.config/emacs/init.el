@@ -509,6 +509,11 @@
   :ensure t
   :defer t)
 
+;; nix
+(use-package nix-mode
+  :ensure t
+  :defer t)
+
 ;; browse HN
 (use-package hackernews
   :defer t)
