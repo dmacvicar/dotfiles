@@ -521,6 +521,7 @@
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
   :custom
+  (org-log-repeat nil)
   (org-latex-listings 'minted)
   (org-latex-pdf-process
    '("xelatex -shell-escape -interaction nonstopmode %f"
