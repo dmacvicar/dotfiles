@@ -164,6 +164,8 @@
   (setq popper-reference-buffers
         '("\\*Messages\\*"
           "\\*Warnings\\*"
+          "\\*grep\\*"
+          "\\*rg*\\*"
           "\\*Org Agenda\\*"
           "Output\\*$"
           "\\*Async Shell Command\\*"
@@ -687,6 +689,10 @@
 
 ;; TODO replace with rg
 (use-package ag
+  :defer t)
+
+;; ripgrep search
+(use-package rg
   :defer t)
 
 (use-package markdown-mode
