@@ -251,11 +251,9 @@
 
 ;; window splitting functions
 (use-package windmove
-   :config
-  ;; use command key on Mac
-  ;;(::windmove-default-keybindings 'super)
-  ;; wrap around at edges
-  (setq windmove-wrap-around t)
+  :defer t
+  :config
+  ;; do not set ever windmove-wrap-around as it prevents jumping to tmux panes
   :bind
   (("C-x -" . (lambda ()
                (interactive) (split-window-vertically) (other-window 1) (switch-to-buffer "*scratch*")))
@@ -263,15 +261,34 @@
                (interactive) (split-window-horizontally) (other-window 1) (switch-to-buffer "*scratch*")))
   ("C-x x" . (lambda ()
                (interactive) (kill-buffer (current-buffer)) (if (one-window-p) () (delete-window))))))
-(bind-key* "M-<left>" #'windmove-left)
-(bind-key* "M-<right>" #'windmove-right)
-(bind-key* "M-<up>" #'windmove-up)
-(bind-key* "M-<down>" #'windmove-down)
-(bind-key* "<XF86Back>" (lambda () (interactive) (other-window -1)))
-(bind-key* "<XF86Forward>" (lambda () (interactive) (other-window 1)))
 
-(bind-key "<XF86Back>" (lambda () (interactive) (other-window -1)))
-(bind-key "<XF86Forward>" (lambda () (interactive) (other-window 1)))
+(use-package tmux-pane
+  :defer t)
+;; define M-arrows using escape codes so that they
+;; work in terminal
+(define-key input-decode-map "\e\eOA" [(meta up)])
+(define-key input-decode-map "\e\eOB" [(meta down)])
+(define-key input-decode-map "\e\eOC" [(meta right)])
+(define-key input-decode-map "\e\eOD" [(meta left)])
+
+(if (display-graphic-p)
+    (progn
+      ;; if graphic mode, use windmove
+      (windmove-mode)
+      (bind-key* "M-<left>" #'windmove-left)
+      (bind-key* "M-<right>" #'windmove-right)
+      (bind-key* "M-<up>" #'windmove-up)
+      (bind-key* "M-<down>" #'windmove-down)
+      (bind-key* "<XF86Back>" (lambda () (interactive) (other-window -1)))
+      (bind-key* "<XF86Forward>" (lambda () (interactive) (other-window 1)))
+      (bind-key "<XF86Back>" (lambda () (interactive) (other-window -1)))
+      (bind-key "<XF86Forward>" (lambda () (interactive) (other-window 1))))
+      ;; else, move across tmux panes too
+      (tmux-pane-mode)
+      (bind-key* "M-<left>" #'tmux-pane-omni-window-left)
+      (bind-key* "M-<right>" #'tmux-pane-omni-window-right)
+      (bind-key* "M-<up>" #'tmux-pane-omni-window-up)
+      (bind-key* "M-<down>" #'tmux-pane-omni-window-down))
 
 ;; tabs 4 spaces width (we only use spaces in Go)
 (setq-default tab-width 4)
