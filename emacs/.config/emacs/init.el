@@ -238,6 +238,12 @@
   :after all-the-icons
   :hook (dired-mode . all-the-icons-dired-mode))
 
+;; emojis
+;; todo, set custom (emojify-display-style) when
+;; we get a good font
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
+
 (use-package shell-pop
   :custom
   (shell-pop-universal-key "C-t")
