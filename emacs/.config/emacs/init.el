@@ -746,7 +746,6 @@
   :load-path mu4e-system-path
   :commands 'mu4e
   :defer t
-  :bind (:map mu4e-compose-mode-map ("<tab>" . dmacvicar/ivy-select-and-insert-contact))
   :custom
   (smtpmail-queue-dir (expand-file-name "~/Mail/queue/cur"))
   (message-signature-file (expand-file-name "~/.signature"))
@@ -863,39 +862,6 @@
     (when (file-exists-p dmacvicar/contact-file)
       (insert-file-contents dmacvicar/contact-file))
     (split-string (buffer-string) "\n" t)))
-
-;;ivy contact completion
-;;based on http://kitchingroup.cheme.cmu.edu/blog/2015/03/14/A-helm-mu4e-contact-selector/
-(defun dmacvicar/ivy-select-and-insert-contact (&optional start)
-  (interactive)
-  ;;make sure mu4e contacts list is updated - I was having
-  ;;intermittent problems that this was empty but couldn't see why
-  ;;(mu4e~request-contacts)
-  (let ((mail-abbrev-mode-regexp mu4e~compose-address-fields-regexp)
-        (eoh ;; end-of-headers
-         (save-excursion
-           (goto-char (point-min))
-           (search-forward-regexp mail-header-separator nil t)))
-        ;;append full sorted contacts list to favourites and delete duplicates
-        (contacts-list
-         (delq nil (delete-dups (append (dmacvicar/read-contact-list) (hash-table-keys mu4e~contacts))))))
-    (when (and eoh (> eoh (point)) (mail-abbrev-in-expansion-header-p))
-      (let* ((end (point))
-             (start
-              (or start
-                  (save-excursion
-                    (re-search-backward "\\(\\`\\|[\n:,]\\)[ \t]*")
-                    (goto-char (match-end 0))
-                    (point))))
-             (contact
-              (ivy-read "Contact: "
-                        contacts-list
-                        :re-builder #'ivy--regex
-                        :sort nil
-                        :initial-input (buffer-substring-no-properties start end))))
-        (unless (equal contact "")
-          (kill-region start end)
-          (insert contact))))))
 
 (when (getenv "EMACS_PROFILE_START")
   (add-hook 'emacs-startup-hook
