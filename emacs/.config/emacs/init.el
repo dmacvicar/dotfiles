@@ -625,6 +625,10 @@
           (?- . ?–)))
   :hook (org-mode . org-superstar-mode))
 
+(use-package org-appear
+  :after org
+  :hook (org-mode . org-appear-mode))
+
 ;; Avoid `org-babel-do-load-languages' since it does an eager require.
 (use-package ob-C
   :straight (:type built-in)
