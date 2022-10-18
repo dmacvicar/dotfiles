@@ -779,7 +779,6 @@
   (smtpmail-queue-dir (expand-file-name "~/Mail/queue/cur"))
   (message-signature-file (expand-file-name "~/.signature"))
   (mu4e-compose-dont-reply-to-self t)
-  (mu4e-view-use-gnus nil)
   (mu4e-view-prefer-html t)
   (mu4e-view-show-images t)
   (mu4e-attachment-dir (expand-file-name "~/Downloads"))
