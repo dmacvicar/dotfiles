@@ -722,6 +722,7 @@
   :defer t
   :init
   (add-hook 'org-present-mode-hook #'(lambda ()
+                                       (setq-local org-image-actual-width (display-pixel-width))
                                        (org-present-big)
                                        (hide-mode-line-mode t)
                                        (display-line-numbers-mode -1)
@@ -732,7 +733,6 @@
                                        (display-line-numbers-mode t)
                                        (org-remove-inline-images))))
 
-;; augment org mode and markdown by providing notes
 (use-package denote
   :defer t)
 
