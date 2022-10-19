@@ -727,6 +727,15 @@
                                        (hide-mode-line-mode -1)
                                        (display-line-numbers-mode t)
                                        (org-remove-inline-images))))
+
+;; augment org mode and markdown by providing notes
+(use-package denote
+  :defer t)
+
+(use-package consult-notes
+  :commands (consult-notes
+             consult-notes-search-in-all-notes))
+
 (use-package htmlize
   :defer t)
 
