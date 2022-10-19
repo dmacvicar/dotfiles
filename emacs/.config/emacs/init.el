@@ -711,6 +711,22 @@
 (use-package org-tree-slide
   :defer t)
 
+(use-package hide-mode-line
+  :defer t)
+
+(use-package org-present
+  :defer t
+  :init
+  (add-hook 'org-present-mode-hook #'(lambda ()
+                                       (org-present-big)
+                                       (hide-mode-line-mode t)
+                                       (display-line-numbers-mode -1)
+                                       (org-display-inline-images)))
+  (add-hook 'org-present-mode-quit-hook #'(lambda ()
+                                       (org-present-small)
+                                       (hide-mode-line-mode -1)
+                                       (display-line-numbers-mode t)
+                                       (org-remove-inline-images))))
 (use-package htmlize
   :defer t)
 
