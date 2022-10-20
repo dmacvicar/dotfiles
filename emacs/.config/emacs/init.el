@@ -777,6 +777,7 @@
   (mu4e-compose-dont-reply-to-self t)
   (mu4e-view-use-gnus nil)
   (mu4e-view-prefer-html t)
+  (mu4e-view-show-images t)
   (mu4e-attachment-dir (expand-file-name "~/Downloads"))
   (mu4e-update-interval 1800)
   (mu4e-view-fields '(:subject :to :from :cc :bcc :from-or-to :date :attachments :maildir :mailing-list))
@@ -845,6 +846,23 @@
   :ensure t
   :defer t)
 
+;; feeds
+(use-package elfeed
+  :custom
+  (elfeed-use-curl nil)
+  (elfeed-feeds '(("owncloud+https://dmacvicar@cloud.mac-vicar.eu"
+                   :password (shell-command-to-string "echo -n `secret-tool lookup host cloud.mac-vicar.eu app elfeed username dmacvicar`"))))
+  :config
+  (elfeed-protocol-enable)
+  :ensure t
+  :defer t)
+
+(use-package elfeed-protocol
+  :custom
+  (elfeed-protocol-enabled-protocols '(owncloud))
+  :ensure t
+  :defer t)
+
 ;; eww
 (use-package shr-tag-code-highlight
   :defer t
@@ -880,6 +898,10 @@
 
 ;;my favourite contacts - these will be put at front of list
 (setq dmacvicar/contact-file "~/.favorite-contacts.txt")
+
+(use-package pulseaudio-control
+  :defer t
+  :commands pulseaudio-control-select-sink-by-name)
 
 (defun dmacvicar/read-contact-list ()
   "Return a list of email addresses"
