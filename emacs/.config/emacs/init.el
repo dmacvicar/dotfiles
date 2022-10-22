@@ -849,23 +849,98 @@
   :ensure t
   :defer t)
 
+(use-package org-web-tools
+  :ensure t
+  :defer t)
+
+(defun --elfeed-mark-all-as-read ()
+  (interactive)
+  (mark-whole-buffer)
+  (elfeed-search-untag-all-unread))
+
+;; From nooker blog.
+(defun --elfeed-eww-open (&optional use-generic-p)
+  "open with eww"
+  (interactive "P")
+  (let ((entries (elfeed-search-selected)))
+    (cl-loop for entry in entries
+             do (elfeed-untag entry 'unread)
+             when (elfeed-entry-link entry)
+             do (eww-browse-url it))
+    (mapc #'elfeed-search-update-entry entries)
+    (unless (use-region-p) (forward-line))))
+
+(defun --elfeed-firefox-open (&optional use-generic-p)
+  "open with firefox"
+  (interactive "P")
+  (let ((entries (elfeed-search-selected)))
+    (cl-loop for entry in entries
+             do (browse-url-firefox (elfeed-entry-link entry)))
+    (mapc #'elfeed-search-update-entry entries)
+    (unless (use-region-p) (forward-line))))
+
 ;; feeds
 (use-package elfeed
+  :commands elfeed
+  :bind (("C-c 3" . elfeed)
+         :map elfeed-search-mode-map
+         ("R" . --elfeed-mark-all-as-read)
+         ("I" . elfeed-protocol-owncloud-reinit)
+         ("O" . elfeed-protocol-owncloud-update-older)
+         ("S" . elfeed-protocol-owncloud-update-star)
+         ("U" . elfeed-protocol-owncloud-update)
+         ("f" . --elfeed-firefox-open)
+         ("e" . --elfeed-eww-open))
+  :init
+  (use-package elfeed-protocol
+    :custom
+    ;; allow to use nextcloud news
+    (elfeed-protocol-enabled-protocols '(owncloud))
+    :ensure t)
+  (advice-add 'elfeed :after #'elfeed-protocol-enable)
   :custom
-  (elfeed-use-curl nil)
+  (shr-max-image-proportion 0.3)
+  (elfeed-search-filter "+unread @1-week-ago")
+  (elfeed-use-curl t)
+  (elfeed-log-level 'debug)
   (elfeed-feeds '(("owncloud+https://dmacvicar@cloud.mac-vicar.eu"
-                   :password (shell-command-to-string "echo -n `secret-tool lookup host cloud.mac-vicar.eu app elfeed username dmacvicar`"))))
-  :config
-  (elfeed-protocol-enable)
+                   :use-authinfo t)))
   :ensure t
   :defer t)
 
-(use-package elfeed-protocol
-  :custom
-  (elfeed-protocol-enabled-protocols '(owncloud))
-  :ensure t
-  :defer t)
 
+;; pinboard feed has no content. This inserts a cleaned up html into the elfeed db
+;; adapted from https://punchagan.muse-amuse.in/blog/elfeed-hook-to-fetch-full-content/
+(defun --elfeed-get-entry-content (entry)
+  "Fetches content for pinboard entries that are not tweets."
+  (interactive
+   (let ((entry elfeed-show-entry))
+     (list entry)))
+  (let ((url (elfeed-entry-link entry))
+        (feed-id (elfeed-deref (elfeed-entry-feed-id entry)))
+        (content (elfeed-deref (elfeed-entry-content entry))))
+    (require 'org-web-tools)
+    (require 'eww)
+    (require 'url)
+    (when (and (s-matches? "feeds.pinboard.in/" feed-id)
+               (not (s-matches? "twitter.com/\\|pdf$\\|png$\\|jpg$" url))
+               (string-equal "" content))
+      (elfeed-curl-retrieve url
+                            (lambda (status)
+                              (if status
+                                  (let* ((data (buffer-string))
+                                         (doc (org-web-tools--eww-readable data))
+                                         (title (car doc))
+                                         (html (cdr doc)))
+                                    (setf (elfeed-entry-content entry) (elfeed-ref html)))
+                                (setf (elfeed-entry-content entry) (elfeed-ref "<h1>Not found</h1>"))))))))
+(add-hook 'elfeed-new-entry-hook  #'--elfeed-get-entry-content)
+
+(defun --elfeed-log-entry (entry) (message (elfeed-entry-feed-id entry)))
+(add-hook 'elfeed-new-entry-hook  #'--elfeed-log-entry)
+(add-hook 'elfeed-new-entry-hook
+          (elfeed-make-tagger :feed-url "pinboard\\.in"
+                              :add 'saved))
 ;; eww
 (use-package shr-tag-code-highlight
   :defer t
