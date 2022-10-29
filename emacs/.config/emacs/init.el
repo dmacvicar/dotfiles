@@ -809,6 +809,10 @@
   :after mu4e
   :defer t)
 
+(use-package mu4e-query-fragments
+  :after mu4e
+  :defer t)
+
 (use-package org-mu4e
   :straight (:type built-in)
   :after mu4e
