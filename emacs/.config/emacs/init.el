@@ -663,8 +663,6 @@
     (org-babel-execute:markdown
      org-babel-expand-body:markdown))
 (use-package ob-http
-  :straight (:type built-in)
-  :requires (org-plus-contrib)
   :commands
   (org-babel-execute:http
    org-babel-expand-body:http))
