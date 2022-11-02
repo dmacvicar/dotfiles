@@ -95,6 +95,7 @@
       make-backup-files nil
       auto-save-default nil
       create-lockfiles nil
+      dired-listing-switches "-lt"
       frame-title-format '(""
 			   invocation-name
 			   " - "
