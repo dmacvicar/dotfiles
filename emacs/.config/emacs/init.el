@@ -580,6 +580,7 @@
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
   :custom
+  (org-hide-emphasis-markers t)
   (org-log-repeat nil)
   (org-latex-listings 'minted)
   (org-latex-pdf-process
@@ -605,7 +606,7 @@
   :config
   (require 'org-crypt)
   (org-crypt-use-before-save-magic))
-    ;;; (all-the-icons-insert-icons-for 'faicon) inserts all faicon icons to check
+  ;;; (all-the-icons-insert-icons-for 'faicon) inserts all faicon icons to check
 
 (use-package org-super-agenda
   :defer t
@@ -617,18 +618,43 @@
 (use-package org-superstar              ; supersedes `org-bullets'
   :ensure
   :after org
-  :config
-  (setq org-superstar-remove-leading-stars t)
-  (setq org-superstar-headline-bullets-list '(" ")) ;; '("🞛" "◉" "○" "▷")
-  (setq org-superstar-item-bullet-alist
-        '((?+ . ?•)
-          (?* . ?➤)
-          (?- . ?–)))
+  :custom
+  (org-superstar-remove-leading-stars t)
+  (org-superstar-headline-bullets-list '(" ")) ;; '("🞛" "◉" "○" "▷")
+  (org-superstar-leading-bullet ?\s)
+  (org-superstar-leading-fallback ?\s)
+  (org-hide-leading-stars nil)
+  (org-superstar-prettify-item-bullets t)
+  (org-superstar-special-todo-items t)
+  (org-superstar-todo-bullet-alist
+   '(("TODO" . 9744)
+     ("[ ]"  . 9744)
+     ("NEXT" . ?✒)
+     ("WAITING" . ?💤)
+     ("CANCELLED" . ?✘)
+     ("DONE" . 9745)
+     ("[X]"  . 9745)
+     ("RED" . ?🔥)
+     ("YELLOW" . ?🤢)
+     ("UNKNOWN" . ?❓)
+     ("GREEN" . ?👍)
+     ("LOVE" ?🫶)))
   :hook (org-mode . org-superstar-mode))
+
+(use-package org-fancy-priorities ; priority icons
+  :after org
+  :hook (org-mode . org-fancy-priorities-mode)
+  :hook (org-agenda-mode . org-fancy-priorities-mode)
+  :custom
+  (org-fancy-priorities-list '("⚑" "⬆" "■")))
 
 (use-package org-appear
   :after org
-  :hook (org-mode . org-appear-mode))
+  :hook (org-mode . org-appear-mode)
+  :custom
+  (org-appear-autoemphasis  t)
+  (org-appear-autolinks t)
+  (org-appear-autosubmarkers t))
 
 ;; Avoid `org-babel-do-load-languages' since it does an eager require.
 (use-package ob-C
