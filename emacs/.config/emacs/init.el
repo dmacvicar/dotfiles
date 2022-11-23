@@ -1014,6 +1014,13 @@
   :defer t
   :commands pulseaudio-control-select-sink-by-name)
 
+(use-package mastodon
+  :straight (:host nil :type git :repo "https://codeberg.org/martianh/mastodon.el.git")
+  :custom
+  (mastodon-instance-url "https://social.mac-vicar.eu")
+  (mastodon-active-user "duncan")
+  :defer t)
+
 (defun dmacvicar/read-contact-list ()
   "Return a list of email addresses"
   (with-temp-buffer
