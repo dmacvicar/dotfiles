@@ -543,7 +543,11 @@
 
 ;; like play.golang.org
 (use-package go-playground
+  :bind (:map go-playground-mode-map
+              ([M-return] . nil)
+              ("C-c C-c" . go-playground-exec))
   :defer t)
+
 ;; generates tests from funcs
 (use-package go-gen-test
   :defer t)
