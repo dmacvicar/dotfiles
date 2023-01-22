@@ -359,6 +359,16 @@
   :defer t
   :config (add-hook 'prog-mode-hook 'company-mode))
 
+;; github copilot
+(use-package copilot
+  :straight (:host github :repo "zerolfx/copilot.el"
+                   :files ("dist" "copilot.el")))
+(with-eval-after-load 'company
+  ;; disable inline previews
+  (delq 'company-preview-if-just-one-frontend company-frontends))
+(define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+(define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+
 ;; remote file access
 (use-package tramp
   :straight (:type built-in)
