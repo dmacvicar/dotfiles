@@ -805,6 +805,12 @@
                                        (display-line-numbers-mode t)
                                        (org-remove-inline-images))))
 
+;; I also tried jupyter packagebut did not work
+(use-package ein
+  :custom
+  (ein:output-area-inlined-images t)
+  :defer t)
+
 (use-package denote
   :defer t)
 
