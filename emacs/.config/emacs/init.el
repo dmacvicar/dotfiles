@@ -475,6 +475,15 @@
   (require 'dap-go)
   (dap-go-setup))
 
+;; meson build system
+(use-package meson-mode
+  :ensure t
+  :defer t
+  :hook
+  (meson-mode. company-mode))
+
+(add-hook 'meson-mode-hook 'company-mode)
+
 (use-package dap-java
   :defer t
   :after (lsp-java)
