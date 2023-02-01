@@ -515,6 +515,30 @@
             (lambda ()
               (tree-sitter-hl-mode (if (bound-and-true-p polymode-mode) -1 1)))))
 
+;; `M-x combobulate' (or `C-c o o') to start using Combobulate
+(use-package treesit
+  :straight (:type built-in)
+  :init
+  (dolist (mapping '((python-mode . python-ts-mode)
+                     (c-mode . c-ts-mode)
+                     (typescript-mode . tsx-ts-mode)
+                     (c++-mode . c++-ts-mode)
+                     (rust-mode . rust-ts-mode)
+                     (go-mode . go-ts-mode)
+                     (yaml-mode . yaml-ts-mode)))
+    (add-to-list 'major-mode-remap-alist mapping))
+
+  :config
+  ;; we could install gramars here first
+  (use-package combobulate
+    :straight (:host github :repo "mickeynp/combobulate")
+    :hook ((python-ts-mode . combobulate-mode)
+           (js-ts-mode . combobulate-mode)
+           (css-ts-mode . combobulate-mode)
+           (yaml-ts-mode . combobulate-mode)
+           (typescript-ts-mode . combobulate-mode)
+           (tsx-ts-mode . combobulate-mode))))
+
 ;; markdown
 (use-package markdown-mode
   :defer t
