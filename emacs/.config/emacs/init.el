@@ -435,6 +435,8 @@
 				    (let ((lsp-solargraph-use-bundler t)) (lsp-deferred)))))
   :custom
   ;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
+  (lsp-server-install-dir (convert-standard-filename
+                           (expand-file-name  "emacs/lsp" (xdg-cache-home))))
   (lsp-auto-guess-root t)
   (lsp-solargraph-use-bundler t)
   :hook 'lsp-ui-mode)
@@ -611,6 +613,9 @@
 
 ;; browse HN
 (use-package hackernews
+  :custom
+  (hackernews-visited-links-file (convert-standard-filename
+                                  (expand-file-name  "emacs/hackernews/visited-links.el" (xdg-cache-home))))
   :defer t)
 
 ;; org mode
@@ -1040,6 +1045,8 @@
   :custom
   (osm-server 'default)
   (osm-copyright t)
+  (osm-tile-directory (convert-standard-filename
+                       (expand-file-name  "emacs/osm/" (xdg-cache-home))))
   :init
   ;; Load Org link support
   (with-eval-after-load 'org
