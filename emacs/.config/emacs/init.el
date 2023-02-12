@@ -424,13 +424,13 @@
   :commands lsp
   :defer t
   :init
-  (add-hook 'go-mode-hook #'lsp-deferred)
+  (add-hook 'go-ts-mode-hook #'lsp-deferred)
   (add-hook 'enh-ruby-mode-hook #'lsp-deferred)
-  (add-hook 'c-mode-hook #'lsp-deferred)
-  (add-hook 'c++-mode-hook #'lsp-deferred)
-  (add-hook 'python-mode-hook #'lsp-deferred)
-  (add-hook 'java-mode-hook #'lsp-deferred)
-  (add-hook 'ruby-mode-hook #'(lambda ()
+  (add-hook 'c-ts-mode-hook #'lsp-deferred)
+  (add-hook 'c++-ts-mode-hook #'lsp-deferred)
+  (add-hook 'python-ts-mode-hook #'lsp-deferred)
+  (add-hook 'java-ts-mode-hook #'lsp-deferred)
+  (add-hook 'ruby-ts-mode-hook #'(lambda ()
 				(if (duncan/ruby-solargraph-project-p)
 				    (let ((lsp-solargraph-use-bundler t)) (lsp-deferred)))))
   :custom
@@ -510,19 +510,6 @@
   (setq beacon-push-mark 5)
   (setq beacon-size 25))
 
-;; faster syntax hightlighting
-(use-package tree-sitter-langs
-  :ensure t
-  :defer t
-  :config
-  (require 'tree-sitter-langs)
-  (global-tree-sitter-mode)
-  ;; poly-mode breaks with tree-sitter (or viceversa?)
-  ;; https://github.com/emacs-tree-sitter/elisp-tree-sitter/issues/139
-  (add-hook 'tree-sitter-after-on-hook
-            (lambda ()
-              (tree-sitter-hl-mode (if (bound-and-true-p polymode-mode) -1 1)))))
-
 ;; `M-x combobulate' (or `C-c o o') to start using Combobulate
 (use-package treesit
   :straight (:type built-in)
@@ -535,7 +522,6 @@
                      (go-mode . go-ts-mode)
                      (yaml-mode . yaml-ts-mode)))
     (add-to-list 'major-mode-remap-alist mapping))
-
   :config
   ;; we could install gramars here first
   (use-package combobulate
