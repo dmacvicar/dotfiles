@@ -251,10 +251,18 @@
   :after all-the-icons
   :hook (dired-mode . all-the-icons-dired-mode))
 
+(use-package transient
+  :custom
+  (transient-history-file (convert-standard-filename
+                           (expand-file-name  "emacs/transient/history.el" (xdg-cache-home)))))
+
 ;; emojis
 ;; todo, set custom (emojify-display-style) when
 ;; we get a good font
 (use-package emojify
+  :custom
+  (emojify-emojis-dir (convert-standard-filename
+                       (expand-file-name  "emacs/emojis" (xdg-cache-home))))
   :hook (after-init . global-emojify-mode))
 
 (use-package shell-pop
