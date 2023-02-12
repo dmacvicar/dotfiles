@@ -490,11 +490,7 @@
 ;; meson build system
 (use-package meson-mode
   :ensure t
-  :defer t
-  :hook
-  (meson-mode. company-mode))
-
-(add-hook 'meson-mode-hook 'company-mode)
+  :defer t)
 
 (use-package dap-java
   :defer t
