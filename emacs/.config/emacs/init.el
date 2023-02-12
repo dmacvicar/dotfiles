@@ -201,17 +201,29 @@
 ;; reimpl of common emacs command using completion-system/vertico
 ;; alternative to consul
 (use-package consult
+  :demand t
   :init
    (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
+         xref-show-definitions-function #'consult-xref)
   :bind
   ("C-s" . consult-line)
   ("C-x b" . consult-buffer)
-  :defer t)
+  :config)
 
 (bind-keys*
  ("M-RET" . consult-buffer)
  ("C-M-j" . consult-buffer))
+
+(use-package perspective
+  :after consult
+  :config
+  (consult-customize consult--source-buffer :hidden t :default nil)
+  (add-to-list 'consult-buffer-sources persp-consult-source)
+  :custom
+  (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
+  (persp-suppress-no-prefix-key-warning t)
+  :init
+  (persp-mode))
 
 ;; complete in any order
 (use-package orderless
