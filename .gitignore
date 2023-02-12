@@ -1,0 +1,7 @@
+emacs/.config/emacs/.cache
+emacs/.config/emacs/emojis
+emacs/.config/emacs/hackernews
+emacs/.config/emacs/*.plstore
+emacs/.config/emacs/persist
+emacs/.config/emacs/request
+emacs/.config/emacs/tramp
