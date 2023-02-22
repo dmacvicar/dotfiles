@@ -203,8 +203,10 @@
 (use-package consult
   :demand t
   :init
-   (setq xref-show-xrefs-function #'consult-xref
-         xref-show-definitions-function #'consult-xref)
+  :custom
+  (xref-show-xrefs-function #'consult-xref)
+  (xref-show-definitions-function #'consult-xref)
+  (consult-preview-key '("S-<down>" "S-<up>"))
   :bind
   ("C-s" . consult-line)
   ("C-x b" . consult-buffer)
