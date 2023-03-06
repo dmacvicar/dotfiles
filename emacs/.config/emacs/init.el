@@ -316,7 +316,9 @@
                               (setq right-margin-width 12)))
 
 (use-package mixed-pitch
-   :hook (text-mode . mixed-pitch-mode))
+  :hook (text-mode . mixed-pitch-mode)
+  :custom
+  (mixed-pitch-variable-pitch-cursor '(bar . 3)))
 
 (duncan/set-frame-size-according-to-resolution)
 ;; not decided yet if maximizing is better?
