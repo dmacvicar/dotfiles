@@ -61,10 +61,12 @@
          (cons 'height (/ (- (x-display-pixel-height) 200)
                              (frame-char-height)))))))
 
-(global-display-line-numbers-mode t)
+(add-hook 'prog-mode-hook
+          'display-line-numbers-mode)
 (column-number-mode)
 ;; if you type with text selected, delete it
 (delete-selection-mode 1)
+(pixel-scroll-mode)
 
 ;; misc defaults
 (setq inhibit-startup-screen t
@@ -103,10 +105,6 @@
 			    (if (buffer-file-name)
 				(abbreviate-file-name (buffer-file-name))
 			      "%b"))))
-
-(duncan/set-frame-size-according-to-resolution)
-;; not decided yet if maximizing is better?
-;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; use gnome secret service to store passwords
 ;; TODO add keepass
@@ -245,8 +243,6 @@
   :init
   (marginalia-mode))
 
-(ignore-errors (set-frame-font "JuliaMono-12"))
-
 (use-package all-the-icons)
 
 (use-package all-the-icons-dired
@@ -300,13 +296,31 @@
   :ensure t
   :defer t)
 
-;; teme
-(use-package leuven-theme
+;; theme
+(use-package modus-themes
   :custom
-  (leuven-scale-outline-headlines nil)
-  (leuven-scale-org-agenda-structure nil)
+  (modus-themes-mixed-fonts t)
+  (modus-themes-org-blocks 'gray-background)
   :config
-  (load-theme 'leuven t))
+  (load-theme 'modus-operandi-tinted :no-confirm)
+  (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
+
+;;(set-face-attribute 'default nil :family "JetBrains Mono" :height 110)
+(set-face-attribute 'default nil :family "Source Code Pro" :height 130)
+;;(set-face-attribute 'variable-pitch nil :family "DejaVu Serif" :height )
+(set-face-attribute 'variable-pitch nil :family "Source Sans Pro")
+(set-face-attribute 'fixed-pitch nil :family (face-attribute 'default :family) :height 110)
+
+(add-hook 'text-mode-hook #'(lambda ()
+                              (setq left-margin-width 12)
+                              (setq right-margin-width 12)))
+
+(use-package mixed-pitch
+   :hook (text-mode . mixed-pitch-mode))
+
+(duncan/set-frame-size-according-to-resolution)
+;; not decided yet if maximizing is better?
+;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; window splitting functions
 (use-package windmove
@@ -635,6 +649,7 @@
   :hook
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
+  (org-mode . auto-fill-mode)
   :custom
   (org-hide-emphasis-markers t)
   (org-log-repeat nil)
@@ -648,11 +663,14 @@
      ("GREEN" . (:foreground "#556b2f" :background "#20b2aa" (:line-width 1 :color "#556b2f") :weight bold))
      ("SHARE" . (:foreground "#0059b3" :background "#99ccff" (:line-width 1 :color "#0059b3") :weight bold))))
   (org-startup-indented t)
+  (org-startup-with-inline-images t)
+  (org-display-remote-inline-images 'cache)
   (org-src-fontify-natively t)
+  (org-edit-src-content-indentation 0)
+  (org-src-tab-acts-natively t)
   (org-fontify-whole-heading-line t)
   (org-pretty-entities t)
   (org-return-follows-link t)
-  (org-src-tab-acts-natively t)
   (org-crypt-key nil "symmetric encryption")
   (org-tags-exclude-from-inheritance (quote ("crypt")))
   ;; Does not work in org-ql yet :-(
@@ -672,6 +690,7 @@
   :defer t)
 
 (use-package org-superstar              ; supersedes `org-bullets'
+  :disabled
   :ensure
   :after org
   :custom
@@ -698,11 +717,15 @@
   :hook (org-mode . org-superstar-mode))
 
 (use-package org-fancy-priorities ; priority icons
+  :disabled
   :after org
   :hook (org-mode . org-fancy-priorities-mode)
   :hook (org-agenda-mode . org-fancy-priorities-mode)
   :custom
   (org-fancy-priorities-list '("⚑" "⬆" "■")))
+
+(use-package org-modern
+  :hook (org-mode . org-modern-mode))
 
 (use-package org-appear
   :after org
