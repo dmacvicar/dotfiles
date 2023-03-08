@@ -61,8 +61,10 @@
          (cons 'height (/ (- (x-display-pixel-height) 200)
                              (frame-char-height)))))))
 
-(add-hook 'prog-mode-hook
-          'display-line-numbers-mode)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
+(add-hook 'text-mode-hook (lambda () (setq show-trailing-whitespace t)))
+
 (column-number-mode)
 ;; if you type with text selected, delete it
 (delete-selection-mode 1)
@@ -369,9 +371,6 @@
 (setq-default tab-width 4)
 (setq-default c-basic-offset 4)
 (setq-default indent-tabs-mode nil)
-
-;; whitespace highlight when coding
-(setq-default show-trailing-whitespace t)
 
 ;; parenthesis
 (use-package paren
@@ -887,6 +886,8 @@
   :load-path mu4e-system-path
   :commands 'mu4e
   :defer t
+  :config
+  (add-hook 'mu4e-compose-mode-hook (lambda () (setq show-trailing-whitespace t)))
   :custom
   (smtpmail-queue-dir (expand-file-name "~/Mail/queue/cur"))
   (message-signature-file (expand-file-name "~/.signature"))
@@ -901,8 +902,6 @@
   (mu4e-get-mail-command "/usr/bin/mbsync -aV")
   (message-send-mail-function 'message-send-mail-with-sendmail)
   (sendmail-program "/usr/bin/msmtp"))
-;; do not show trailing whitespace when rendering emails
-(add-hook 'mu4e-vide-mode (lambda () (setq show-trailing-whitespace nil)))
 
 (use-package outlook
   :after mu4e
@@ -1065,9 +1064,6 @@
   :config
   (add-to-list 'shr-external-rendering-functions
                '(code . shr-tag-code-highlight)))
-
-(add-hook 'eww-mode (lambda ()
-		      (setq show-trailing-whitespace nil)))
 
 ;; maps
 (use-package osm
