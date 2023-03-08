@@ -372,6 +372,12 @@
 (setq-default c-basic-offset 4)
 (setq-default indent-tabs-mode nil)
 
+;; respect style of projects
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
 ;; parenthesis
 (use-package paren
   :defer t
