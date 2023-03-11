@@ -313,12 +313,15 @@
 (set-face-attribute 'variable-pitch nil :family "Source Sans Pro")
 (set-face-attribute 'fixed-pitch nil :family (face-attribute 'default :family) :height 110)
 
-(add-hook 'text-mode-hook #'(lambda ()
-                              (setq left-margin-width 12)
-                              (setq right-margin-width 12)))
+(use-package visual-fill-column
+  :custom
+  (visual-fill-column-adjust-for-text-scale t)
+  (visual-fill-column-width 100)
+  (visual-fill-column-center-text t)
+  :defer t)
+(advice-add 'text-scale-adjust :after #'visual-fill-column-adjust)
 
 (use-package mixed-pitch
-  :hook (text-mode . mixed-pitch-mode)
   :custom
   (mixed-pitch-variable-pitch-cursor '(bar . 3)))
 
@@ -657,6 +660,8 @@
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
   (org-mode . auto-fill-mode)
+  (org-mode . visual-fill-column-mode)
+  (org-mode . mixed-pitch-mode)
   :custom
   (org-hide-emphasis-markers t)
   (org-log-repeat nil)
@@ -876,6 +881,9 @@
   :defer t)
 
 (use-package markdown-mode
+  :hook
+  (markdown-mode . visual-fill-column-mode)
+  (markdown-mode . mixed-pitch-mode)
   :defer t)
 
 ;; work setup. It conflicts with the home setup because of mu4e
