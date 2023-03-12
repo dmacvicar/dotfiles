@@ -303,6 +303,7 @@
   :custom
   (modus-themes-mixed-fonts t)
   (modus-themes-org-blocks 'gray-background)
+  (modus-themes-fringes 'intense)
   :config
   (load-theme 'modus-operandi-tinted :no-confirm)
   (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
@@ -318,6 +319,7 @@
   (visual-fill-column-adjust-for-text-scale t)
   (visual-fill-column-width 100)
   (visual-fill-column-center-text t)
+  (visual-fill-column-fringes-outside-margins nil)
   :defer t)
 (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust)
 
