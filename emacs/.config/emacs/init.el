@@ -677,6 +677,7 @@
   (org-startup-indented t)
   (org-startup-with-inline-images t)
   (org-display-remote-inline-images 'cache)
+  (org-image-actual-width 300)
   (org-src-fontify-natively t)
   (org-edit-src-content-indentation 0)
   (org-src-tab-acts-natively t)
@@ -691,8 +692,31 @@
   ;;(org-agenda-prefix-format "○ ")
   :config
   (require 'org-crypt)
-  (org-crypt-use-before-save-magic))
-  ;;; (all-the-icons-insert-icons-for 'faicon) inserts all faicon icons to check
+  (require 'org-yt)
+  (org-crypt-use-before-save-magic)
+  ;; this allows to retrieve http images and show them inline (with
+  ;; helo from org-yt)
+  (defun org-http-image-data-fn (protocol link _description)
+    "Interpret LINK as an URL to an image file."
+    (when (and (image-type-from-file-name link)
+               (not (eq org-display-remote-inline-images 'skip)))
+      (if-let (buf (url-retrieve-synchronously (concat protocol ":" link)))
+          (with-current-buffer buf
+            (goto-char (point-min))
+            (re-search-forward "\r?\n\r?\n" nil t)
+            (buffer-substring-no-properties (point) (point-max)))
+        (message "Download of image \"%s\" failed" link)
+        nil)))
+  (org-link-set-parameters "http"  :image-data-fun #'org-http-image-data-fn)
+  (org-link-set-parameters "https" :image-data-fun #'org-http-image-data-fn))
+
+;; this takes care of being able to display inline images in the buffer
+(use-package org-yt
+  :defer t
+  ;;:straight (org-yt :host github :repo "TobiasZawada/org-yt"))
+  ;; https://github.com/TobiasZawada/org-yt/pull/1
+  ;; don't require imagemagick for resizing
+  :straight (org-yt :host github :repo "league/org-yt"))
 
 (use-package org-super-agenda
   :defer t
