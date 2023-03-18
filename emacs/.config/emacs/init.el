@@ -676,6 +676,11 @@
                                   (expand-file-name  "emacs/hackernews/visited-links.el" (xdg-cache-home))))
   :defer t)
 
+;; https://d2lang.com/tour/intro/
+(use-package d2-mode
+  :ensure t
+  :defer t)
+
 ;; org mode
 (use-package org
   :defer t
@@ -872,6 +877,11 @@
   :custom
   (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
   :commands (org-babel-execute:plantuml))
+(use-package ob-d2
+  :defer t
+  :straight (:host github :repo "dmacvicar/ob-d2")
+  :requires (org-plus-contrib)
+  :commands (org-babel-execute:d2))
 (use-package ox-gfm
   :defer t)
 (use-package ox-reveal
