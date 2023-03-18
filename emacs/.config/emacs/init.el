@@ -216,6 +216,28 @@
  ("M-RET" . consult-buffer)
  ("C-M-j" . consult-buffer))
 
+(use-package dashboard
+  :custom
+  (dashboard-banner-logo-title "My Dashboard")
+  (dashboard-startup-banner 'logo)
+  (dashboard-projects-backend 'project-el)
+  (dashboard-set-init-info t)
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+  (dashboard-items '((recents . 5)
+                     (bookmarks . 5)
+                     (projects . 5)
+                     (hackernews . 5)
+                     (agenda . 5)))
+  (dashboard-center-content t)
+  (dashboard-week-agenda t)
+  :config
+  (dashboard-setup-startup-hook))
+
+(use-package dashboard-hackernews
+  :config
+  (require 'json))
+
 (use-package perspective
   :after consult
   :config
