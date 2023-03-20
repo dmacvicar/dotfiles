@@ -224,19 +224,18 @@
   (dashboard-set-init-info t)
   (dashboard-set-heading-icons t)
   (dashboard-set-file-icons t)
-  (dashboard-items '((recents . 5)
+  (dashboard-items '((agenda . 5)
+                     (recents . 5)
                      (bookmarks . 5)
                      (projects . 5)
-                     (hackernews . 5)
-                     (agenda . 5)))
+                     (elfeed . 6)))
   (dashboard-center-content t)
   (dashboard-week-agenda t)
   :config
   (dashboard-setup-startup-hook))
 
-(use-package dashboard-hackernews
-  :config
-  (require 'json))
+(use-package dashboard-elfeed
+  :straight (:host nil :type git :repo "git@github.com:dmacvicar/emacs-dashboard-elfeed"))
 
 (use-package perspective
   :after consult
@@ -1095,6 +1094,12 @@
   :ensure t
   :defer t)
 
+(use-package elfeed-score
+  :ensure t
+  :config
+  (progn
+    (elfeed-score-enable)
+    (define-key elfeed-search-mode-map "=" elfeed-score-map)))
 
 ;; pinboard feed has no content. This inserts a cleaned up html into the elfeed db
 ;; adapted from https://punchagan.muse-amuse.in/blog/elfeed-hook-to-fetch-full-content/
