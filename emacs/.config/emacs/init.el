@@ -218,6 +218,7 @@
 
 (use-package dashboard
   :custom
+  (dashboard-set-footer nil)
   (dashboard-banner-logo-title "My Dashboard")
   (dashboard-startup-banner 'logo)
   (dashboard-projects-backend 'project-el)
