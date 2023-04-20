@@ -1180,6 +1180,10 @@
   (mastodon-active-user "duncan")
   :defer t)
 
+(use-package envrc
+ :config
+ (envrc-global-mode))
+
 (defun dmacvicar/read-contact-list ()
   "Return a list of email addresses"
   (with-temp-buffer
