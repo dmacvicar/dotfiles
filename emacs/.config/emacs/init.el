@@ -267,7 +267,8 @@
   :init
   (marginalia-mode))
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :if (display-graphic-p))
 
 (use-package all-the-icons-dired
   :after all-the-icons
