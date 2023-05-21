@@ -295,28 +295,6 @@
 (use-package vterm
   :custom
   (vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=no")
-  :hook
-  ((vterm-mode . (lambda ()
-                   (duncan/vterm-configure-faces)
-                  (setq-local global-hl-line-mode nil
-                               solaire-mode nil))))
-  :init
-  (defun duncan/vterm-configure-faces ()
-    (face-remap-add-relative 'default :background "#ffffdd")
-    ;; I am not sure if the background color has to be set here, or use #0000
-    (set-face-attribute 'vterm-color-black nil :foreground "#171421" :background "#5E5C64")
-    (set-face-attribute 'vterm-color-red nil :foreground "#C01C28" :background "#F66151")
-    (set-face-attribute 'vterm-color-green nil :foreground "#26A269" :background "#33DA7A")
-    (set-face-attribute 'vterm-color-yellow nil :foreground "#A2734C" :background "#E9AD0C")
-    (set-face-attribute 'vterm-color-blue nil :foreground "#12488B" :background "#2A7BDE")
-    (set-face-attribute 'vterm-color-magenta nil :foreground "#A347BA" :background "#C061CB")
-    (set-face-attribute 'vterm-color-cyan nil :foreground "#2AA1B3" :background "#33C7DE")
-    (set-face-attribute 'vterm-color-white nil :foreground "#D0CFCC" :background "#FFFFFF")
-    (set (make-local-variable 'buffer-face-mode-face) '(:family "Source Code Pro Regular" :foreground "#000000"))
-    ;; not working...
-    (display-line-numbers-mode nil)
-    ;;
-    (buffer-face-mode t))
   :ensure t
   :defer t)
 
@@ -330,9 +308,7 @@
   (load-theme 'modus-operandi-tinted :no-confirm)
   (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
 
-;;(set-face-attribute 'default nil :family "JetBrains Mono" :height 110)
 (set-face-attribute 'default nil :family "Source Code Pro" :height 130)
-;;(set-face-attribute 'variable-pitch nil :family "DejaVu Serif" :height )
 (set-face-attribute 'variable-pitch nil :family "Source Sans Pro")
 (set-face-attribute 'fixed-pitch nil :family (face-attribute 'default :family) :height 110)
 
