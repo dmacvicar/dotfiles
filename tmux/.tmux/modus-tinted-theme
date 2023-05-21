@@ -1,0 +1,9 @@
+set-option -g status-position top
+set-option -g status-style 'bg=#cab9b2,fg=#000000'
+set-option -g window-status-current-style 'bg=#94d4ff,fg=#000000'
+set-option -g pane-border-status bottom
+
+set -g pane-border-format "#{pane_index} #{pane_title}"
+
+set-option -g pane-active-border-style 'bg=#cab9b2,fg=#000000'
+set-option -g pane-border-style 'bg=#dfd9cf,fg=#585858'
