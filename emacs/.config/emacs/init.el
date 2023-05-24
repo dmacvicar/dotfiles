@@ -4,29 +4,6 @@
 (setq gc-cons-threshold (* 50 1000 1000))
 (defconst emacs-start-time (current-time))
 
-;; speedup
-(setq straight-check-for-modifications nil)
-
-;; bootstrap straight package manager
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" straight-base-dir))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	 'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-(setq use-package-compute-statistics t)
-(straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
-(eval-when-compile
-  (require 'use-package))
-
 ;; disable UI elements, do this early
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
@@ -108,28 +85,74 @@
 				(abbreviate-file-name (buffer-file-name))
 			      "%b"))))
 
+(defvar elpaca-installer-version 0.4)
+(defvar elpaca-directory (expand-file-name "emacs/elpaca/" (xdg-cache-home)))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil
+                              :files (:defaults (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                 ((zerop (call-process "git" nil buffer t "clone"
+                                       (plist-get order :repo) repo)))
+                 ((zerop (call-process "git" nil buffer t "checkout"
+                                       (or (plist-get order :ref) "--"))))
+                 (emacs (concat invocation-directory invocation-name))
+                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                 ((require 'elpaca))
+                 ((elpaca-generate-autoloads "elpaca" repo)))
+            (kill-buffer buffer)
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
+
+;; Install use-package support
+(elpaca elpaca-use-package
+  (elpaca-use-package-mode)                 ; enable :elpaca use-package keyword
+  (setq elpaca-use-package-by-default t))   ; assume :elpaca t unless otherwise specified
+
+; block until current queue is processed - this will allow use of use-package right away
+(elpaca-wait)
+
 ;; use gnome secret service to store passwords
 ;; TODO add keepass
 (use-package auth-source
-  :straight (:type built-in)
+  :elpaca nil
+  :defer t
   :custom
   (auth-sources '("secrets:login"))
   (auth-source-cache-expiry nil)
   (auth-source-debug 'trivia))
 
 (use-package expand-region
-  :ensure t
+  :defer t
   :bind ("C-=" . er/expand-region))
 
 ;; copy from clipboard in terminal
 (use-package xclip
   :init
-  (xclip-mode)
-  :ensure t)
+  (xclip-mode))
 
 ;; recent files
 (use-package recentf
-  :straight (:type built-in)
+  :elpaca nil
+  :defer t
   :config
   (recentf-mode)
   :custom
@@ -143,7 +166,7 @@
 
 ;; minibuffer history
 (use-package savehist
-  :straight (:type built-in)
+  :elpaca nil
   :custom
   (savehist-file (convert-standard-filename
        (expand-file-name  "emacs/history" (xdg-state-home))))
@@ -152,12 +175,10 @@
 
 ;; modeline
 (use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
+  :config (doom-modeline-mode 1))
 
 ;; popups
 (use-package popper
-  :ensure t ; or :straight t
   :bind (("C-`"   . popper-toggle-latest)
          ("M-`"   . popper-cycle)
          ("C-M-`" . popper-toggle-type))
@@ -181,14 +202,13 @@
 (use-package vertico
   :init
   (vertico-mode)
-  :straight (vertico
+  :elpaca (vertico
              :files (:defaults "extensions/vertico-directory.el")
              :includes (vertico-directory)))
 
 ;; configure directory extension
 (use-package vertico-directory
-  :straight nil
-  :ensure nil
+  :elpaca nil
   :after vertico
   ;; More convenient directory navigation commands
   :bind (:map vertico-map
@@ -216,7 +236,13 @@
  ("M-RET" . consult-buffer)
  ("C-M-j" . consult-buffer))
 
+(use-package dashboard-elfeed
+  :defer t
+  :disabled
+  :elpaca (:host nil :type git :repo "git@github.com:dmacvicar/emacs-dashboard-elfeed"))
+
 (use-package dashboard
+  :defer t
   :custom
   (dashboard-set-footer nil)
   (dashboard-banner-logo-title "My Dashboard")
@@ -228,15 +254,11 @@
   (dashboard-items '((agenda . 5)
                      (recents . 5)
                      (bookmarks . 5)
-                     (projects . 5)
-                     (elfeed . 6)))
+                     (projects . 5)))
+;                     (elfeed . 6)))
   (dashboard-center-content t)
-  (dashboard-week-agenda t)
-  :config
-  (dashboard-setup-startup-hook))
-
-(use-package dashboard-elfeed
-  :straight (:host nil :type git :repo "git@github.com:dmacvicar/emacs-dashboard-elfeed"))
+  (dashboard-week-agenda t))
+;(add-hook 'elpaca-after-init-hook #'dashboard-open)
 
 (use-package perspective
   :after consult
@@ -267,12 +289,12 @@
   :init
   (marginalia-mode))
 
-(use-package all-the-icons
+(use-package nerd-icons
   :if (display-graphic-p))
 
-(use-package all-the-icons-dired
-  :after all-the-icons
-  :hook (dired-mode . all-the-icons-dired-mode))
+(use-package nerd-icons-dired
+  :after nerd-icons
+  :hook (dired-mode . nerd-icons-dired-mode))
 
 (use-package transient
   :custom
@@ -289,40 +311,42 @@
   :hook (after-init . global-emojify-mode))
 
 (use-package shell-pop
+  :defer t
   :custom
-  (shell-pop-universal-key "C-t")
-  :defer t)
+  (shell-pop-universal-key "C-t"))
 
 (use-package vterm
+  :defer t
   :custom
-  (vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=no")
-  :ensure t
-  :defer t)
+  (vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=no"))
 
 ;; theme
 (use-package modus-themes
   :custom
   (modus-themes-mixed-fonts t)
   (modus-themes-org-blocks 'gray-background)
-  (modus-themes-fringes 'intense)
-  :config
-  (load-theme 'modus-operandi-tinted :no-confirm)
-  (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
+  (modus-themes-fringes 'intense))
+
+(elpaca-wait)
+
+(load-theme 'modus-operandi-tinted :no-confirm)
+(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 (set-face-attribute 'default nil :family "Source Code Pro" :height 130)
 (set-face-attribute 'variable-pitch nil :family "Source Sans Pro")
 (set-face-attribute 'fixed-pitch nil :family (face-attribute 'default :family) :height 110)
 
 (use-package visual-fill-column
+  :defer t
   :custom
   (visual-fill-column-adjust-for-text-scale t)
   (visual-fill-column-width 100)
   (visual-fill-column-center-text t)
-  (visual-fill-column-fringes-outside-margins nil)
-  :defer t)
+  (visual-fill-column-fringes-outside-margins nil))
 (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust)
 
 (use-package mixed-pitch
+  :defer t
   :custom
   (mixed-pitch-variable-pitch-cursor '(bar . 3)))
 
@@ -332,7 +356,7 @@
 
 ;; window splitting functions
 (use-package windmove
-  :defer t
+  :elpaca nil
   :config
   ;; do not set ever windmove-wrap-around as it prevents jumping to tmux panes
   :bind
@@ -343,14 +367,15 @@
   ("C-x x" . (lambda ()
                (interactive) (kill-buffer (current-buffer)) (if (one-window-p) () (delete-window))))))
 
-(use-package tmux-pane
-  :defer t)
+(use-package tmux-pane)
 ;; define M-arrows using escape codes so that they
 ;; work in terminal
 (define-key input-decode-map "\e\eOA" [(meta up)])
 (define-key input-decode-map "\e\eOB" [(meta down)])
 (define-key input-decode-map "\e\eOC" [(meta right)])
 (define-key input-decode-map "\e\eOD" [(meta left)])
+
+(elpaca-wait)
 
 (if (display-graphic-p)
     (progn
@@ -378,28 +403,27 @@
 
 ;; respect style of projects
 (use-package editorconfig
-  :ensure t
+  :defer t
   :config
   (editorconfig-mode 1))
 
 ;; parenthesis
 (use-package paren
   :defer t
+  :elpaca nil
   :hook ((prog-mode . show-paren-mode))
   :custom (show-paren-style 'expression))
 
 (use-package rainbow-delimiters
-    :hook ((prog-mode . rainbow-delimiters-mode)))
+  :defer t
+  :hook ((prog-mode . rainbow-delimiters-mode)))
 
 ;; highlight undoed text
 (use-package undo-hl
   :defer t
-  :straight (
-    :host github
-    :repo "casouri/undo-hl")
-  :config
-  (add-hook 'prog-mode-hook #'undo-hl-mode)
-  (add-hook 'text-mode #'undo-hl-mode))
+  :elpaca (:host github :repo "casouri/undo-hl"))
+(add-hook 'prog-mode-hook #'undo-hl-mode)
+(add-hook 'text-mode #'undo-hl-mode)
 
 ;; text completion
 (use-package company
@@ -408,18 +432,21 @@
 
 ;; github copilot
 (use-package copilot
-  :straight (:host github :repo "zerolfx/copilot.el"
-                   :files ("dist" "copilot.el")))
+  :defer t
+  :elpaca (:host github :repo "zerolfx/copilot.el"
+                 :files ("dist" "copilot.el"))
+  :bind (:map copilot-completion-map
+              ("<tab>" . copilot-accept-completion)
+              ("TAB" . copilot-accept-completion)))
+
 (with-eval-after-load 'company
   ;; disable inline previews
   (delq 'company-preview-if-just-one-frontend company-frontends))
-(define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-(define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
 ;; remote file access
 (use-package tramp
-  :straight (:type built-in)
   :defer t
+  :elpaca nil
   :config
   (setq vc-ignore-dir-regexp
 	(format "\\(%s\\)\\|\\(%s\\)"
@@ -456,8 +483,8 @@
 
 ;; LSP
 (use-package lsp-mode
-  :commands lsp
   :defer t
+  :commands lsp
   :init
   (add-hook 'go-ts-mode-hook #'lsp-deferred)
   (add-hook 'enh-ruby-mode-hook #'lsp-deferred)
@@ -487,10 +514,12 @@
   :after flycheck)
 
 (use-package company-lsp
-  :commands company-lsp
   :defer t
+  :after company
+  :elpaca nil
+  :commands company-lsp
   :config
-  (push 'company-lsp company-backends))
+  (add-to-list 'company-lsp company-backends))
 
 (use-package flycheck
   :defer t
@@ -502,11 +531,13 @@
   (global-flycheck-mode))
 
 (use-package flycheck-pos-tip
+  :defer t
   :after (flycheck)
   :config
   (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)))
 
 (use-package lsp-java
+  :defer t
   :after lsp
   :config (add-hook 'java-mode-hook 'lsp)
   :custom
@@ -517,6 +548,7 @@
 
 ;; debugger
 (use-package dap-mode
+  :defer t
   :after lsp-mode
   :config
   (dap-mode t)
@@ -526,22 +558,19 @@
 
 ;; meson build system
 (use-package meson-mode
-  :ensure t
   :defer t)
 
 (use-package dap-java
   :defer t
   :after (lsp-java)
-  :straight (:type built-in))
+  :elpaca nil)
 
 ;; git
 (use-package magit
-  :ensure t
   :defer t)
 
 ;; never lose your cursor
 (use-package beacon
-  :ensure t
   :defer 5
   :config
   (setq beacon-push-mark 5)
@@ -549,7 +578,8 @@
 
 ;; `M-x combobulate' (or `C-c o o') to start using Combobulate
 (use-package treesit
-  :straight (:type built-in)
+  :defer t
+  :elpaca nil
   :init
   (dolist (mapping '((python-mode . python-ts-mode)
                      (c-mode . c-ts-mode)
@@ -558,47 +588,46 @@
                      (rust-mode . rust-ts-mode)
                      (go-mode . go-ts-mode)
                      (yaml-mode . yaml-ts-mode)))
-    (add-to-list 'major-mode-remap-alist mapping))
-  :config
-  ;; we could install gramars here first
-  (use-package combobulate
-    :straight (:host github :repo "mickeynp/combobulate")
-    :hook ((python-ts-mode . combobulate-mode)
-           (js-ts-mode . combobulate-mode)
-           (css-ts-mode . combobulate-mode)
-           (yaml-ts-mode . combobulate-mode)
-           (typescript-ts-mode . combobulate-mode)
-           (tsx-ts-mode . combobulate-mode))))
+    (add-to-list 'major-mode-remap-alist mapping)))
 
+ ;; we could install gramars here first
+(use-package combobulate
+  :defer t
+  :after treesit
+  :elpaca (:host github :repo "mickeynp/combobulate")
+  :hook ((python-ts-mode . combobulate-mode)
+         (js-ts-mode . combobulate-mode)
+         (css-ts-mode . combobulate-mode)
+         (yaml-ts-mode . combobulate-mode)
+         (typescript-ts-mode . combobulate-mode)
+         (tsx-ts-mode . combobulate-mode)))
+ 
 ;; markdown
 (use-package markdown-mode
   :defer t
-  :ensure t
+  :hook
+  (markdown-mode . visual-fill-column-mode)
+  (markdown-mode . mixed-pitch-mode)
   :mode ("\\.md\\'" . gfm-mode))
 
 ;; use lang modes inside org src blocks
 (use-package poly-org
+  :defer t
   :init
-  (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
-  :defer t)
-
+  (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode)))
 ;; use lang modes inside markdow code fences
 (use-package poly-markdown
-  :init
-  (add-to-list 'auto-mode-alist '("\\.md" . poly-gfm-mode))
-  :defer t)
-
-(use-package web-mode
   :defer t
-  :mode "\\.qtpl\\'")
-
+  :init
+  (add-to-list 'auto-mode-alist '("\\.md" . poly-gfm-mode)))
+(use-package web-mode :mode "\\.qtpl\\'"
+  :defer t)
 (use-package vue-html-mode
   :defer t)
-
 ;; vue single file component mode (uses polymode)
 (use-package sfc-mode
-  :straight (:host github :repo "gexplorer/sfc-mode")
   :defer t
+  :elpaca (:host github :repo "gexplorer/sfc-mode")
   :custom
   (sfc-template-default-mode 'vue-html-mode)
   :mode "\\.vue\\'")
@@ -614,54 +643,39 @@
   :custom
   (go-test-verbose t)
   (gofmt-args '("-s")))
-
 ;; like play.golang.org
 (use-package go-playground
+  :defer t
   :bind (:map go-playground-mode-map
               ([M-return] . nil)
-              ("C-c C-c" . go-playground-exec))
-  :defer t)
-
+              ("C-c C-c" . go-playground-exec)))
 ;; generates tests from funcs
 (use-package go-gen-test
   :defer t)
 
-;; rust
 (use-package rust-mode
-  :ensure t
   :defer t)
-
-;; elixir, mostly for slides highlighting
 (use-package elixir-mode
-  :ensure t
   :defer t)
-
-;; zig
 (use-package zig-mode
-  :ensure t
   :defer t)
-
-;; nix
 (use-package nix-mode
-  :ensure t
   :defer t)
 
 ;; browse HN
 (use-package hackernews
+  :defer t
   :custom
   (hackernews-visited-links-file (convert-standard-filename
-                                  (expand-file-name  "emacs/hackernews/visited-links.el" (xdg-cache-home))))
-  :defer t)
+                                  (expand-file-name  "emacs/hackernews/visited-links.el" (xdg-cache-home)))))
 
 ;; https://d2lang.com/tour/intro/
 (use-package d2-mode
-  :ensure t
   :defer t)
 
 ;; org mode
 (use-package org
   :defer t
-;  :straight (:type built-in)
   :hook
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
@@ -718,23 +732,21 @@
 
 ;; this takes care of being able to display inline images in the buffer
 (use-package org-yt
+  :after org
   :defer t
-  ;;:straight (org-yt :host github :repo "TobiasZawada/org-yt"))
+  ;;:elpaca (org-yt :host github :repo "TobiasZawada/org-yt"))
   ;; https://github.com/TobiasZawada/org-yt/pull/1
   ;; don't require imagemagick for resizing
-  :straight (org-yt :host github :repo "league/org-yt"))
+  :elpaca (org-yt :host github :repo "league/org-yt"))
 
 (use-package org-super-agenda
-  :defer t
   :hook (org-agenda-mode . org-super-agenda-mode))
-
 (use-package org-ql
-  :defer t)
-
-(use-package org-superstar              ; supersedes `org-bullets'
-  :disabled
-  :ensure
   :after org
+  :defer t)
+(use-package org-superstar              ; supersedes `org-bullets'
+  :after org
+  :defer t
   :custom
   (org-superstar-remove-leading-stars t)
   (org-superstar-headline-bullets-list '(" ")) ;; '("🞛" "◉" "○" "▷")
@@ -759,7 +771,7 @@
   :hook (org-mode . org-superstar-mode))
 
 (use-package org-fancy-priorities ; priority icons
-  :disabled
+  :defer t
   :after org
   :hook (org-mode . org-fancy-priorities-mode)
   :hook (org-agenda-mode . org-fancy-priorities-mode)
@@ -767,10 +779,12 @@
   (org-fancy-priorities-list '("⚑" "⬆" "■")))
 
 (use-package org-modern
+  :defer t
   :hook (org-mode . org-modern-mode))
 
 (use-package org-appear
   :after org
+  :defer t
   :hook (org-mode . org-appear-mode)
   :custom
   (org-appear-autoemphasis  t)
@@ -779,33 +793,27 @@
 
 ;; Avoid `org-babel-do-load-languages' since it does an eager require.
 (use-package ob-C
-  :straight (:type built-in)
-  :defer t
+  :elpaca nil
   :requires (org-plus-contrib)
   :commands (org-babel-execute:C org-babel-execute:C++))
 (use-package ob-ruby
-  :straight (:type built-in)
-  :defer t
+  :elpaca nil
   :requires (org-plus-contrib)
   :commands (org-babel-execute:ruby))
 (use-package ob-python
-  :straight (:type built-in)
-  :defer t
+  :elpaca nil
   :requires (org-plus-contrib)
   :commands (org-babel-execute:python))
 (use-package ob-octave
-  :straight (:type built-in)
-  :defer t
+  :elpaca nil
   :requires (org-plus-contrib)
   :commands (org-babel-execute:octave))
 (use-package ob-gnuplot
-  :straight (:type built-in)
-  :defer t
+  :elpaca nil
   :requires (org-plus-contrib)
   :commands (org-babel-execute:gnuplot))
 (use-package ob-markdown
-  :straight (:type built-in)
-  :defer t
+  :elpaca nil
   :requires (org-plus-contrib)
   :commands
     (org-babel-execute:markdown
@@ -815,8 +823,7 @@
   (org-babel-execute:http
    org-babel-expand-body:http))
 (use-package ob-grpc
-  :straight (ob-grpc :type git :host github :repo "shsms/ob-grpc")
-  :defer t
+  :elpaca (ob-grpc :type git :host github :repo "shsms/ob-grpc")
   :commands
   (org-babel-execute:grpc
    org-babel-expand-body:grpc)
@@ -824,8 +831,7 @@
               ("C-c g i" . ob-grpc-init)
               ("C-c g b" . ob-grpc-insert-block)))
 (use-package ob-shell
-  :straight (:type built-in)
-  :defer t
+  :elpaca nil
   :requires (org-plus-contrib)
   :commands
   (org-babel-execute:sh
@@ -833,30 +839,25 @@
    org-babel-execute:bash
    org-babel-expand-body:bash))
 (use-package ob-sql
-  :straight (:type built-in)
-  :defer t
+  :elpaca nil
   :commands (org-babel-execute:sql))
 (use-package ob-diagrams
-  :defer t
   :requires (org-plus-contrib)
   :commands (org-babel-execute:diagrams))
 (use-package ob-ditaa
-  :straight (:type built-in)
-  :defer t
+  :elpaca nil
   :requires (org-plus-contrib)
   :custom
   (org-ditaa-jar-path "/usr/share/java/ditaa.jar")
   :commands (org-babel-execute:ditaa))
 (use-package ob-plantuml
-  :straight (:type built-in)
-  :defer t
+  :elpaca nil
   :requires (org-plus-contrib)
   :custom
   (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
   :commands (org-babel-execute:plantuml))
 (use-package ob-d2
-  :defer t
-  :straight (:host github :repo "dmacvicar/ob-d2")
+  :elpaca (:host github :repo "dmacvicar/ob-d2")
   :requires (org-plus-contrib)
   :commands (org-babel-execute:d2))
 (use-package ox-gfm
@@ -865,10 +866,8 @@
   :defer t)
 (use-package org-tree-slide
   :defer t)
-
 (use-package hide-mode-line
   :defer t)
-
 (use-package org-present
   :defer t
   :init
@@ -886,40 +885,22 @@
 
 ;; I also tried jupyter packagebut did not work
 (use-package ein
+  :defer t
   :custom
-  (ein:output-area-inlined-images t)
-  :defer t)
+  (ein:output-area-inlined-images t))
 
 (use-package denote
   :defer t)
-
 (use-package consult-notes
+  :defer t
   :commands (consult-notes
              consult-notes-search-in-all-notes))
-
-(use-package htmlize
-  :defer t)
-
-(use-package protobuf-mode
-  :defer t)
+(use-package htmlize :defer t)
+(use-package protobuf-mode :defer t)
 
 ;; start services
-(use-package prodigy
-  :defer t)
-
-;; TODO replace with rg
-(use-package ag
-  :defer t)
-
-;; ripgrep search
-(use-package rg
-  :defer t)
-
-(use-package markdown-mode
-  :hook
-  (markdown-mode . visual-fill-column-mode)
-  (markdown-mode . mixed-pitch-mode)
-  :defer t)
+(use-package prodigy :defer t)
+(use-package rg :defer t)
 
 ;; work setup. It conflicts with the home setup because of mu4e
 ;; so we load one or the other
@@ -931,10 +912,10 @@
 ;; email
 (defconst mu4e-system-path "/usr/share/emacs/site-lisp/mu4e")
 (use-package mu4e
-  :straight (:type built-in)
+  :defer t
+  :elpaca nil
   :load-path mu4e-system-path
   :commands 'mu4e
-  :defer t
   :config
   (add-hook 'mu4e-compose-mode-hook (lambda () (setq show-trailing-whitespace t)))
   :custom
@@ -954,15 +935,15 @@
 
 (use-package outlook
   :after mu4e
+  :defer t
   :init
   (require 'outlook-mu4e))
 
 (use-package mu4e-jump-to-list
   :after mu4e
-  :defer t)
-
+    :defer t)
 (use-package mu4e-contrib
-  :straight (:type built-in)
+  :elpaca nil
   :after mu4e
   :defer t
   :load-path mu4e-system-path)
@@ -976,13 +957,14 @@
   :defer t)
 
 (use-package org-mu4e
-  :straight (:type built-in)
-  :after mu4e
   :defer t
+  :elpaca nil
+  :after mu4e
   :load-path mu4e-system-path)
 
 (use-package mu4e-icalendar
-  :straight (:type built-in)
+  :defer t
+  :elpaca nil
   :after mu4e
   :load-path mu4e-system-path
   :config
@@ -990,6 +972,7 @@
   (mu4e-icalendar-setup))
 
 (use-package mu4e-views
+  :defer t
   :after mu4e
   :bind (:map mu4e-headers-mode-map
 	      ("v" . mu4e-views-mu4e-select-view-msg-method) ;; select viewing method
@@ -1005,16 +988,14 @@
 
 (use-package mu4e-column-faces
   :after mu4e
+  :defer t
   :config (mu4e-column-faces-mode))
 
 ;; calendar
 (use-package calfw
-  :disabled
-  :ensure t
   :defer t)
 
 (use-package org-web-tools
-  :ensure t
   :defer t)
 
 (defun --elfeed-mark-all-as-read ()
@@ -1045,7 +1026,7 @@
 
 ;; feeds
 (use-package elfeed
-  :commands elfeed
+  :defer t
   :bind (("C-c 3" . elfeed)
          :map elfeed-search-mode-map
          ("R" . --elfeed-mark-all-as-read)
@@ -1055,25 +1036,25 @@
          ("U" . elfeed-protocol-owncloud-update)
          ("f" . --elfeed-firefox-open)
          ("e" . --elfeed-eww-open))
-  :init
-  (use-package elfeed-protocol
-    :custom
-    ;; allow to use nextcloud news
-    (elfeed-protocol-enabled-protocols '(owncloud))
-    :ensure t)
-  (advice-add 'elfeed :after #'elfeed-protocol-enable)
   :custom
   (shr-max-image-proportion 0.3)
   (elfeed-search-filter "+unread @1-week-ago")
   (elfeed-use-curl t)
   (elfeed-log-level 'debug)
   (elfeed-feeds '(("owncloud+https://dmacvicar@cloud.mac-vicar.eu"
-                   :use-authinfo t)))
-  :ensure t
-  :defer t)
+                   :use-authinfo t))))
+
+(use-package elfeed-protocol
+  :defer t
+  :after elfeed
+  :custom
+  ;; allow to use nextcloud news
+  (elfeed-protocol-enabled-protocols '(owncloud)))
+;(advice-add 'elfeed :after #'elfeed-protocol-enable)
 
 (use-package elfeed-score
-  :ensure t
+  :defer t
+  :after elfeed
   :config
   (progn
     (elfeed-score-enable)
@@ -1108,13 +1089,15 @@
 
 (defun --elfeed-log-entry (entry) (message (elfeed-entry-feed-id entry)))
 (add-hook 'elfeed-new-entry-hook  #'--elfeed-log-entry)
-(add-hook 'elfeed-new-entry-hook
-          (elfeed-make-tagger :feed-url "pinboard\\.in"
-                              :add 'saved))
+;(add-hook 'elfeed-new-entry-hook
+;          (elfeed-make-tagger :feed-url "pinboard\\.in"
+;                              :add 'saved))
 ;; eww
+;; disable because the org-inhibit version check thing
 (use-package shr-tag-code-highlight
   :defer t
-  :straight (:host github :repo "dmacvicar/shr-tag-code-highlight.el")
+  :disabled
+  :elpaca (:host github :repo "dmacvicar/shr-tag-code-highlight.el")
   :after shr
   :config
   (add-to-list 'shr-external-rendering-functions
@@ -1122,6 +1105,7 @@
 
 ;; maps
 (use-package osm
+  :defer t
   :bind (("C-c m h" . osm-home)
          ("C-c m s" . osm-search)
          ("C-c m v" . osm-server)
@@ -1151,11 +1135,11 @@
   :commands pulseaudio-control-select-sink-by-name)
 
 (use-package mastodon
-  :straight (:host nil :type git :repo "https://codeberg.org/martianh/mastodon.el.git")
+  :defer t
+  :elpaca (:host nil :type git :repo "https://codeberg.org/martianh/mastodon.el.git")
   :custom
   (mastodon-instance-url "https://social.mac-vicar.eu")
-  (mastodon-active-user "duncan")
-  :defer t)
+  (mastodon-active-user "duncan"))
 
 (use-package envrc
  :config
