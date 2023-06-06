@@ -579,16 +579,22 @@
 ;; `M-x combobulate' (or `C-c o o') to start using Combobulate
 (use-package treesit
   :defer t
-  :elpaca nil
-  :init
-  (dolist (mapping '((python-mode . python-ts-mode)
-                     (c-mode . c-ts-mode)
-                     (typescript-mode . tsx-ts-mode)
-                     (c++-mode . c++-ts-mode)
-                     (rust-mode . rust-ts-mode)
-                     (go-mode . go-ts-mode)
-                     (yaml-mode . yaml-ts-mode)))
-    (add-to-list 'major-mode-remap-alist mapping)))
+  :elpaca nil)
+
+(use-package treesit-auto
+  :demand t
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (add-to-list 'treesit-auto-recipe-list
+	           (make-treesit-auto-recipe
+	            :lang 'gomod
+	            :ts-mode 'gomod-ts-mode
+	            :remap '(gomod-mode)
+	            :url "https://github.com/camdencheek/tree-sitter-go-mod"
+	            :revision "main"
+	            :source-dir "src"))
+  (global-treesit-auto-mode))
 
  ;; we could install gramars here first
 (use-package combobulate
