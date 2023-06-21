@@ -367,7 +367,10 @@
   ("C-x x" . (lambda ()
                (interactive) (kill-buffer (current-buffer)) (if (one-window-p) () (delete-window))))))
 
-(use-package tmux-pane)
+(use-package tmux-pane
+  :if (not (display-graphic-p))
+  :config
+  (setq -override-map-enable nil))
 ;; define M-arrows using escape codes so that they
 ;; work in terminal
 (define-key input-decode-map "\e\eOA" [(meta up)])
