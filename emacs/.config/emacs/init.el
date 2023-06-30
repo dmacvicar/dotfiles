@@ -645,6 +645,8 @@
   :defer t)
 (use-package yaml-mode
   :defer t)
+(use-package dockerfile-mode
+  :defer t)
 
 ;; go
 (use-package go-mode
