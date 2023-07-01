@@ -579,27 +579,30 @@
   (setq beacon-push-mark 5)
   (setq beacon-size 25))
 
-;; `M-x combobulate' (or `C-c o o') to start using Combobulate
+ ; `M-x combobulate' (or `C-c o o') to start using Combobulate
 (use-package treesit
   :defer t
+  :init
+  (setq =treesit-grammar-cache-directory (convert-standard-filename
+                                         (expand-file-name  "emacs/tree-sitter" (xdg-cache-home))))
+  (add-to-list 'treesit-extra-load-path =treesit-grammar-cache-directory)
+  :config
+  (advice-add #'treesit--install-language-grammar-1 :around
+	          (lambda (fn out-dir &rest args)
+	            (apply fn (or out-dir =treesit-grammar-cache-directory) args)))
   :elpaca nil)
 
 (use-package treesit-auto
   :demand t
-  :custom
-  (treesit-auto-install 'prompt)
+  :init
+  (setq treesit-auto-install-all t)
+  ; those are broken
+  (setq treesit-auto-opt-out-list
+        '(markdown protobuf ruby r yaml))
   :config
-  (add-to-list 'treesit-auto-recipe-list
-	           (make-treesit-auto-recipe
-	            :lang 'gomod
-	            :ts-mode 'gomod-ts-mode
-	            :remap '(gomod-mode)
-	            :url "https://github.com/camdencheek/tree-sitter-go-mod"
-	            :revision "main"
-	            :source-dir "src"))
-  (global-treesit-auto-mode))
+  (global-treesit-auto-mode)
+  (treesit-auto-install-all))
 
- ;; we could install gramars here first
 (use-package combobulate
   :defer t
   :after treesit
