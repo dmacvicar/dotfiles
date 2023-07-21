@@ -891,17 +891,41 @@
   :defer t
   :init
   (add-hook 'org-present-mode-hook #'(lambda ()
+                                       (setq-local face-remap-cookies
+                                                   (mapcar (lambda (remapping)
+                                                             (face-remap-add-relative (car remapping) (cdr remapping)))
+                                                           '((default :height 2.5)
+                                                             (header-line :height 4.0)
+                                                             (org-document-title :height 2.75)
+                                                             (org-code :height 2.55)
+                                                             (org-verbatim :height 2.55)
+                                                             (org-block :height 3.25)
+                                                             (org-block-begin-line :height 0.7))))
+
+                                       (let ((font-family
+                                              (car (pcase (org-collect-keywords '("PRESENT_FONT"))
+                                                     (`(("PRESENT_FONT" . ,val)) val)))))
+                                         (when font-family
+                                           (message "font: %s" font-family)
+                                           (setq-local face-remap-cookies
+                                                       (append face-remap-cookies
+                                                               (mapcar (lambda (face)
+                                                                         (face-remap-add-relative face :family font-family))
+                                                                         '(default org-document-title org-code org-verbatim org-block org-block-begin-line))))))
                                        (setq-local org-image-actual-width (display-pixel-width))
                                        (org-present-big)
                                        (hide-mode-line-mode t)
                                        (display-line-numbers-mode -1)
-                                       (org-display-inline-images)))
+                                       (org-display-inline-images)
+                                       (toggle-frame-fullscreen)))
   (add-hook 'org-present-mode-quit-hook #'(lambda ()
+                                       (dolist (cookie face-remap-cookies)
+                                         (face-remap-remove-relative cookie))
                                        (org-present-small)
                                        (hide-mode-line-mode -1)
                                        (display-line-numbers-mode t)
-                                       (org-remove-inline-images))))
-
+                                       (org-remove-inline-images)
+                                       (toggle-frame-fullscreen))))
 ;; I also tried jupyter packagebut did not work
 (use-package ein
   :defer t
