@@ -687,6 +687,8 @@
 (use-package d2-mode
   :defer t)
 
+(custom-set-variables '(ad-redefinition-action (quote accept)))
+
 ;; org mode
 (use-package org
   :defer t
