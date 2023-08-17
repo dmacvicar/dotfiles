@@ -962,7 +962,22 @@
   :commands 'mu4e
   :config
   (add-hook 'mu4e-compose-mode-hook (lambda () (setq show-trailing-whitespace t)))
+  :init
+  ;; nerdfonts for marks
+  (setq mu4e-headers-unread-mark    '("u" . ""))
+  (setq mu4e-headers-draft-mark     '("D" . ""))
+  (setq mu4e-headers-flagged-mark   '("F" . "󰈻"))
+  (setq mu4e-headers-new-mark       '("N" . "󰎔"))
+  (setq mu4e-headers-passed-mark    '("P" . "↪"))
+  (setq mu4e-headers-replied-mark   '("R" . "↩ "))
+  (setq mu4e-headers-seen-mark      '("S" . " "))
+  (setq mu4e-headers-trashed-mark   '("T" . ""))
+  (setq mu4e-headers-attach-mark    '("a" . "󰁦 "))
+  (setq mu4e-headers-encrypted-mark '("x" . "󰌆"))
+  (setq mu4e-headers-calendar-mark  '("c" . "󰃭"))
+  (setq mu4e-headers-signed-mark    '("s" . "󰷼 "))
   :custom
+  (mu4e-use-fancy-chars t)
   (smtpmail-queue-dir (expand-file-name "~/Mail/queue/cur"))
   (message-signature-file (expand-file-name "~/.signature"))
   (mu4e-compose-dont-reply-to-self t)
