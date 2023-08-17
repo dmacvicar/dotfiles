@@ -727,7 +727,7 @@
   (org-tags-exclude-from-inheritance (quote ("crypt")))
   ;; Does not work in org-ql yet :-(
   (org-agenda-category-icon-alist
-   `(("emacs" ,(list (all-the-icons-fileicon "emacs")) nil nil :ascent center)))
+   `(("emacs" ,(list (nerd-icons-sucicon "nf-custom-emacs")) nil nil :ascent center)))
   ;;(org-agenda-prefix-format "○ ")
   :config
   (require 'org-crypt)
