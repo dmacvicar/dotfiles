@@ -1,0 +1,20 @@
+#!/bin/bash
+
+MDL=/sys/module/zswap
+DBG=/sys/kernel/debug/zswap
+PAGE=$[`cat $DBG/stored_pages`*4096]
+POOL=$[`cat $DBG/pool_total_size`]
+
+Show(){
+    printf "========\n$1\n========\n"
+    grep -R . $2 2>&1 | sed 's|.*/||'
+}
+
+Show Settings $MDL
+Show Stats    $DBG
+
+printf "\nCompression ratio: "
+
+[ $POOL -gt 0 ] && {
+     echo "scale=3;$PAGE/$POOL" | bc
+} || echo zswap disabled
