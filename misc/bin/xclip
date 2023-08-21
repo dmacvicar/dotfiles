@@ -1,0 +1,19 @@
+#!/usr/bin/python3
+
+import sys
+import subprocess
+
+args = sys.argv[1:]
+cmd = 'wl-copy'
+wl_args = ['-n']
+if args:
+    if '-o' in args:
+        # requesting the contents, use wl-paste
+        cmd = 'wl-paste'
+    if '-selection' in args:
+        sel_idx = args.index('-selection')
+        if args[sel_idx+1] == 'primary':
+            # use the primary clipboard
+            wl_args.append('-p')
+
+subprocess.check_call([cmd] + wl_args, stdin=sys.stdin, stdout=sys.stdout)
