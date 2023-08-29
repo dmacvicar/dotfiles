@@ -318,6 +318,7 @@
 (use-package vterm
   :defer t
   :custom
+  (vterm-timer-delay nil)
   (vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=no"))
 
 ;; theme
