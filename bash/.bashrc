@@ -27,8 +27,6 @@ if exists starship && ! [[ -v INSIDE_EMACS ]]; then
     eval "$(starship init bash)"
 fi
 
-VTERM_BASH_SUPPORT="${HOME}/.cache/emacs/straight/repos/emacs-libvterm/etc/emacs-vterm-bash.sh"
-if [ -f "$VTERM_BASH_SUPPORT" ]; then
-    source "$VTERM_BASH_SUPPORT"
-fi
+[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/bash"
+
 

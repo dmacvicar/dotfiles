@@ -315,37 +315,16 @@
   :custom
   (shell-pop-universal-key "C-t"))
 
-(use-package vterm
+;; terminal emulator (replaces vterm, in pure-lisp)
+;; provides eat-project to start a shell in current project
+(use-package eat
   :defer t
-  :custom
-  (vterm-timer-delay nil)
-  (vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=no"))
-
-(defun project-vterm ()
-  "Start vterm in the current project's root directory.
-If a buffer already exists for running vterm in the project's root,
-switch to it.  Otherwise, create a new vterm buffer."
-  (interactive)
-  (defvar vterm-buffer-name)
-  (let* ((directory (project-root (project-current t)))
-         (bufname (project-prefixed-buffer-name "vterm"))
-         (buf (get-buffer bufname))
-         (thismode (and buf (with-current-buffer buf major-mode))))
-    ;; create if no such vterm buffer exists
-    (when (or (not buf) (not (eq thismode 'vterm-mode)))
-      (setq buf (generate-new-buffer bufname))
-      (with-current-buffer buf
-        (require 'vterm)
-        (vterm-mode)))
-    ;; check the current directory
-    (with-current-buffer buf
-      (when vterm-copy-mode
-        (vterm-copy-mode-done nil))
-      (vterm-insert (concat "cd " directory))
-      (vterm-send-return))
-    ;; set to this vterm buf
-    (switch-to-buffer buf)))
-
+  :elpaca (:host nil :type git
+           :repo "https://codeberg.org/akib/emacs-eat"
+           :files ("*.el" "dir"
+                   ("integration" "integration/*")
+                   "*.info" "*.texi"
+                   "*.ti" ("e" "e/*"))))
 ;; theme
 (use-package modus-themes
   :custom
