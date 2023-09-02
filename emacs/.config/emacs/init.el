@@ -1112,8 +1112,10 @@
           (message "importing %s" ics-file-path)
           (with-temp-buffer
             (insert-file-contents ics-file-path)
-            (if (file-exists-p diary-file-path)
-                (delete-file diary-file-path t))
+            (when (file-exists-p diary-file-path)
+                (message "deleting old diary file")
+                (delete-file diary-file-path t)
+                (with-temp-buffer (write-file diary-file-path)))
             (icalendar-import-buffer diary-file-path t t))
           (insert (format "#include \"%s\"\n" diary-file-path)))))))
 
