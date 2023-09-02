@@ -779,6 +779,14 @@
   :after org
   :init
   (advice-add 'org-agenda :before 'duncan/generate-diary-from-calendars)
+  (advice-add 'org-agenda-exit :after
+            (lambda (&rest _)
+              (message "closing all diaries opened by agenda")
+              (dolist (buffer (buffer-list))
+                (with-current-buffer buffer
+                  ; stupid org-agenda opens a generated diary as DCL mode
+                  (when (or (eq major-mode 'diary-mode) (eq major-mode 'dcl-mode))
+                    (kill-buffer buffer))))))
   :custom
   (org-agenda-include-diary t))
 
