@@ -716,6 +716,7 @@
 
 ;; org mode
 (use-package org
+  :elpaca nil
   :defer t
   :hook
   ;; handwriten style
