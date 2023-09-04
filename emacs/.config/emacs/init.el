@@ -680,6 +680,8 @@
   :defer t)
 (use-package nix-mode
   :defer t)
+(use-package lua-mode
+  :defer t)
 
 ;; browse HN
 (use-package hackernews
