@@ -2,6 +2,8 @@ local wezterm = require 'wezterm'
 local config = {}
 config = wezterm.config_builder()
 
+config.use_fancy_tab_bar = false
+
 config.colors = {
   -- Modus Operandi Tinded
   -- https://protesilaos.com/emacs/modus-themes-colors
