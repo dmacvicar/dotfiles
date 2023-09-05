@@ -121,6 +121,43 @@ keys = {
     mods = 'LEADER',
     action = wezterm.action.ReloadConfiguration,
   },
+  {
+     key = '[',
+    mods = 'LEADER',
+    action = wezterm.action.ActivateCopyMode,
+  },
+  {
+     key = 'p',
+    mods = 'LEADER',
+    action = wezterm.action.PasteFrom 'Clipboard',
+  },
+}
+
+-- tmux emacs style copy paste
+config.key_tables = {
+   copy_mode = {
+      {
+        key = 'w',
+        mods = 'ALT',
+        action = wezterm.action.Multiple {
+          wezterm.action.CopyTo 'ClipboardAndPrimarySelection',
+          wezterm.action.ClearSelection,
+          wezterm.action.CopyMode 'Close',
+        },
+      },
+      { key = 'Escape', mods = 'NONE', action = wezterm.action.CopyMode 'Close' },
+      { key = 'a', mods = 'CTRL', action = wezterm.action.CopyMode 'MoveToStartOfLineContent' },
+      { key = 'e', mods = 'CTRL', action = wezterm.action.CopyMode 'MoveToEndOfLineContent' },
+      { key = 'LeftArrow', mods = 'NONE', action = wezterm.action.CopyMode 'MoveLeft' },
+      { key = 'DownArrow', mods = 'NONE', action = wezterm.action.CopyMode 'MoveDown' },
+      { key = 'UpArrow', mods = 'NONE', action = wezterm.action.CopyMode 'MoveUp' },
+      { key = 'RightArrow', mods = 'NONE', action = wezterm.action.CopyMode 'MoveRight' },
+      {
+        key = 'Space',
+        mods = 'CTRL',
+        action = wezterm.action.CopyMode { SetSelectionMode = 'Cell' },
+      },
+   },
 }
 
 -- set a shortcut leader-num for all tabs
