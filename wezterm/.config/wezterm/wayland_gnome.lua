@@ -20,6 +20,16 @@ function mod.apply_to_config(config)
     config.xcursor_size = tonumber(stdout)
   end
 
+  local success, stdout, stderr = gsettings("monospace-font-name")
+  if success then
+     sz, _ = stdout:gsub("'(.+) (%d+)'\n", "%2")
+     config.font_size = tonumber(sz)
+     config.font = wezterm.font_with_fallback {
+        stdout:gsub("'(.+) (%d+)'\n", "%1"),
+        'Source Code Pro',
+     }
+  end
+
   config.enable_wayland = true
 
   if config.enable_wayland and os.getenv("WAYLAND_DISPLAY") then

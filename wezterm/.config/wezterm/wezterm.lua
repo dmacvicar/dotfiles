@@ -40,12 +40,6 @@ config.colors = {
 config.enable_scroll_bar = false
 config.term = "xterm-256color"
 
-config.font = wezterm.font_with_fallback {
-  'SauceCodePro Nerd Font Mono',
-  'Source Code Pro',
-}
-config.font_size = 13.0
-
 config.leader = { key = 'b', mods = 'CTRL', timeout_milliseconds = 1000 }
 keys = {
   {
