@@ -43,6 +43,28 @@ config.term = "xterm-256color"
 config.leader = { key = 'b', mods = 'CTRL', timeout_milliseconds = 1000 }
 keys = {
   {
+    key = '+',
+    mods = 'CTRL',
+    action = wezterm.action.DisableDefaultAssignment,
+  },
+  {
+    key = '-',
+    mods = 'CTRL',
+    action = wezterm.action.DisableDefaultAssignment,
+  },
+  -- I use this one in emacs. It is bound by default to fullscreen in wezterm
+  {
+    key = 'Enter',
+    mods = 'META',
+    action = wezterm.action.DisableDefaultAssignment,
+  },
+  -- move fullscreen to F11 like rest of gnome
+  {
+    key = 'F11',
+    mods = 'NONE',
+    action = wezterm.action.ToggleFullScreen,
+  },
+  {
     key = '|',
     mods = 'LEADER',
     action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
