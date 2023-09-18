@@ -23,7 +23,8 @@ if exists direnv; then
     eval "$(direnv hook bash)"
 fi
 
-if exists starship && ! [[ -v INSIDE_EMACS ]]; then
+# avoid enabling starship in emacs terminal unless in eat
+if exists starship && [[ -z "$INSIDE_EMACS" || "$INSIDE_EMACS" =~ .*eat.* ]]; then
     eval "$(starship init bash)"
 fi
 
