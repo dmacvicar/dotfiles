@@ -317,6 +317,8 @@
 
 ;; terminal emulator (replaces vterm, in pure-lisp)
 ;; provides eat-project to start a shell in current project
+;; if TERM is not functional, install tic (terminfo compiler) from
+;; ncurses devel and run eat-compile-termifo
 (use-package eat
   :defer t
   :elpaca (:host nil :type git
