@@ -28,6 +28,12 @@ if exists starship && [[ -z "$INSIDE_EMACS" || "$INSIDE_EMACS" =~ .*eat.* ]]; th
     eval "$(starship init bash)"
 fi
 
+if [[ "$XDG_CURRENT_DESKTOP" =~ .*KDE.* ]]; then
+    for f in $HOME/.config/plasma-workspace/env/*; do
+        test -f "$f" && source "$f"
+    done
+fi
+
 [ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/bash"
 
 
