@@ -1259,10 +1259,6 @@
 ;;my favourite contacts - these will be put at front of list
 (setq dmacvicar/contact-file "~/.favorite-contacts.txt")
 
-(use-package pulseaudio-control
-  :defer t
-  :commands pulseaudio-control-select-sink-by-name)
-
 (use-package mastodon
   :defer t
   :elpaca (:host nil :type git :repo "https://codeberg.org/martianh/mastodon.el.git")
