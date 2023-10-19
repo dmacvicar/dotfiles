@@ -83,7 +83,9 @@
 			   (:eval
 			    (if (buffer-file-name)
 				(abbreviate-file-name (buffer-file-name))
-			      "%b"))))
+			    "%b"))))
+(set-charset-priority 'unicode)
+(prefer-coding-system 'utf-8-unix)
 
 (defvar elpaca-installer-version 0.5)
 (defvar elpaca-directory (expand-file-name "emacs/elpaca/" (xdg-cache-home)))
