@@ -130,15 +130,12 @@ keys = {
     action = wezterm.action.ActivateCopyMode,
   },
   {
-     key = 'c',
-     mods = 'CTRL',
-     action = wezterm.action.ActivateKeyTable {
-        name = 'emacs_like_ctr_c',
-        one_shot = true,
-     },
+     key = 'e',
+     mods = 'LEADER|CTRL',
+     action = wezterm.action.ActivateCopyMode,
   },
   {
-     key = 'p',
+    key = 'p',
     mods = 'LEADER',
     action = wezterm.action.PasteFrom 'Clipboard',
   },
@@ -169,16 +166,6 @@ table.insert(copy_mode, { key = 'j', mods = 'CTRL',
 
 config.key_tables = {
    copy_mode = copy_mode,
-   -- simulate emacs eat ctrl-c ctrl-e and ctrl-c ctrl-e to switch to copy mode
-   emacs_like_ctr_c = {
-    {
-       key = 'e',
-       mods = 'CTRL',
-       action = wezterm.action.ActivateCopyMode,
-    },
-    -- Cancel the mode by pressing escape
-    { key = 'Escape', action = 'PopKeyTable' },
-   },
 }
 
 -- set a shortcut leader-num for all tabs
