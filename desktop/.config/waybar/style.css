@@ -1,13 +1,13 @@
 
-.panel {
+* {
     border: none;
     border-radius: 0;
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-    font-size: 13px;
+	font-family: Noto Sans ExtraCondensed Display Thin;
+    font-size: 13pt;
     min-height: 0;
 }
 
-window.panel#waybar {
+window#waybar {
 	background-color: transparent;
 	background-color: #c9b9b0;
     border-bottom: 3px solid #595959;
@@ -16,68 +16,75 @@ window.panel#waybar {
     transition-duration: .5s;
 }
 
-.panel.modules-right {
+.modules-right {
     box-shadow: inset -2px -2px #ffffff, inset 1px 1px #0a0a0a, inset -3px -3px #dfdfdf, inset 2px 2px #808080;
-    margin: 3px 0px 5px 0px;
     padding: 0px 10px 0px 10px;
+	margin: 3px 0px 5px 0px;
 }
 
-.panel .modules-right * {
-    margin: 0px 2px 0px 2px;
-}
+ .modules-right * {
+	margin: 0px 5px 0px 5px;
+ }
 
-.panel tooltip {
+ tooltip {
   background: #efe9dd;
   border: 1px solid #9f9690;
 }
 
-.panel tooltip label {
+ tooltip label {
   color: black;
 }
 
-.panel#taskbar {
+#taskbar {
     padding-left: 5px;
 }
 
-.panel#clock {
+#clock {
     margin-right: 5px;
 }
 
-.panel#taskbar button {
+#taskbar button {
+	border-radius: 15%;
     box-shadow: inset -2px -2px #0a0a0a,inset 1px 1px #fff,inset -3px -3px grey,inset 2px 2px #dfdfdf;
     margin: 3px 0px 5px 0px;
 }
 
-.panel#taskbar button.active {
+#taskbar button.active {
 
 }
 
-.panel#taskbar button.minimized {
+#taskbar button.minimized {
 }
 
-.panel#taskbar button.maximized {
-
-}
-
-.panel#taskbar button.fullscreen {
+#taskbar button.maximized {
 
 }
 
-.panel#tray {
-    margin: 3px 10px 5px 10px;
+#taskbar button.fullscreen {
+
+}
+
+#tray {
+    margin: 0px 0px 0px 0px;
     padding: 0px 5px 0px 5px;
     color: black;
 }
 
-.panel#bluetooth {
+#bluetooth {
     color: blue;
 }
 
-.panel#custom-launcher {
+#custom-launcher.start {
     color: #2a5045;
     font-size: 20pt;
 
     padding: 0px 20px 0px 10px;
     margin: 3px 5px 5px 5px;
     box-shadow: inset -2px -2px #0a0a0a,inset 1px 1px #fff,inset -3px -3px grey,inset 2px 2px #dfdfdf;
+	border-radius: 15%;
+}
+
+#custom-launcher.home {
+    color: #2a5045;
+    margin: 0px 10px 0px 10px;
 }

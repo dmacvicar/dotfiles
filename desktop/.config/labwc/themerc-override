@@ -1,6 +1,6 @@
 # modus operandi tinted colors
-
-window.active.title.bg.color: #193668
+window.active.title.bg.color: #7c318f
+#window.active.title.bg.color: #f3d000
 window.active.label.text.color: #fbf7f0
 window.inactive.title.bg.color: #595959
 

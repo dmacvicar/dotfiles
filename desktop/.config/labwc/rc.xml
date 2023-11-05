@@ -6,9 +6,9 @@
   <theme>
     <name></name>
     <cornerRadius>3</cornerRadius>
-    <font name="sans" size="10" />
+    <font name="NotoSans Nerd Font" size="10" />
   </theme>
-  <desktops>
+  <desktops number="4">
       <popupTime>1000</popupTime>
       <names>
         <name>Workspace 1</name>
@@ -29,7 +29,7 @@
       <action name="NextWindow" />
     </keybind>
     <keybind key="A-F2">
-      <action name="Execute" command="wofi --show drun" />
+      <action name="Execute" command="wofi --show drun -I" />
     </keybind>
     <keybind key="XF86_MonBrightnessUp">
       <action name="Execute" command="brightnessctl set +10%" />
@@ -58,7 +58,7 @@
       </mousebind>
     </context>
   </mouse>
-  <windowSwitcher>
+  <windowSwitcher preview="yes">
   <fields>
     <field content="identifier" width="25%"/>
   </fields>
