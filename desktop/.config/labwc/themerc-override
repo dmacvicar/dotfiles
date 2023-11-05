@@ -1,0 +1,12 @@
+# modus operandi tinted colors
+
+window.active.title.bg.color: #193668
+window.active.label.text.color: #fbf7f0
+window.inactive.title.bg.color: #595959
+
+window.active.button.max.unpressed.image.color: #c9b9b0
+
+osd.bg.color: #c9b9b0
+osd.border.width: 1
+osd.border.color: #595959
+osd.label.text.color: #000000

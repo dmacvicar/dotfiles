@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<labwc_config>
+  <core>
+    <gap>10</gap>
+  </core>
+  <theme>
+    <name></name>
+    <cornerRadius>3</cornerRadius>
+    <font name="sans" size="10" />
+  </theme>
+  <desktops>
+      <popupTime>1000</popupTime>
+      <names>
+        <name>Workspace 1</name>
+        <name>Workspace 2</name>
+        <name>Workspace 3</name>
+        <name>Workspace 4</name>
+      </names>
+  </desktops>
+  <keyboard>
+    <!-- Use a different terminal emulator -->
+    <keybind key="W-Return">
+      <action name="Execute" command="wezterm" />
+    </keybind>
+	<keybind key="W-l">
+      <action name="Execute" command="~/.config/labwc/scripts/lock.sh" />
+    </keybind>
+    <keybind key="A-Tab">
+      <action name="NextWindow" />
+    </keybind>
+    <keybind key="A-F2">
+      <action name="Execute" command="wofi --show drun" />
+    </keybind>
+    <keybind key="XF86_MonBrightnessUp">
+      <action name="Execute" command="brightnessctl set +10%" />
+    </keybind>
+    <keybind key="XF86_MonBrightnessDown">
+      <action name="Execute" command="brightnessctl set 10%-" />
+    </keybind>
+    <keybind key="XF86_AudioLowerVolume">
+      <action name="Execute" command="amixer sset Master 5%-" />
+    </keybind>
+    <keybind key="XF86_AudioRaiseVolume">
+      <action name="Execute" command="amixer sset Master 5%+" />
+    </keybind>
+    <keybind key="XF86_AudioMute">
+      <action name="Execute" command="amixer sset Master toggle" />
+    </keybind>
+	<keybind key="W-Print">
+      <action name="Execute" command="~/.config/labwc/scripts/screenshot.sh" />
+    </keybind>
+  </keyboard>
+  <mouse>
+    <default />
+    <context name="Root">
+      <mousebind button="Right" action="Press">
+        <action name="ShowMenu" menu="some-custom-menu" />
+      </mousebind>
+    </context>
+  </mouse>
+  <windowSwitcher>
+  <fields>
+    <field content="identifier" width="25%"/>
+  </fields>
+  </windowSwitcher>
+</labwc_config>

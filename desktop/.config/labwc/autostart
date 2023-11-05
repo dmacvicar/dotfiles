@@ -1,0 +1,15 @@
+swaybg -c '#008081' >/dev/null 2>&1 &
+
+# autoconfigure outputs
+kanshi >/dev/null 2>&1 &
+
+waybar >/dev/null 2>&1 &
+
+# notifications
+mako >/dev/null 2>&1 &
+
+swayidle -w \
+	timeout 300 "$HOME/.config/labwc/scripts/lock.sh' \
+	timeout 600 'wlopm --off \*' \
+	resume 'wlopm --on \*' \
+	before-sleep '$HOME/.config/labwc/scripts/lock.sh' >/dev/null 2>&1 &

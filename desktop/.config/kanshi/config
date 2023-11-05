@@ -1,0 +1,9 @@
+profile "roaming" {
+        output "eDP-1" enable
+}
+
+profile "docked" {
+        output "DP-5" mode 2560x1440 position 0,0
+        output "DP-4" mode 2560x1440 position 2560,0
+        output "eDP-1" disable
+}

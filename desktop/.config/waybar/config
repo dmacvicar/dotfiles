@@ -1,0 +1,100 @@
+[
+  {
+    "name": "panel",
+    //"output": "eDP-1", 
+	"output": ["eDP-1", "DP-4"],
+    "layer": "top",
+    "position": "top",
+    //"height": 20,
+    //"spacing": 4, // Gaps between modules (4px)
+    "modules-left": ["custom/launcher", "wlr/taskbar", "wlr/workspaces"],
+    "modules-center": [],
+    "modules-right": ["bluetooth", "pulseaudio", "network", "battery", "tray", "clock"],
+    "wlr/taskbar": {
+		"format": "{icon}",
+        "on-click": "minimize-raise",
+		"all-outputs": true,
+    },
+    "tray": {
+        "icon-size": 48,
+        //"spacing": 10,
+		//"show-passive-items": true
+    },
+    "clock": {
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        //"format": "{capacity}% {icon}",
+        //"format-charging": "{capacity}% ",
+        //"format-plugged": "{capacity}% ",
+        //"format-alt": "{time} {icon}",
+        "format": "{icon}",
+        "format-charging": "",
+        "format-plugged": "",
+        "format-alt": "{time}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "wlr/workspaces": {
+        "format": "{icon}",
+        "on-click": "activate",
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "urgent": "",
+            "active": "",
+            "default": ""
+        },
+        "sort-by-number": true
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{essid} ({signalStrength}%) {ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+		"on-click": "networkmanager_dmenu"
+    },
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{icon}",
+        "format-bluetooth": "{icon}",
+        "format-bluetooth-muted": " {icon}",
+        "format-muted": " {icon}",
+        "format-source": "",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "bluetooth": {
+    	"format": "",
+        "format-disabled": "",
+  	    "format-connected": " ({num_connections})",
+        "tooltip-format": "{controller_alias}\t{controller_address}",
+	    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+	    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+		"on-click": "env DMENU_BLUETOOTH_LAUNCHER=fuzzel ~/.config/labwc/scripts/dmenu-bluetooth --connected-icon "
+     },
+     //"custom/launcher": {
+     //     "format": "\uf314"
+     //}
+}
+]
