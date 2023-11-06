@@ -64,10 +64,6 @@ window#waybar {
     color: black;
 }
 
-#bluetooth {
-    color: blue;
-}
-
 #custom-launcher.start {
     color: white;
     font-size: 20pt;
