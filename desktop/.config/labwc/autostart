@@ -1,4 +1,4 @@
-swaybg -c '#008081' >/dev/null 2>&1 &
+swaybg -i ~/.wallpaper -c '#008081' >/dev/null 2>&1 &
 
 # autoconfigure outputs
 kanshi >/dev/null 2>&1 &
