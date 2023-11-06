@@ -8,17 +8,13 @@
 }
 
 window#waybar {
-	background-color: transparent;
-	background-color: #c9b9b0;
-    border-bottom: 3px solid #595959;
-    color: black;
+	background-color: rgba(0, 0, 0, 0.2);
+    color: white;
     transition-property: background-color;
     transition-duration: .5s;
 }
 
 .modules-right {
-    box-shadow: inset -2px -2px #ffffff, inset 1px 1px #0a0a0a, inset -3px -3px #dfdfdf, inset 2px 2px #808080;
-    padding: 0px 10px 0px 10px;
 	margin: 3px 0px 5px 0px;
 }
 
@@ -44,8 +40,6 @@ window#waybar {
 }
 
 #taskbar button {
-	border-radius: 15%;
-    box-shadow: inset -2px -2px #0a0a0a,inset 1px 1px #fff,inset -3px -3px grey,inset 2px 2px #dfdfdf;
     margin: 3px 0px 5px 0px;
 }
 
@@ -75,16 +69,19 @@ window#waybar {
 }
 
 #custom-launcher.start {
-    color: #2a5045;
+    color: white;
     font-size: 20pt;
 
     padding: 0px 20px 0px 10px;
     margin: 3px 5px 5px 5px;
-    box-shadow: inset -2px -2px #0a0a0a,inset 1px 1px #fff,inset -3px -3px grey,inset 2px 2px #dfdfdf;
-	border-radius: 15%;
 }
 
 #custom-launcher.home {
-    color: #2a5045;
+    color: white;
+    margin: 0px 10px 0px 10px;
+}
+
+#custom-launcher.yubikey {
+    color: white;
     margin: 0px 10px 0px 10px;
 }

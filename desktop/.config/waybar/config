@@ -4,7 +4,7 @@
 		"output": ["eDP-1", "DP-4"],
 		"layer": "top",
 		"position": "bottom",
-		"modules-left": ["custom/launcher#start", "custom/launcher#home", "wlr/taskbar", "wlr/workspaces"],
+		"modules-left": ["custom/launcher#start", "custom/launcher#home", "custom/launcher#yubikey", "wlr/taskbar", "wlr/workspaces"],
 		"modules-center": [],
 		"modules-right": ["bluetooth", "pulseaudio", "network#eth", "network#wifi", "network#vpn", "network#home", "battery", "tray", "custom/launcher#clipboard", "clock"],
 		"wlr/taskbar": {
@@ -119,7 +119,10 @@
 		"custom/launcher#home": {
 			"format": "\udb84\udcb5",
 			"on-click": "pcmanfm-qt"
+		},
+		"custom/launcher#yubikey": {
+			"format": "\udb80\udf06",
+			"on-click": "python3 ~/.config/labwc/scripts/yubikey-oath-dmenu.py --clipboard --menu-cmd 'wofi --dmenu -i'"
 		}
-
 	}
 ]
