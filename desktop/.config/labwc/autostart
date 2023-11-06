@@ -10,6 +10,8 @@ mako >/dev/null 2>&1 &
 
 wl-paste --watch cliphist store 2>&1 &
 
+nextcloud --background 2>&1 &
+
 swayidle -w \
 	timeout 300 "$HOME/.config/labwc/scripts/lock.sh' \
 	timeout 600 'wlopm --off \*' \
