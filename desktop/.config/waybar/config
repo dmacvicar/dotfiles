@@ -122,7 +122,7 @@
 		},
 		"custom/launcher#yubikey": {
 			"format": "\udb80\udf06",
-			"on-click": "python3 ~/.config/labwc/scripts/yubikey-oath-dmenu.py --clipboard --menu-cmd 'wofi --dmenu -i'"
+			"on-click": "~/.config/labwc/scripts/otp.sh"
 		}
 	}
 ]
