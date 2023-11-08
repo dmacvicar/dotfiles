@@ -515,6 +515,7 @@
                            (expand-file-name  "emacs/lsp" (xdg-cache-home))))
   (lsp-auto-guess-root t)
   (lsp-solargraph-use-bundler t)
+  (lsp-file-watch-threshold 2000)
   :hook 'lsp-ui-mode)
 
 (use-package lsp-ui
