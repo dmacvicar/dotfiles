@@ -110,11 +110,11 @@
 		},
 		"custom/launcher#start": {
 			"format": "\uf314",
-			"on-click": "wofi --show drun -I --location bottom_left"
+			"on-click": "~/.config/labwc/scripts/start.sh"
 		},
 		"custom/launcher#clipboard": {
 			"format": "\udb80\udd4c",
-			"on-click": "cliphist list | wofi --dmenu --location bottom_right | cliphist decode | wl-copy"
+			"on-click": "~/.config/labwc/scripts/clipboard.sh"
 		},
 		"custom/launcher#home": {
 			"format": "\udb84\udcb5",
