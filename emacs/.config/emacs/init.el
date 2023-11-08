@@ -148,6 +148,8 @@
 
 ;; copy from clipboard in terminal
 (use-package xclip
+  :custom
+  (xclip-method 'wl-copy)
   :init
   (xclip-mode))
 
