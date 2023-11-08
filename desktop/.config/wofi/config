@@ -1,1 +1,15 @@
 single_click=true
+mode=drun
+filter_rate=50
+insensitive=true
+allow-markup=true
+term=wezterm
+layer=overlay
+allow_images=true
+image_size=32
+# Position
+halign=fill
+orientation=vertical
+content_halign=fill
+# This hide executable actions
+no_actions=true
