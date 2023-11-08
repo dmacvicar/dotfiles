@@ -106,7 +106,7 @@
 			"tooltip-format": "{controller_alias}\t{controller_address}",
 			"tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
 			"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-			"on-click": "~/.config/labwc/scripts/dmenu-bluetooth --connected-icon "
+			"on-click": "~/.config/labwc/scripts/helpers/dmenu-bluetooth --connected-icon "
 		},
 		"custom/launcher#start": {
 			"format": "\uf314",
