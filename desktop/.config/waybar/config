@@ -4,9 +4,9 @@
 		"output": ["eDP-1", "DP-4"],
 		"layer": "top",
 		"position": "top",
-		"modules-left": ["custom/launcher#start", "custom/launcher#home", "custom/launcher#yubikey", "wlr/taskbar", "wlr/workspaces"],
-		"modules-center": [],
-		"modules-right": ["bluetooth", "pulseaudio", "network#eth", "network#wifi", "network#vpn", "network#home", "battery", "tray", "custom/launcher#clipboard", "clock"],
+		"modules-left": ["custom/start", "custom/home", "custom/otp"],
+		"modules-center": ["wlr/taskbar", "wlr/workspaces"],
+		"modules-right": ["image#albumart", "mpris", "bluetooth", "pulseaudio", "network#eth", "network#wifi", "network#vpn", "network#home", "battery", "tray", "custom/clipboard", "clock"],
 		"wlr/taskbar": {
 			"format": "{icon}",
 			"on-click": "minimize-raise",
@@ -99,6 +99,18 @@
 			},
 			"on-click": "pavucontrol"
 		},
+		"mpris": {
+		    	"format": "{player_icon}",
+				"format-paused": "{status_icon}",
+				"player-icons": {
+				"default": "▶",
+				"mpv": "🎵"
+			},
+			"status-icons": {
+			"paused": "⏸"
+			},
+			// "ignored-players": ["firefox"]
+		},
 		"bluetooth": {
     		"format": "",
 			"format-disabled": "",
@@ -108,21 +120,26 @@
 			"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
 			"on-click": "~/.config/labwc/scripts/helpers/dmenu-bluetooth --connected-icon "
 		},
-		"custom/launcher#start": {
-			"format": "\uf314",
-			"on-click": "~/.config/labwc/scripts/start.sh"
+		"custom/start": {
+			"format": "\uf314"
+			//on-click": "~/.config/labwc/scripts/start.sh"
 		},
-		"custom/launcher#clipboard": {
+		"custom/clipboard": {
 			"format": "\udb80\udd4c",
 			"on-click": "~/.config/labwc/scripts/clipboard.sh"
 		},
-		"custom/launcher#home": {
+		"custom/home": {
 			"format": "\udb84\udcb5",
 			"on-click": "pcmanfm-qt"
 		},
-		"custom/launcher#yubikey": {
+		"custom/otp": {
 			"format": "\udb80\udf06",
 			"on-click": "~/.config/labwc/scripts/otp.sh"
-		}
+		},
+		"image#albumart": {
+		     "exec":"~/.config/waybar/scripts/albumart.sh",
+			 "size": 32,
+		     "interval": 30,  
+	    }
 	}
 ]

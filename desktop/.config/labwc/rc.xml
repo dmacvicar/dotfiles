@@ -6,17 +6,10 @@
   <theme>
     <name></name>
     <cornerRadius>3</cornerRadius>
-    <font name="NotoSans Nerd Font" size="10" />
+    <font name="Noto Sans Display" size="10" />
   </theme>
-  <desktops number="4">
-      <popupTime>1000</popupTime>
-      <names>
-        <name>Workspace 1</name>
-        <name>Workspace 2</name>
-        <name>Workspace 3</name>
-        <name>Workspace 4</name>
-      </names>
-  </desktops>
+  <desktops number="4" />
+  <!--margin top="20" bottom="20" left="20" right="20" output="" /-->
   <keyboard>
     <!-- Use a different terminal emulator -->
     <keybind key="W-Return">

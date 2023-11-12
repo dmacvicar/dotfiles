@@ -1,4 +1,7 @@
-swaybg -i ~/.wallpaper -c '#008081' >/dev/null 2>&1 &
+swaybg -i ~/.wallpaper -c '#008899' >/dev/null 2>&1 &
+
+systemctl --user import-environment WAYLAND_DISPLAY & dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE &
+
 
 # autoconfigure outputs
 kanshi >/dev/null 2>&1 &
