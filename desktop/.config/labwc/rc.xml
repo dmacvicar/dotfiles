@@ -53,7 +53,7 @@
   </mouse>
   <windowSwitcher preview="yes">
   <fields>
-    <field content="identifier" width="25%"/>
+    <field content="title" width="100%"/>
   </fields>
   </windowSwitcher>
 </labwc_config>
