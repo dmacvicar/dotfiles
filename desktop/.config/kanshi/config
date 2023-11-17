@@ -3,7 +3,7 @@ profile "roaming" {
 }
 
 profile "docked" {
-        output "DP-5" mode 2560x1440 position 0,0
-        output "DP-4" mode 2560x1440 position 2560,0
+        output "LG Electronics LG HDR QHD 105NTSU2K566" mode 2560x1440 position 0,0
+        output "LG Electronics LG HDR QHD 105NTUW2K574" mode 2560x1440 position 2560,0
         output "eDP-1" disable
 }

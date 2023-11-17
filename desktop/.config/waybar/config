@@ -1,7 +1,7 @@
 [
 	{
 		"name": "panel",
-		"output": ["eDP-1", "DP-4"],
+		"output": ["eDP-1", "LG Electronics LG HDR QHD 105NTUW2K574"],
 		"layer": "top",
 		"position": "top",
 		"modules-left": ["custom/start", "custom/home", "custom/otp"],
