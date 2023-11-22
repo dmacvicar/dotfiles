@@ -88,7 +88,7 @@
 (prefer-coding-system 'utf-8-unix)
 
 (defvar elpaca-installer-version 0.6)
-(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-directory (expand-file-name "emacs/elpaca/" (xdg-cache-home)))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
