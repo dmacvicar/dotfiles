@@ -593,11 +593,11 @@
 
  ; `M-x combobulate' (or `C-c o o') to start using Combobulate
 (use-package treesit
-  :defer t
   :init
   (setq =treesit-grammar-cache-directory (convert-standard-filename
-                                         (expand-file-name  "emacs/tree-sitter" (xdg-cache-home))))
-  (add-to-list 'treesit-extra-load-path =treesit-grammar-cache-directory)
+                                          (expand-file-name  "emacs/tree-sitter" (xdg-cache-home))))
+  (when (boundp 'treesit-extra-load-path)
+    (add-to-list 'treesit-extra-load-path =treesit-grammar-cache-directory))
   :config
   (advice-add #'treesit--install-language-grammar-1 :around
 	          (lambda (fn out-dir &rest args)
@@ -605,15 +605,13 @@
   :elpaca nil)
 
 (use-package treesit-auto
-  :demand t
-  :init
-  (setq treesit-auto-install-all t)
+  :custom
+  (treesit-auto-install 'prompt)
   ; those are broken
-  (setq treesit-auto-opt-out-list
+  (treesit-auto-opt-out-list
         '(markdown protobuf ruby r yaml))
   :config
-  (global-treesit-auto-mode)
-  (treesit-auto-install-all))
+  (global-treesit-auto-mode))
 
 (use-package combobulate
   :defer t
