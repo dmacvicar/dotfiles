@@ -1249,11 +1249,7 @@
   (osm-server 'default)
   (osm-copyright t)
   (osm-tile-directory (convert-standard-filename
-                       (expand-file-name  "emacs/osm/" (xdg-cache-home))))
-  :init
-  ;; Load Org link support
-  (with-eval-after-load 'org
-    (require 'osm-ol)))
+                       (expand-file-name  "emacs/osm/" (xdg-cache-home)))))
 
 ;; contacts completion
 ;; http://pragmaticemacs.com/emacs/tweaking-email-contact-completion-in-mu4e/
