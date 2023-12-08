@@ -179,7 +179,13 @@ end
 
 config.keys = keys
 
-local wayland_gnome = require 'wayland_gnome'
-wayland_gnome.apply_to_config(config)
+-- Not using gnome lately
+--local wayland_gnome = require 'wayland_gnome'
+--wayland_gnome.apply_to_config(config)
+
+config.font_size = 12.0
+config.font = wezterm.font_with_fallback {
+   'Fira Code',
+}
 
 return config
