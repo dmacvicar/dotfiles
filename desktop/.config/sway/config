@@ -1,0 +1,167 @@
+exec dbus-update-activation-environment --systemd SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
+
+set $mod Mod4
+set $lock ~/.local/scripts/lock.sh
+set $screenshot ~/.local/scripts/screenshot.sh
+set $wallpaper ~/.wallpaper
+set $term wezterm
+set $menu wofi --show drun -I
+
+set $lmonitor "LG Electronics LG HDR QHD 105NTSU2K566"
+set $rmonitor "LG Electronics LG HDR QHD 105NTUW2K574"
+set $laptop "eDP-1"
+
+output $lmonitor pos 0 0 res 2560x1440
+output $rmonitor pos 2560 0 res 2560x1440
+output $laptop pos 0 0 res 1920x1080
+output * bg $wallpaper fill
+
+bindswitch --reload --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off output $laptop enable
+
+exec_always ~/.config/sway/scripts/clamshell.sh
+
+input * {
+    xkb_layout "de,es,us"
+    xkb_options "caps:ctrl_modifier"
+}
+
+exec --no-startup-id mako
+exec --no-startup-id nextcloud --background
+exec --no-startup-id wl-paste --watch cliphist store --no-persist
+
+# Shortcuts
+bindsym $mod+d exec $menu
+bindsym $mod+Return exec $term
+bindsym $mod+Print exec $screenshot
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+q kill
+bindsym $mod+b splith
+bindsym $mod+v splitv
+bindsym $mod+l exec $lock
+
+# Move your focus around
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# _move_ the focused window with the same, but add Shift
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# default location for workspaces
+workspace 1 outputs $lmonitor $laptop
+workspace 2 outputs $rmonitor $laptop
+workspace 3 outputs $lmonitor $laptop
+workspace 4 outputs $rmonitor $laptop
+
+bindsym $mod+Next next_on_output
+bindsym $mod+Prior workspace prev_on_output
+
+# after that, move them to current output
+bindsym $mod+1 [workspace="^1$"] move workspace to output current; workspace 1
+bindsym $mod+2 [workspace="^2$"] move workspace to output current; workspace 2
+bindsym $mod+3 [workspace="^3$"] move workspace to output current; workspace 3
+bindsym $mod+4 [workspace="^4$"] move workspace to output current; workspace 4
+
+# after that, move them to current output
+bindsym $mod+F1 [workspace="^F1$"] move workspace to output current; workspace F1
+bindsym $mod+F2 [workspace="^F2$"] move workspace to output current; workspace F2
+bindsym $mod+F3 [workspace="^F3$"] move workspace to output current; workspace F3
+bindsym $mod+F4 [workspace="^F4$"] move workspace to output current; workspace F4
+
+bindsym $mod+Shift+1    move container to workspace 1
+bindsym $mod+Shift+2    move container to workspace 2
+bindsym $mod+Shift+3    move container to workspace 3
+bindsym $mod+Shift+4    move container to workspace 4
+
+bindsym $mod+Shift+F1   move container to workspace F1
+bindsym $mod+Shift+F2   move container to workspace F2
+bindsym $mod+Shift+F3   move container to workspace F3
+bindsym $mod+Shift+F4   move container to workspace F4
+
+workspace 1
+focus output $rmonitor
+
+# Window borders
+default_border pixel 1
+default_floating_border normal
+hide_edge_borders smart
+
+smart_gaps on
+gaps inner 10
+
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+workspace_layout tabbed
+
+bindsym $mod+f fullscreen
+
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+space floating toggle
+# Swap focus between the tiling area and the floating area
+bindsym $mod+space focus mode_toggle
+
+# move focus to the parent container
+bindsym $mod+a focus parent
+
+# Modes
+mode "resize" {
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+set $mode_system System: (l) lock, (e) logout, (s) suspend, (r) reboot, (S) shutdown, (R) UEFI
+mode "$mode_system" {
+    bindsym l exec $lock, mode "default"
+    bindsym e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+    bindsym s exec --no-startup-id systemctl suspend, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+    bindsym Shift+r exec --no-startup-id systemctl reboot --firmware-setup, mode "default"
+
+    # return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Shift+e mode "$mode_system"
+
+exec_always ~/.config/waybar/waybar.sh
+
+for_window [title = ".*matterhorn.*"] {
+  border pixel 100
+  resize set width 20 ppt height 20 ppt
+  move position center
+}
+
+for_window [title = ".*Tor.*"] {
+  resize set width 20 ppt height 20 ppt
+  move position center
+}
+
+
+for_window [window_role = "pop-up"] floating enable
+for_window [window_role = "bubble"] floating enable
+for_window [window_role = "dialog"] floating enable
+for_window [window_type = "dialog"] floating enable
+for_window [window_role = "task_dialog"] floating enable
+for_window [window_type = "menu"] floating enable
+
+for_window [title = "About Mozilla Firefox"] floating enable
+for_window [window_role = "About"] floating enable
+for_window [app_id="firefox" title="Library"] floating enable, border pixel 1, sticky enable
+for_window [title = "Firefox - Sharing Indicator"] kill
+for_window [title = "Firefox — Sharing Indicator"] kill
+
+exec gnome-keyring-daemon --start --components=secrets
+exec export $(gnome-keyring-daemon)
