@@ -3,6 +3,11 @@ local config = {}
 config = wezterm.config_builder()
 
 config.use_fancy_tab_bar = false
+-- we don't need tabs if using sway, most likely we will
+-- use say splits
+if os.getenv("DESKTOP_SESSION") == "sway" then
+   config.hide_tab_bar_if_only_one_tab = true
+end
 
 config.colors = {
   -- Modus Operandi Tinded
@@ -40,6 +45,7 @@ config.colors = {
 config.enable_scroll_bar = false
 config.term = "xterm-256color"
 config.disable_default_key_bindings = true
+--config.debug_key_events = true
 
 config.leader = { key = 'b', mods = 'CTRL', timeout_milliseconds = 1000 }
 keys = {
