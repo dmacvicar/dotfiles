@@ -780,10 +780,14 @@
         nil)))
   (org-link-set-parameters "http"  :image-data-fun #'org-http-image-data-fn)
   (org-link-set-parameters "https" :image-data-fun #'org-http-image-data-fn))
+  (org-link-set-parameters "https" :image-data-fun #'org-http-image-data-fn)
+  (set-face-attribute 'org-headline-done nil :strike-through t))
 
 (use-package org-agenda
   :elpaca nil
   :after org
+  :config
+  (org-agenda-dim-blocked-tasks t)
   :init
   (advice-add 'org-agenda :before 'duncan/generate-diary-from-calendars)
   (advice-add 'org-agenda-exit :after
