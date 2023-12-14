@@ -28,22 +28,12 @@ input * {
     xkb_options "caps:ctrl_modifier"
 }
 
-exec --no-startup-id mako
-exec --no-startup-id nextcloud --background
-exec --no-startup-id wl-paste --watch cliphist store --no-persist
-
 exec_always swaybg --output '*' --image ~/.wallpaper --color '#008899'
+
 # border background text indicator child
 client.focused #721045 #721045 fbf7f0
 client.focused_tab_title #721045 #721045 fbf7f0
-#client.focused_inactive #000000 #721045 fbf7f0
-
-#client.focused_inactive brd bck text 
-#client.focused_tab_title brd bck text 
-#client.unfocused #008899 #008899 fbf7f0
 client.unfocused #000000 #000000 #fbf7f0
-#client.unfocused #f6f5f4 #595959 fbf7f0 
-#client.urgent brd bck text 
 
 # Window borders
 default_border pixel 1
@@ -51,8 +41,6 @@ default_floating_border normal
 hide_edge_borders smart
 titlebar_border_thickness 1
 smart_gaps on
-gaps inner 10
-
 
 # Shortcuts
 bindsym $mod+d exec $menu
@@ -148,23 +136,11 @@ mode "$mode_system" {
 }
 bindsym $mod+Shift+e mode "$mode_system"
 
-exec_always ~/.config/waybar/waybar.sh
-
-for_window [title = ".*matterhorn.*"] {
-  border pixel 100
-  resize set width 20 ppt height 20 ppt
-  move position center
-}
-
-for_window [title = ".*Tor.*"] {
-  resize set width 20 ppt height 20 ppt
-  move position center
-}
-
 for_window [app_id = "pcmanfm-qt"] floating enable
 for_window [app_id = "^imv$"] floating enable, sticky enable
 for_window [app_id="^pavucontrol$"] floating enable, sticky enable
 for_window [app_id="^org.keepassxc.KeePassXC$"] floating enable
+for_window [app_id="^org.pwmt.zathura$"] floating enable
 
 for_window [window_role = "pop-up"] floating enable
 for_window [window_role = "bubble"] floating enable
@@ -177,7 +153,15 @@ for_window [title = "About Mozilla Firefox"] floating enable
 for_window [window_role = "About"] floating enable
 for_window [app_id="firefox" title="Library"] floating enable, border pixel 1, sticky enable
 for_window [title = "Firefox - Sharing Indicator"] kill
-for_window [title = "Firefox — Sharing Indicator"] kill
+
+# desktop components
 
 exec gnome-keyring-daemon --start --components=secrets
 exec export $(gnome-keyring-daemon)
+
+exec --no-startup-id mako
+exec --no-startup-id wl-paste --watch cliphist store --no-persist
+
+exec_always ~/.config/waybar/waybar.sh
+
+exec --no-startup-id nextcloud --background
