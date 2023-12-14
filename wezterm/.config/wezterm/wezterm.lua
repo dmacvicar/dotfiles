@@ -5,7 +5,7 @@ config = wezterm.config_builder()
 config.use_fancy_tab_bar = false
 -- we don't need tabs if using sway, most likely we will
 -- use say splits
-if os.getenv("DESKTOP_SESSION") == "sway" then
+if string.match(os.getenv("DESKTOP_SESSION"), "sway") then
    config.hide_tab_bar_if_only_one_tab = true
 end
 
