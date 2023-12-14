@@ -730,7 +730,6 @@
   (org-mode . (lambda() (buffer-face-set '(:family "Purisa"))))
   (org-babel-after-execute . org-redisplay-inline-images)
   (org-mode . visual-line-mode)
-  (org-mode . auto-fill-mode)
   (org-mode . visual-fill-column-mode)
   (org-mode . mixed-pitch-mode)
   (org-mode . buffer-face-mode)
