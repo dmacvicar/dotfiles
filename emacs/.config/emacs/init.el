@@ -602,6 +602,19 @@
   (advice-add #'treesit--install-language-grammar-1 :around
 	          (lambda (fn out-dir &rest args)
 	            (apply fn (or out-dir =treesit-grammar-cache-directory) args)))
+
+  (dolist (mode
+           '((bash-mode       . bash-ts-mode)
+             (c-mode          . c-ts-mode)
+             (c++-mode        . c++-ts-mode)
+             (python-mode     . python-ts-mode)
+             (css-mode        . css-ts-mode)
+             (dockerfile-mode . dockerfile-ts-mode)
+             (go-mode         . go-ts-mode)
+             (javascript-mode . js-ts-mode)
+             (js-json-mode    . json-ts-mode)
+             (typescript-mode . typescript-ts-mode)))
+    (add-to-list 'major-mode-remap-alist mode))
   :elpaca nil)
 
 (use-package treesit-auto
@@ -659,15 +672,27 @@
   :defer t)
 (use-package yaml-mode
   :defer t)
-(use-package dockerfile-mode
+
+(use-package dockerfile-ts-mode
+  :elpaca nil
+  :mode
+  "Dockerfile\\'"
+  "\\.dockerfile\\'"
+  :defer t)
+(use-package docker-compose-mode
+  :ensure t
   :defer t)
 
 ;; go
-(use-package go-mode
+(use-package go-ts-mode
+  :elpaca nil
   :defer t
   :custom
+  (indent-tabs-mode t)
+  (go-ts-mode-indent-offset 4)
   (go-test-verbose t)
   (gofmt-args '("-s")))
+
 ;; like play.golang.org
 (use-package go-playground
   :defer t
