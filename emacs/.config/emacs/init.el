@@ -822,20 +822,6 @@
   (org-superstar-leading-fallback ?\s)
   (org-hide-leading-stars nil)
   (org-superstar-prettify-item-bullets t)
-  (org-superstar-special-todo-items t)
-  (org-superstar-todo-bullet-alist
-   '(("TODO" . 9744)
-     ("[ ]"  . 9744)
-     ("NEXT" . ?✒)
-     ("WAITING" . ?💤)
-     ("CANCELLED" . ?✘)
-     ("DONE" . 9745)
-     ("[X]"  . 9745)
-     ("RED" . ?🔥)
-     ("YELLOW" . ?🤢)
-     ("UNKNOWN" . ?❓)
-     ("GREEN" . ?👍)
-     ("LOVE" ?🫶)))
   :hook (org-mode . org-superstar-mode))
 
 (use-package org-fancy-priorities ; priority icons
