@@ -805,7 +805,6 @@
         (message "Download of image \"%s\" failed" link)
         nil)))
   (org-link-set-parameters "http"  :image-data-fun #'org-http-image-data-fn)
-  (org-link-set-parameters "https" :image-data-fun #'org-http-image-data-fn))
   (org-link-set-parameters "https" :image-data-fun #'org-http-image-data-fn)
   (set-face-attribute 'org-headline-done nil :strike-through t))
 
