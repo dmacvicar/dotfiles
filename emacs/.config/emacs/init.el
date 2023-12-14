@@ -628,6 +628,7 @@
 (use-package markdown-mode
   :defer t
   :hook
+  (markdown-mode . visual-line-mode)
   (markdown-mode . visual-fill-column-mode)
   (markdown-mode . mixed-pitch-mode)
   :mode ("\\.md\\'" . gfm-mode))
