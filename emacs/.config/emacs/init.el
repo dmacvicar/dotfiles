@@ -149,7 +149,7 @@
 ;; copy from clipboard in terminal
 (use-package xclip
   :custom
-  (xclip-method 'wl-copy)
+  (xclip-method (if (getenv "WAYLAND_DISPLAY") 'wl-copy 'xclip))
   :init
   (xclip-mode))
 
