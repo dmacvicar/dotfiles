@@ -2,102 +2,100 @@
 * {
     border: none;
     border-radius: 0;
-	font-family: Noto Sans Display SemiBold;
-    font-size: 12pt;
+	font-family: Noto Sans ExtraCondensed Display Thin;
+    font-size: 13pt;
     min-height: 0;
 }
 
-.text-button:hover {
-	color: #bfefff;
+window.eDP-1 * {
+	font-family: "monospace";
+	font-size: 10pt;
 }
 
 window#waybar {
-	/*background-color: #2f3f83;*/
-	background-color: black;
-
-    color: #fbf7f0;
+	background-color: #c9b9b0;
+    border-bottom: 3px solid #595959;
+    color: black;
     transition-property: background-color;
     transition-duration: .5s;
 }
 
 .modules-left {
-	margin: 0px 0px 0px 0px;
-	padding: 0px 15px 0px 5px;
-    background-color: #721045;
+	margin: 3px 1px 5px 1px;
 
-	border-radius: 0px 20px 20px 0px;
 }
-
-.modules-left * {
-	margin: 0px 5px 0px 5px;
- }
-
-.modules-center {
-	padding: 0px 10px 0px 10px;
-	/*border: 5px solid black;*/
-    background-color:  #721045;
-	border-radius: 20px 20px 0px 0px;
-}
-
 
 .modules-right {
-    /*background-color: #721045;*/
-    border-radius: 10px;
- }
+	box-shadow: inset -1px -1px #ffffff, inset 1px 1px #808080;
+    padding: 0px 5px 0px 5px;
+	margin: 5px 5px 5px 0px;
+}
 
- .modules-right * {
-	margin: 0px 5px 0px 5px;
- }
+.modules-right > *:not(:last-child) {
+}
 
- tooltip {
+tooltip {
   background: #efe9dd;
   border: 1px solid #9f9690;
 }
 
- tooltip label {
+
+tooltip label {
   color: black;
+}
+
+#taskbar {
+    padding-left: 5px;
 }
 
 #clock {
     margin-right: 5px;
 }
 
-#taskbar .empty {
-	background-color: black;
+#workspaces button {
+	box-shadow: inset 1px 1px #fff,inset -1px -1px grey;
+    margin: 1px 1px 1px 1px;
+}
+
+#workspaces button.focused {
+	box-shadow: inset -1px -1px #fff,inset 1px 1px grey;
 }
 
 #taskbar button {
-    /*margin: 3px 0px 5px 0px;*/
+	box-shadow: inset 1px 1px #fff,inset -1px -1px grey;
 }
 
 #taskbar button.active {
-	border-radius: 10px;
+	box-shadow: inset -1px -1px #fff,inset 1px 1px grey;
 }
 
-#taskbar button:hover {
-	border-radius: 40px;
-    background-color:  #721045;
+#taskbar button.minimized {
+}
+
+#taskbar button.maximized {
+
+}
+
+#taskbar button.fullscreen {
 
 }
 
 #tray {
     margin: 0px 0px 0px 0px;
-    padding: 0px 5px 0px 5px;
+    padding: 0px 10px 0px 5px;
     color: black;
 }
 
+#tray * {
+    margin: 5px 0px 5px 0px;
+}
+
 #custom-start {
-    color: white;
-    font-size: 20pt;
-	padding: 0px 10px 0px 0px;
+	box-shadow: inset 1px 1px #fff,inset -1px -1px grey;
+    margin: 1px 1px 1px 1px;
+    color: #2a5045;
 }
 
 #custom-home {
-    color: white;
-    margin: 0px 10px 0px 10px;
-}
-
-#custom-otp {
-    color: white;
-    margin: 0px 10px 0px 10px;
+    color: #2a5045;
 }

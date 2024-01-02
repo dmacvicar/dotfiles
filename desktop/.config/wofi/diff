@@ -1,0 +1,70 @@
+diff --git a/desktop/.config/wofi/style.css b/desktop/.config/wofi/style.css
+index f0c2958..74b5dd6 100644
+--- a/desktop/.config/wofi/style.css
++++ b/desktop/.config/wofi/style.css
+@@ -1,27 +1,29 @@
++; modulus tinted colors
+ window {
+ 	font-family: NotoSans Nerd Font;
+ 	margin: 0px;
+-	border: 1px solid #bd93f9;
+-	background-color: #282a36;
++	border: 1px solid #9f9690;
++	background-color: #c9b9b0;
+ }
+ 
+ #input {
+ 	margin: 5px;
+ 	border: none;
+-	color: #f8f8f2;
+-	background-color: #44475a;
++	background-color: #fbf7f0;
++	color: #000000;
++
+ }
+ 
+ #inner-box {
+ 	margin: 5px;
+ 	border: none;
+-	background-color: #282a36;
++	background-color: #fbf7f0;
+ }
+ 
+ #outer-box {
+ 	margin: 5px;
+ 	border: none;
+-	background-color: #282a36;
++	background-color: #c9b9b0;
+ }
+ 
+ #scroll {
+@@ -32,21 +34,22 @@ window {
+ #text {
+ 	margin: 5px;
+ 	border: none;
+-	color: #f8f8f2;
+-} 
+-
+-#entry.activatable #text {
+-	color: #282a36;
++	color: #000000;
+ }
+ 
++;#entry.activatable #text {
++	;	color: #282a36;
++;}
++
+ #entry > * {
+-color: #f8f8f2;
++		color: #000000;
+ }
+ 
+ #entry:selected {
+-	background-color: #44475a;
++	background-color: #f1d5d0;
+ }
+ 
+ #entry:selected #text {
+ 	font-weight: bold;
++	color: #000000;
+ }

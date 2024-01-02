@@ -7,4 +7,4 @@ killall -q waybar
 while pgrep --uid $UID -x waybar >/dev/null; do sleep 1; done
 
 # Launch main
-waybar
+waybar -c ~/.config/waybar/config

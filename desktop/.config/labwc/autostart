@@ -1,4 +1,5 @@
-swaybg -i ~/.wallpaper -c '#008899' >/dev/null 2>&1 &
+#swaybg -i ~/.wallpaper -c '#008899' >/dev/null 2>&1 &
+pcmanfm-qt --desktop >/dev/null 2>&1 &
 
 eval "$(echo "" | /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh --unlock)"
 

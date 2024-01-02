@@ -1,5 +1,6 @@
 window {
-	font-family: NotoSans Mono Nerd Font;
+	font-family: NotoSans Display;
+	font-size: 10pt
 	margin: 0px;
 	border: 1px solid #9f9690;
 	background-color:  #c9b9b0;
@@ -10,17 +11,23 @@ window {
 	border: none;
 	color: #000000;
 	background-color: #fbf7f0;
+	box-shadow: inset 2px 2px grey, inset 1px 1px grey, inset -2px -2px grey, inset -1px -1px #fff;
+	border-radius: 0px;
 }
 
 #inner-box {
 	margin: 5px;
 	border: none;
 	background-color:  #c9b9b0;
+	background-color: #fbf7f0;
+	/*box-shadow: inset 2px 2px grey, inset 1px 1px grey, inset -2px -2px grey, inset -1px -1px #fff;*/
+	box-shadow: 2px 2px grey, 1px 1px grey, -2px -2px grey, -1px -1px #fff;
 }
 
 #outer-box {
-	margin: 5px;
-	border: none;
+	padding: 15px;
+	box-shadow: inset -2px -2px grey, inset -1px -1px grey, inset 2px 2px #fff, inset 1px 1px grey;
+
 }
 
 #scroll {
@@ -44,6 +51,7 @@ color: #f8f8f2;
 
 #entry:selected {
 	background-color: #f1d5d0;
+	border: none;
 }
 
 #entry:selected #text {
