@@ -1,0 +1,31 @@
+* {
+	font-family: "Noto Sans Display";
+}
+
+button {
+	background-color: #c9b9b0;
+	border-style: inset;
+	border-width: 1px;
+	border-color: white black black white;
+	padding: 0;
+	border-radius: 0px;
+}
+button:active {
+	border-color: black;
+}
+window {
+	background-color: #c9b9b0;
+	border-style: inset;
+	border-width: 1px;
+	border-color: white black black white;
+color: black;
+}
+
+headerbar {
+	background-color: #7f0000;
+	padding: 2px;
+}
+
+headerbar button {
+	font-size: 10px;
+}
