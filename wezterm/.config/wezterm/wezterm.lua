@@ -192,6 +192,8 @@ config.keys = keys
 config.font_size = 12.0
 config.font = wezterm.font_with_fallback {
    'Fira Code',
+   'FiraCode Nerd Font',
+   'Noto Color Emoji',
 }
 
 return config
