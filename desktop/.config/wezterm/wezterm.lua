@@ -1,6 +1,9 @@
 local wezterm = require 'wezterm'
 local config = {}
+
 config = wezterm.config_builder()
+-- do not start a login shell
+config.default_prog = { "/bin/bash" }
 
 config.use_fancy_tab_bar = false
 -- we don't need tabs if using sway, most likely we will
