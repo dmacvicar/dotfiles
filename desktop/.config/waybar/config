@@ -6,7 +6,7 @@
 		"position": "top",
 		"modules-left": ["custom/start", "sway/workspaces", "wlr/workspaces", "custom/home", "custom/otp", "wlr/taskbar"],
 		"modules-center": [],
-	  "modules-right": ["sway/language", "image#albumart", "mpris", "bluetooth", "pulseaudio", "network#eth", "network#wifi", "network#vpn", "network#home", "battery", "tray", "custom/clipboard", "clock"],
+	    "modules-right": ["sway/language", "image#albumart", "mpris", "bluetooth", "pulseaudio", "network#eth", "network#wifi", "network#vpn", "network#home", "battery", "tray", "custom/clipboard", "clock"],
 		"wlr/taskbar": {
 		  "format": "{icon} {name}",
 			"on-click": "minimize-raise",
@@ -117,15 +117,15 @@
 		"tooltip-format": "{controller_alias}\t{controller_address}",
 		"tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
 		"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-		"on-click": "~/.local/scripts/helpers/dmenu-bluetooth.sh --connected-icon "
+		"on-click": "~/.config/labwc/scripts/helpers/dmenu-bluetooth.sh --connected-icon "
 	  },
 	  "custom/start": {
 		"format": "  \uf314  "
-		//on-click": "~/.local/scripts/start.sh"
+		//on-click": "~/.config/labwc/scripts/start.sh"
 	  },
 	  "custom/clipboard": {
 		"format": " \udb80\udd4c ",
-		"on-click": "~/.local/scripts/clipboard.sh"
+		"on-click": "~/.config/labwc/scripts/clipboard.sh"
 	  },
 	  "custom/home": {
 		"format": " \udb84\udcb5 ",
@@ -133,7 +133,7 @@
 	  },
 	  "custom/otp": {
 		"format": " \udb80\udf06 ",
-		"on-click": "~/.local/scripts/otp.sh"
+		"on-click": "~/.config/labwc/scripts/otp.sh"
 	  },
 	  "image#albumart": {
 		"exec":"~/.config/waybar/scripts/albumart.sh",
