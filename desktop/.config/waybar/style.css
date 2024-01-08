@@ -2,8 +2,8 @@
 * {
     border: none;
     border-radius: 0;
-	font-family: Noto Sans ExtraCondensed Display Thin;
-    font-size: 13pt;
+	font-family: "monospace";
+    font-size: 10pt;
     min-height: 0;
 }
 
@@ -14,7 +14,7 @@ window.eDP-1 * {
 
 window#waybar {
 	background-color: #c9b9b0;
-    border-bottom: 3px solid #595959;
+    border-bottom: 2 solid #595959;
     color: black;
     transition-property: background-color;
     transition-duration: .5s;
