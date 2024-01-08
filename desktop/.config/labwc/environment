@@ -2,7 +2,7 @@
 XDG_CURRENT_DESKTOP=wlroots
 XKB_DEFAULT_LAYOUT=de
 XKB_DEFAULT_LAYOUT=de,es
-XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle
+XKB_DEFAULT_OPTIONS=caps:ctrl_modifier
 MOZ_ENABLE_WAYLAND=1
 # Find icons themes with the command below or similar:
 #     find /usr/share/icons/ -type d -name "cursors"
@@ -16,3 +16,4 @@ WLR_NO_HARDWARE_CURSORS=1
 _JAVA_AWT_WM_NONREPARENTING=1
 XKB_DEFAULT_OPTIONS=ctrl:swapcaps
 DMENU_BLUETOOTH_LAUNCHER=wofi --dmenu -I --location top_right
+QT_QPA_PLATFORMTHEME=qt5ct
