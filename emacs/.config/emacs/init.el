@@ -202,6 +202,13 @@
   (popper-mode +1)
   (popper-echo-mode +1))
 
+;; discoverability
+(use-package which-key
+  :config
+  (which-key-mode)
+  :custom
+  (which-key-popup-type 'minibuffer))
+
 ;; completion system (alternative to ivy)
 (use-package vertico
   :init
