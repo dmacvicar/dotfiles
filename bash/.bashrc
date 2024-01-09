@@ -1,5 +1,4 @@
 #!/bin/bash
-
 exists()
 {
     command -v "$1" >/dev/null 2>&1
@@ -23,11 +22,6 @@ if exists direnv; then
     eval "$(direnv hook bash)"
 fi
 
-# avoid enabling starship in emacs terminal unless in eat
-if exists starship && [[ -z "$INSIDE_EMACS" || "$INSIDE_EMACS" =~ .*eat.* ]]; then
-    eval "$(starship init bash)"
-fi
-
 if [[ "$XDG_CURRENT_DESKTOP" =~ .*KDE.* ]]; then
     for f in $HOME/.config/plasma-workspace/env/*; do
         test -f "$f" && source "$f"
@@ -36,4 +30,7 @@ fi
 
 [ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/bash"
 
-
+# avoid enabling starship in emacs terminal unless in eat
+if exists starship && [[ -z "$INSIDE_EMACS" || "$INSIDE_EMACS" =~ .*eat.* ]]; then
+    eval "$(starship init bash)"
+fi
