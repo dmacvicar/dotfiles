@@ -518,7 +518,12 @@
   (lsp-auto-guess-root t)
   (lsp-solargraph-use-bundler t)
   (lsp-file-watch-threshold 2000)
-  :hook 'lsp-ui-mode)
+  :config
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  :hook 'lsp-ui-mode
+  :hook (lsp-mode . (lambda ()
+                      (let ((lsp-keymap-prefix "C-c l"))
+                        (lsp-enable-which-key-integration)))))
 
 (use-package lsp-ui
   :defer t
