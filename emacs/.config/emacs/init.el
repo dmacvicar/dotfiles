@@ -533,6 +533,8 @@
   (lsp-ui-sideline-enable t)
   (lsp-ui-imenu-enable t)
   (lsp-ui-flycheck-enable t)
+  (lsp-ui-sideline-show-code-actions t)
+  (lsp-ui-sideline-show-diagnostics t)
   :after flycheck)
 
 (use-package company-lsp
