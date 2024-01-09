@@ -417,11 +417,6 @@
       (bind-key* "M-<up>" #'tmux-pane-omni-window-up)
       (bind-key* "M-<down>" #'tmux-pane-omni-window-down))
 
-;; tabs 4 spaces width (we only use spaces in Go)
-(setq-default tab-width 4)
-(setq-default c-basic-offset 4)
-(setq-default indent-tabs-mode nil)
-
 ;; respect style of projects
 (use-package editorconfig
   :defer t
@@ -690,13 +685,23 @@
   :ensure t
   :defer t)
 
+;; guess indentation params
+(use-package dtrt-indent
+  :custom
+  (dtrt-indent-max-lines 2000)
+  (dtrt-indent-verbosity 2)
+  :diminish
+  :hook (prog-mode . dtrt-indent-mode))
+(setq-default tab-width 8)
+
+;; C
+(setq-default c-default-style "linux")
+
 ;; go
 (use-package go-ts-mode
   :elpaca nil
   :defer t
   :custom
-  (indent-tabs-mode t)
-  (go-ts-mode-indent-offset 4)
   (go-test-verbose t)
   (gofmt-args '("-s")))
 
