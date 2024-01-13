@@ -2,7 +2,7 @@
 * {
     border: none;
     border-radius: 0;
-	font-family: "monospace";
+    font-family: "monospace";
     font-size: 10pt;
     min-height: 0;
 }
@@ -62,7 +62,7 @@ tooltip label {
 }
 
 #taskbar button {
-	box-shadow: inset 1px 1px #fff,inset -1px -1px grey;
+    box-shadow: inset 1px 1px #fff,inset -1px -1px grey;
 }
 
 #taskbar button.active {

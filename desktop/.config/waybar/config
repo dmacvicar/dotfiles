@@ -8,7 +8,7 @@
 		"modules-center": [],
 	    "modules-right": ["sway/language", "image#albumart", "mpris", "bluetooth", "pulseaudio", "network#eth", "network#wifi", "network#vpn", "network#home", "battery", "tray", "custom/clipboard", "clock"],
 		"wlr/taskbar": {
-		  "format": "{icon} {name}",
+		  "format": " {icon} {name} ",
 			"on-click": "minimize-raise",
 			"all-outputs": true,
 		},
