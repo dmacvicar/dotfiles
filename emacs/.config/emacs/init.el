@@ -1011,7 +1011,6 @@
 ;; I also tried jupyter packagebut did not work
 (use-package ein
   :defer t
-  :elpaca (:main "lisp/ein-pkg.el")
   :custom
   (ein:output-area-inlined-images t))
 
