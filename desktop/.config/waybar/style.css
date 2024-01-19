@@ -1,37 +1,54 @@
-
 * {
     border: none;
     border-radius: 0;
-    font-family: "monospace";
+    font-family: "Noto Sand Mono ExtraCondensed Light";
     font-size: 10pt;
-    min-height: 0;
+    min-height: 18pt;
 }
 
 window.eDP-1 * {
-	font-family: "monospace";
-	font-size: 10pt;
+    font-size: 10pt;
 }
 
 window#waybar {
-	background-color: #c9b9b0;
-    border-bottom: 2 solid #595959;
+    background-color: #c9b9b0;
+    border-bottom: 2px solid #595959;
     color: black;
     transition-property: background-color;
     transition-duration: .5s;
 }
 
 .modules-left {
-	margin: 3px 1px 5px 1px;
-
+    margin: 0.25em 0.1em 0.3em 0.1em;
 }
 
 .modules-right {
-	box-shadow: inset -1px -1px #ffffff, inset 1px 1px #808080;
-    padding: 0px 5px 0px 5px;
-	margin: 5px 5px 5px 0px;
+    box-shadow: inset -1px -1px #ffffff, inset 1px 1px #808080;
+    padding: 0px 1px 0px 0.5em;
+    margin: 2px 2px 5px 0em;
+
 }
 
-.modules-right > *:not(:last-child) {
+.modules-right * {
+    /* has to be the same as tray then */
+    padding-right: 0.5em;
+    font-size: larger;
+}
+
+#tray {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 1px 0px 0.5em;
+    color: black;
+}
+
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: #eb4d4b;
 }
 
 tooltip {
@@ -39,63 +56,63 @@ tooltip {
   border: 1px solid #9f9690;
 }
 
-
 tooltip label {
   color: black;
 }
 
 #taskbar {
-    padding-left: 5px;
+    padding-left: 0.5em;
 }
 
 #clock {
-    margin-right: 5px;
+    margin-right: 0.5em;
 }
 
 #workspaces button {
-	box-shadow: inset 1px 1px #fff,inset -1px -1px grey;
+    box-shadow: inset 1px 1px #fff,inset -1px -1px grey;
     margin: 1px 1px 1px 1px;
 }
 
 #workspaces button.focused {
-	box-shadow: inset -1px -1px #fff,inset 1px 1px grey;
+    box-shadow: inset -1px -1px #fff,inset 1px 1px grey;
 }
 
 #taskbar button {
     box-shadow: inset 1px 1px #fff,inset -1px -1px grey;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
 }
 
 #taskbar button.active {
-	box-shadow: inset -1px -1px #fff,inset 1px 1px grey;
+    box-shadow: inset -1px -1px #fff,inset 1px 1px grey;
 }
 
 #taskbar button.minimized {
 }
 
 #taskbar button.maximized {
-
 }
 
 #taskbar button.fullscreen {
 
 }
 
-#tray {
-    margin: 0px 0px 0px 0px;
-    padding: 0px 10px 0px 5px;
-    color: black;
-}
-
-#tray * {
-    margin: 5px 0px 5px 0px;
-}
-
 #custom-start {
-	box-shadow: inset 1px 1px #fff,inset -1px -1px grey;
-    margin: 1px 1px 1px 1px;
+    box-shadow: inset 1px 1px #fff,inset -1px -1px grey;
+    margin: 1px 1em 1px 1px;
+    padding: 0px 0.5em 0px 1em;
     color: #2a5045;
+    font-weight: bold;
 }
 
 #custom-home {
     color: #2a5045;
+    padding-right: 0.5em;
+    font-size: larger;
+}
+
+#custom-otp {
+    color: #2a5045;
+    padding-right: 0.5em;
+    font-size: larger;
 }
