@@ -645,7 +645,12 @@
          (yaml-ts-mode . combobulate-mode)
          (typescript-ts-mode . combobulate-mode)
          (tsx-ts-mode . combobulate-mode)))
- 
+
+;; replace built-in pdf viewer with something we
+;; can copy paste, based on poppler
+(use-package pdf-tools
+  :defer t)
+
 ;; markdown
 (use-package markdown-mode
   :defer t
