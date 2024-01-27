@@ -96,13 +96,13 @@
       <action name="Execute" command="brightnessctl set 10%-" />
     </keybind>
     <keybind key="XF86_AudioLowerVolume">
-      <action name="Execute" command="amixer sset Master 5%-" />
+      <action name="Execute" command="pamixer -d 5" />
     </keybind>
     <keybind key="XF86_AudioRaiseVolume">
-      <action name="Execute" command="amixer sset Master 5%+" />
+      <action name="Execute" command="pamixer +d 5" />
     </keybind>
     <keybind key="XF86_AudioMute">
-      <action name="Execute" command="amixer sset Master toggle" />
+      <action name="Execute" command="pamixer -t" />
     </keybind>
 	<keybind key="W-Print">
       <action name="Execute" command="~/.config/labwc/scripts/screenshot.sh" />
