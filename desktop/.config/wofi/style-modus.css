@@ -1,3 +1,4 @@
+
 window {
 	font-family: NotoSans Display;
 	font-size: 10pt
@@ -57,3 +58,4 @@ color: #f8f8f2;
 #entry:selected #text {
 	font-weight: bold;
 }
+
