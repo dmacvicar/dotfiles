@@ -449,8 +449,8 @@
 ;; github copilot
 (use-package copilot
   :defer t
-  :elpaca (:host github :repo "zerolfx/copilot.el"
-                 :files ("dist" "copilot.el"))
+  :elpaca (:host github :repo "copilot-emacs/copilot.el"
+                 :files ("dist" "*.el"))
   :bind (:map copilot-completion-map
               ("<tab>" . copilot-accept-completion)
               ("TAB" . copilot-accept-completion)))
