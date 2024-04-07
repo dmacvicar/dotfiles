@@ -570,24 +570,9 @@
 			   ".bzr" "_darcs" ".tox" ".svn" ".stack-work"
 			   "build" "data"))
 
-;; debugger
-(use-package dap-mode
-  :defer t
-  :after lsp-mode
-  :config
-  (dap-mode t)
-  (dap-ui-mode t)
-  (require 'dap-go)
-  (dap-go-setup))
-
 ;; meson build system
 (use-package meson-mode
   :defer t)
-
-(use-package dap-java
-  :defer t
-  :after (lsp-java)
-  :elpaca nil)
 
 ;; git
 (use-package magit
