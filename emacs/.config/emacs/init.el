@@ -87,12 +87,13 @@
 (set-charset-priority 'unicode)
 (prefer-coding-system 'utf-8-unix)
 
-(defvar elpaca-installer-version 0.6)
+(defvar elpaca-installer-version 0.7)
 (defvar elpaca-directory (expand-file-name "emacs/elpaca/" (xdg-cache-home)))
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil
+                              :ref nil :depth 1
                               :files (:defaults "elpaca-test.el" (:exclude "extensions"))
                               :build (:not elpaca--activate-package)))
 (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
@@ -105,8 +106,10 @@
     (when (< emacs-major-version 28) (require 'subr-x))
     (condition-case-unless-debug err
         (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-                 ((zerop (call-process "git" nil buffer t "clone"
-                                       (plist-get order :repo) repo)))
+                 ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                 ,@(when-let ((depth (plist-get order :depth)))
+                                                     (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                 ,(plist-get order :repo) ,repo))))
                  ((zerop (call-process "git" nil buffer t "checkout"
                                        (or (plist-get order :ref) "--"))))
                  (emacs (concat invocation-directory invocation-name))
@@ -135,7 +138,7 @@
 ;; use gnome secret service to store passwords
 ;; TODO add keepass
 (use-package auth-source
-  :elpaca nil
+  :ensure nil
   :defer t
   :custom
   (auth-sources '("secrets:login"))
@@ -155,7 +158,7 @@
 
 ;; recent files
 (use-package recentf
-  :elpaca nil
+  :ensure nil
   :defer t
   :config
   (recentf-mode)
@@ -170,7 +173,7 @@
 
 ;; minibuffer history
 (use-package savehist
-  :elpaca nil
+  :ensure nil
   :custom
   (savehist-file (convert-standard-filename
        (expand-file-name  "emacs/history" (xdg-state-home))))
@@ -213,13 +216,13 @@
 (use-package vertico
   :init
   (vertico-mode)
-  :elpaca (vertico
+  :ensure (vertico
              :files (:defaults "extensions/vertico-directory.el")
              :includes (vertico-directory)))
 
 ;; configure directory extension
 (use-package vertico-directory
-  :elpaca nil
+  :ensure nil
   :after vertico
   ;; More convenient directory navigation commands
   :bind (:map vertico-map
@@ -250,7 +253,7 @@
 (use-package dashboard-elfeed
   :defer t
   :disabled
-  :elpaca (:host nil :type git :repo "git@github.com:dmacvicar/emacs-dashboard-elfeed"))
+  :ensure (:host nil :type git :repo "git@github.com:dmacvicar/emacs-dashboard-elfeed"))
 
 (use-package dashboard
   :defer t
@@ -332,7 +335,7 @@
 ;; ncurses devel and run eat-compile-termifo
 (use-package eat
   :defer t
-  :elpaca (:host nil :type git
+  :ensure (:host nil :type git
            :repo "https://codeberg.org/akib/emacs-eat"
            :files ("*.el" "dir"
                    ("integration" "integration/*")
@@ -374,7 +377,7 @@
 
 ;; window splitting functions
 (use-package windmove
-  :elpaca nil
+  :ensure nil
   :config
   ;; do not set ever windmove-wrap-around as it prevents jumping to tmux panes
   :bind
@@ -426,7 +429,7 @@
 ;; parenthesis
 (use-package paren
   :defer t
-  :elpaca nil
+  :ensure nil
   :hook ((prog-mode . show-paren-mode))
   :custom (show-paren-style 'expression))
 
@@ -437,7 +440,7 @@
 ;; highlight undoed text
 (use-package undo-hl
   :defer t
-  :elpaca (:host github :repo "casouri/undo-hl"))
+  :ensure (:host github :repo "casouri/undo-hl"))
 (add-hook 'prog-mode-hook #'undo-hl-mode)
 (add-hook 'text-mode #'undo-hl-mode)
 
@@ -449,7 +452,7 @@
 ;; github copilot
 (use-package copilot
   :defer t
-  :elpaca (:host github :repo "copilot-emacs/copilot.el"
+  :ensure (:host github :repo "copilot-emacs/copilot.el"
                  :files ("dist" "*.el"))
   :bind (:map copilot-completion-map
               ("<tab>" . copilot-accept-completion)
@@ -462,7 +465,7 @@
 ;; remote file access
 (use-package tramp
   :defer t
-  :elpaca nil
+  :ensure nil
   :config
   (setq vc-ignore-dir-regexp
 	(format "\\(%s\\)\\|\\(%s\\)"
@@ -540,7 +543,7 @@
 (use-package company-lsp
   :defer t
   :after company
-  :elpaca nil
+  :ensure nil
   :commands company-lsp
   :config
   (add-to-list 'company-lsp company-backends))
@@ -609,7 +612,7 @@
              (js-json-mode    . json-ts-mode)
              (typescript-mode . typescript-ts-mode)))
     (add-to-list 'major-mode-remap-alist mode))
-  :elpaca nil)
+  :ensure nil)
 
 (use-package treesit-auto
   :custom
@@ -623,7 +626,7 @@
 (use-package combobulate
   :defer t
   :after treesit
-  :elpaca (:host github :repo "mickeynp/combobulate")
+  :ensure (:host github :repo "mickeynp/combobulate")
   :hook ((python-ts-mode . combobulate-mode)
          (js-ts-mode . combobulate-mode)
          (css-ts-mode . combobulate-mode)
@@ -662,7 +665,7 @@
 ;; vue single file component mode (uses polymode)
 (use-package sfc-mode
   :defer t
-  :elpaca (:host github :repo "gexplorer/sfc-mode")
+  :ensure (:host github :repo "gexplorer/sfc-mode")
   :custom
   (sfc-template-default-mode 'vue-html-mode)
   :mode "\\.vue\\'")
@@ -673,7 +676,7 @@
   :defer t)
 
 (use-package dockerfile-ts-mode
-  :elpaca nil
+  :ensure nil
   :mode
   "Dockerfile\\'"
   "\\.dockerfile\\'"
@@ -696,7 +699,7 @@
 
 ;; go
 (use-package go-ts-mode
-  :elpaca nil
+  :ensure nil
   :defer t
   :custom
   (go-test-verbose t)
@@ -738,14 +741,14 @@
 
 (use-package calendar
   :defer t
-  :elpaca nil
+  :ensure nil
   :init
   (setq calendar-view-diary-initially-flag t)
   (setq calendar-date-style 'european))
 
 (use-package diary
   :defer t
-  :elpaca nil
+  :ensure nil
   :after calendar
   :init
   (advice-add 'diary :before 'duncan/generate-diary-from-calendars)
@@ -758,7 +761,7 @@
 
 ;; org mode
 (use-package org
-  :elpaca nil
+  :ensure nil
   :defer t
   :hook
   ;; handwriten style
@@ -818,7 +821,7 @@
   (set-face-attribute 'org-headline-done nil :strike-through t))
 
 (use-package org-agenda
-  :elpaca nil
+  :ensure nil
   :after org
   :config
   (org-agenda-dim-blocked-tasks t)
@@ -839,10 +842,10 @@
 (use-package org-yt
   :after org
   :defer t
-  ;;:elpaca (org-yt :host github :repo "TobiasZawada/org-yt"))
+  ;;:ensure (org-yt :host github :repo "TobiasZawada/org-yt"))
   ;; https://github.com/TobiasZawada/org-yt/pull/1
   ;; don't require imagemagick for resizing
-  :elpaca (org-yt :host github :repo "league/org-yt"))
+  :ensure (org-yt :host github :repo "league/org-yt"))
 
 (use-package org-super-agenda
   :hook (org-agenda-mode . org-super-agenda-mode))
@@ -884,27 +887,27 @@
 
 ;; Avoid `org-babel-do-load-languages' since it does an eager require.
 (use-package ob-C
-  :elpaca nil
+  :ensure nil
   :requires (org-plus-contrib)
   :commands (org-babel-execute:C org-babel-execute:C++))
 (use-package ob-ruby
-  :elpaca nil
+  :ensure nil
   :requires (org-plus-contrib)
   :commands (org-babel-execute:ruby))
 (use-package ob-python
-  :elpaca nil
+  :ensure nil
   :requires (org-plus-contrib)
   :commands (org-babel-execute:python))
 (use-package ob-octave
-  :elpaca nil
+  :ensure nil
   :requires (org-plus-contrib)
   :commands (org-babel-execute:octave))
 (use-package ob-gnuplot
-  :elpaca nil
+  :ensure nil
   :requires (org-plus-contrib)
   :commands (org-babel-execute:gnuplot))
 (use-package ob-markdown
-  :elpaca nil
+  :ensure nil
   :requires (org-plus-contrib)
   :commands
     (org-babel-execute:markdown
@@ -914,7 +917,7 @@
   (org-babel-execute:http
    org-babel-expand-body:http))
 (use-package ob-grpc
-  :elpaca (ob-grpc :type git :host github :repo "shsms/ob-grpc")
+  :ensure (ob-grpc :type git :host github :repo "shsms/ob-grpc")
   :commands
   (org-babel-execute:grpc
    org-babel-expand-body:grpc)
@@ -922,7 +925,7 @@
               ("C-c g i" . ob-grpc-init)
               ("C-c g b" . ob-grpc-insert-block)))
 (use-package ob-shell
-  :elpaca nil
+  :ensure nil
   :requires (org-plus-contrib)
   :commands
   (org-babel-execute:sh
@@ -930,25 +933,25 @@
    org-babel-execute:bash
    org-babel-expand-body:bash))
 (use-package ob-sql
-  :elpaca nil
+  :ensure nil
   :commands (org-babel-execute:sql))
 (use-package ob-diagrams
   :requires (org-plus-contrib)
   :commands (org-babel-execute:diagrams))
 (use-package ob-ditaa
-  :elpaca nil
+  :ensure nil
   :requires (org-plus-contrib)
   :custom
   (org-ditaa-jar-path "/usr/share/java/ditaa.jar")
   :commands (org-babel-execute:ditaa))
 (use-package ob-plantuml
-  :elpaca nil
+  :ensure nil
   :requires (org-plus-contrib)
   :custom
   (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
   :commands (org-babel-execute:plantuml))
 (use-package ob-d2
-  :elpaca (:host github :repo "dmacvicar/ob-d2")
+  :ensure (:host github :repo "dmacvicar/ob-d2")
   :requires (org-plus-contrib)
   :commands (org-babel-execute:d2))
 (use-package ox-gfm
@@ -1028,7 +1031,7 @@
 (defconst mu4e-system-path "/usr/share/emacs/site-lisp/mu4e")
 (use-package mu4e
   :defer t
-  :elpaca nil
+  :ensure nil
   :load-path mu4e-system-path
   :commands 'mu4e
   :config
@@ -1074,7 +1077,7 @@
   :after mu4e
     :defer t)
 (use-package mu4e-contrib
-  :elpaca nil
+  :ensure nil
   :after mu4e
   :defer t
   :load-path mu4e-system-path)
@@ -1089,13 +1092,13 @@
 
 (use-package org-mu4e
   :defer t
-  :elpaca nil
+  :ensure nil
   :after mu4e
   :load-path mu4e-system-path)
 
 (use-package mu4e-icalendar
   :defer t
-  :elpaca nil
+  :ensure nil
   :after mu4e
   :load-path mu4e-system-path
   :config
@@ -1252,7 +1255,7 @@
 (use-package shr-tag-code-highlight
   :defer t
   :disabled
-  :elpaca (:host github :repo "dmacvicar/shr-tag-code-highlight.el")
+  :ensure (:host github :repo "dmacvicar/shr-tag-code-highlight.el")
   :after shr
   :config
   (add-to-list 'shr-external-rendering-functions
@@ -1283,7 +1286,7 @@
 
 (use-package mastodon
   :defer t
-  :elpaca (:host nil :type git :repo "https://codeberg.org/martianh/mastodon.el.git")
+  :ensure (:host nil :type git :repo "https://codeberg.org/martianh/mastodon.el.git")
   :custom
   (mastodon-instance-url "https://social.mac-vicar.eu")
   (mastodon-active-user "duncan"))
