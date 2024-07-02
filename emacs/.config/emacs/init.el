@@ -169,7 +169,8 @@
   (recentf-max-menu-items 25)
   (recentf-max-saved-items 25)
   (recentf-exclude '("/autosave$"
-		     "/treemacs-persist$")))
+		     "/treemacs-persist$"
+                     ".cache")))
 
 ;; minibuffer history
 (use-package savehist
