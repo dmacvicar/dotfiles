@@ -824,6 +824,9 @@
 (use-package org-agenda
   :ensure nil
   :after org
+  :init
+  ;; do not ask to reload the calendar when regenerated
+  (add-to-list 'revert-without-query "\\.cache/.+\\.ics")
   :config
   (org-agenda-dim-blocked-tasks t)
   :init
@@ -1143,7 +1146,7 @@
       (dolist (ics-file-name calendar-list)
         (let* ((ics-file-path (concat ics-directory ics-file-name))
                (diary-file-name (file-name-sans-extension ics-file-name))
-               (diary-file-path (concat calendars-diary-directory diary-file-name)))
+               (diary-file-path (concat calendars-diary-directory diary-file-name ".ics")))
           (message "importing %s" ics-file-path)
           (with-temp-buffer
             (insert-file-contents ics-file-path)
