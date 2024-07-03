@@ -633,6 +633,7 @@
            '((bash-mode       . bash-ts-mode)
              (c-mode          . c-ts-mode)
              (c++-mode        . c++-ts-mode)
+             (cmake-mode        . cmake-ts-mode)
              (python-mode     . python-ts-mode)
              (css-mode        . css-ts-mode)
              (dockerfile-mode . dockerfile-ts-mode)
@@ -725,6 +726,23 @@
 
 ;; C
 (setq-default c-default-style "linux")
+
+(use-package cmake-ts-mode
+  :ensure nil
+  :mode
+  "CMakeLists\\.txt\\'"
+  :defer t)
+
+;; integrate compile command for project with cmake
+(use-package cmake-project
+  :ensure t
+  :defer t
+  :custom
+  (cmake-project-default-build-dir-name "build"))
+(defun maybe-cmake-project-hook ()
+  (if (file-exists-p "CMakeLists.txt") (cmake-project-mode)))
+(add-hook 'c-ts-mode-hook 'maybe-cmake-project-hook)
+(add-hook 'c++-ts-mode-hook 'maybe-cmake-project-hook)
 
 ;; go
 (use-package go-ts-mode
@@ -1326,6 +1344,20 @@
   :custom
   (mastodon-instance-url "https://social.mac-vicar.eu")
   (mastodon-active-user "duncan"))
+
+(use-package emacs
+  :ensure nil
+  :config
+  :commands (duncan/cwd-fn)
+  :config
+  (defun duncan/cwd-fn ()
+    (expand-file-name
+     ;; custom-src-directory is supposed to come from .dir-locals.el
+     (if (boundp 'custom-src-directory)
+         custom-src-directory
+       (or (when-let ((project (project-current)))
+             (project-root project))
+           default-directory)))))
 
 (use-package envrc
  :config
