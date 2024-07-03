@@ -870,6 +870,10 @@
   :custom
   (org-agenda-include-diary t))
 
+(use-package org-timeblock
+  :defer t
+  :ensure (:host github :repo "ichernyshovvv/org-timeblock"))
+
 ;; this takes care of being able to display inline images in the buffer
 (use-package org-yt
   :after org
