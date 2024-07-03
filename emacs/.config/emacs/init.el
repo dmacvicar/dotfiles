@@ -50,6 +50,7 @@
 ;; misc defaults
 (setq inhibit-startup-screen t
       initial-scratch-message nil
+      initial-buffer-choice #'enlight
       initial-major-mode 'text-mode
       sentence-end-double-space nil
       ring-bell-function 'ignore
@@ -184,6 +185,33 @@
 ;; modeline
 (use-package doom-modeline
   :config (doom-modeline-mode 1))
+
+;; dashboard screen
+
+(use-package grid
+  :ensure (:host github :repo "ichernyshovvv/grid.el"))
+
+(use-package enlight
+  :ensure (:host github :repo "ichernyshovvv/enlight")
+  :after grid
+  :config
+  (require 'grid)
+  :custom
+  (enlight-content
+    (concat
+      (propertize "Emacs Dashboard" 'face 'highlight )
+      "\n\n\n"
+      (enlight-menu
+        '(("Files/projects"
+           ("Projects" project-switch-project "p")
+           ("Recent" recentf-open "r"))
+          ("Calendar/TODO"
+            ("Agenda" (org-agenda-list "1") "a")
+            ("todo.org"
+              (find-file (seq-find (lambda (x) (string-match "todo.org" x)) org-agenda-files)) "t"))
+          ("Misc"
+           ("Emacs Configuration" (find-file user-init-file) "c")
+           ("Home folder" (dired "~/") "h")))))))
 
 ;; popups
 (use-package popper
