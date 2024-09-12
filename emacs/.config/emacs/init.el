@@ -1090,6 +1090,7 @@
   :commands 'mu4e
   :config
   (add-hook 'mu4e-compose-mode-hook (lambda () (setq show-trailing-whitespace t)))
+  (add-hook 'mu4e-search-bookmark-hook (lambda (_) (setq mu4e-headers-include-related nil)))
   :init
   ;; nerdfonts for marks
   (setq mu4e-headers-unread-mark    '("u" . ""))
@@ -1106,6 +1107,8 @@
   (setq mu4e-headers-signed-mark    '("s" . "󰷼 "))
   (setq mu4e-headers-personal-mark  '("P" . ""))
   :custom
+  (mu4e-date-format "%F")
+  (mu4e-headers-date-format "%F")
   (mu4e-use-fancy-chars t)
   (smtpmail-queue-dir (expand-file-name "~/Mail/queue/cur"))
   (message-signature-file (expand-file-name "~/.signature"))
