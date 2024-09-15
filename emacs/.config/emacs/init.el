@@ -47,10 +47,11 @@
 (delete-selection-mode 1)
 (pixel-scroll-mode)
 
+
 ;; misc defaults
 (setq inhibit-startup-screen t
       initial-scratch-message nil
-      initial-buffer-choice #'enlight
+      initial-buffer-choice (if (< (length command-line-args) 2) #'enlight nil)
       initial-major-mode 'text-mode
       sentence-end-double-space nil
       ring-bell-function 'ignore
