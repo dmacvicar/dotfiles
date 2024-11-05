@@ -488,6 +488,10 @@
               ("<tab>" . copilot-accept-completion)
               ("TAB" . copilot-accept-completion)))
 
+;; different gpt models
+(use-package gptel
+  :defer t)
+
 (with-eval-after-load 'company
   ;; disable inline previews
   (delq 'company-preview-if-just-one-frontend company-frontends))
