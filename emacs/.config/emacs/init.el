@@ -908,9 +908,9 @@
 
 (use-package org-super-agenda
   :hook (org-agenda-mode . org-super-agenda-mode))
-(use-package org-ql
-  :after org
-  :defer t)
+;(use-package org-ql
+;  :after org
+;  :defer t)
 (use-package org-superstar              ; supersedes `org-bullets'
   :after org
   :defer t
