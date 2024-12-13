@@ -1346,13 +1346,6 @@
 ;;my favourite contacts - these will be put at front of list
 (setq dmacvicar/contact-file "~/.favorite-contacts.txt")
 
-(use-package mastodon
-  :defer t
-  :ensure (:host nil :type git :repo "https://codeberg.org/martianh/mastodon.el.git")
-  :custom
-  (mastodon-instance-url "https://social.mac-vicar.eu")
-  (mastodon-active-user "duncan"))
-
 (use-package emacs
   :ensure nil
   :config
