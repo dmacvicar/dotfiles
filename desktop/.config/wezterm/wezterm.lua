@@ -59,7 +59,7 @@ config.colors = {
 }
 
 config.enable_scroll_bar = false
-config.term = "xterm-256color"
+config.term = "wezterm"
 config.disable_default_key_bindings = true
 --config.debug_key_events = true
 
