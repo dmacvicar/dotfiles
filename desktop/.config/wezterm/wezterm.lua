@@ -122,6 +122,19 @@ keys = {
     action = wezterm.action.SpawnTab "CurrentPaneDomain",
   },
   {
+    key = ',',
+    mods = 'LEADER',
+    action = wezterm.action.PromptInputLine {
+      description = 'Enter new name for tab',
+      action = wezterm.action_callback(function(window, pane, line)
+        -- ESC produces nil (abort), ENTER empty string (default value)
+        if line then
+          window:active_tab():set_title(line)
+        end
+      end),
+    },
+  },
+  {
     key = 'RightArrow',
     mods = 'META|SHIFT',
     action = wezterm.action.ActivateTabRelative(1),
