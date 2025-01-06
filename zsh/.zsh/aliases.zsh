@@ -1,8 +1,0 @@
-alias e="${EDITOR}"
-alias vi="emacs-nox"
-alias lag="ag --pager=less"
-alias ack="ag"
-alias lack="lag"
-alias iosc="osc -A https://api.suse.de"
-alias pry="rbenv exec pry"
-alias irb="rbenv exec pry"
