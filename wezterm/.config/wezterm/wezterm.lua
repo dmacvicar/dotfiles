@@ -135,6 +135,11 @@ keys = {
     },
   },
   {
+    key = 'mapped:&',
+    mods = 'LEADER|SHIFT',
+    action = wezterm.action.CloseCurrentTab { confirm = true },
+  },
+  {
     key = 'RightArrow',
     mods = 'META|SHIFT',
     action = wezterm.action.ActivateTabRelative(1),
@@ -143,11 +148,6 @@ keys = {
     key = 'LeftArrow',
     mods = 'META|SHIFT',
     action = wezterm.action.ActivateTabRelative(-1),
-  },
-  {
-    key = '&',
-    mods = 'LEADER',
-    action = wezterm.action.CloseCurrentTab{ confirm=true },
   },
   {
     key = 'x',
