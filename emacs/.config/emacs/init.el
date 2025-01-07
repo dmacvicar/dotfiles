@@ -687,12 +687,12 @@
 (use-package poly-org
   :defer t
   :init
-  (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode)))
+  (add-to-list 'auto-mode-alist '("\\.org\\'" . poly-org-mode)))
 ;; use lang modes inside markdow code fences
 (use-package poly-markdown
   :defer t
   :init
-  (add-to-list 'auto-mode-alist '("\\.md" . poly-gfm-mode)))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . poly-gfm-mode)))
 (use-package web-mode :mode "\\.qtpl\\'"
   :defer t)
 (use-package vue-html-mode
