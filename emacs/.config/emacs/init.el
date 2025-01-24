@@ -1067,7 +1067,12 @@
   (ein:output-area-inlined-images t))
 
 (use-package denote
-  :defer t)
+  :defer t
+  :bind ("C-c d" . denote)
+  :config
+  (with-eval-after-load 'org
+    (require 'denote)))
+
 (use-package consult-notes
   :defer t
   :commands (consult-notes
