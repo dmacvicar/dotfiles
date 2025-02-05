@@ -1084,12 +1084,13 @@
 (use-package prodigy :defer t)
 (use-package rg :defer t)
 
-;; work setup. It conflicts with the home setup because of mu4e
-;; so we load one or the other
-(if (file-directory-p "~/.emacs.work.d")
-    (mapc 'load (file-expand-wildcards "~/.emacs.work.d/*.el")))
-(if (file-directory-p "~/.emacs.home.d")
-    (mapc 'load (file-expand-wildcards "~/.emacs.home.d/*.el")))
+;; load specific configuration for different user accounts (work, home)
+(dolist (profile-name '("work" "home"))
+  (let ((profile-dir (expand-file-name (concat "emacs." profile-name) (xdg-config-home))))
+    (if (file-directory-p profile-dir)
+        (progn
+          (message "Including files in: %s" profile-dir)
+          (mapc 'load (file-expand-wildcards (concat profile-dir "/*.el")))))))
 
 ;; email
 (defconst mu4e-system-path "/usr/share/emacs/site-lisp/mu4e")
