@@ -1085,6 +1085,7 @@
 (use-package rg :defer t)
 
 ;; load specific configuration for different user accounts (work, home)
+;; from .config/emacs.$profile/*.el
 (dolist (profile-name '("work" "home"))
   (let ((profile-dir (expand-file-name (concat "emacs." profile-name) (xdg-config-home))))
     (if (file-directory-p profile-dir)
