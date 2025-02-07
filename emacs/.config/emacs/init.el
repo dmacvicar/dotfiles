@@ -777,6 +777,10 @@
   :defer t)
 (use-package lua-mode
   :defer t)
+(use-package typescript-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.ts[x]?\\'" . typescript-mode))
+  :defer t)
 
 ;; browse HN
 (use-package hackernews
