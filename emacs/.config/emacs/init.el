@@ -1123,6 +1123,7 @@
   (setq mu4e-headers-signed-mark    '("s" . "󰷼 "))
   (setq mu4e-headers-personal-mark  '("P" . ""))
   :custom
+  (mu4e-compose-format-flowed t)
   (mu4e-date-format "%F")
   (mu4e-headers-date-format "%F")
   (mu4e-use-fancy-chars t)
