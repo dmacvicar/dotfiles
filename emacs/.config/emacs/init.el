@@ -1138,6 +1138,7 @@
   (mu4e-maildir (expand-file-name "~/Mail"))
   (smtpmail-queue-mail nil)
   (mu4e-get-mail-command "/usr/bin/mbsync -aV")
+  (mu4e-change-filenames-when-moving t)
   (message-send-mail-function 'message-send-mail-with-sendmail)
   (sendmail-program "/usr/bin/msmtp"))
 
