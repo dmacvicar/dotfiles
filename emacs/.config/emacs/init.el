@@ -495,7 +495,7 @@
   (gptel-backend (gptel-make-openai "Mistral AI"
                    :host "api.mistral.ai"
                    :key (auth-source-pick-first-password
-                         :host "api.openai.com" :user "apiKey")
+                         :host "api.mistral.ai" :user "apiKey")
                    :stream t
                    :models '(codestral-latest)))
   :config
