@@ -490,6 +490,22 @@
 
 ;; different gpt models
 (use-package gptel
+  :custom
+  (gptel-model 'codestral-latest)
+  (gptel-backend (gptel-make-openai "Mistral AI"
+                   :host "api.mistral.ai"
+                   :key (auth-source-pick-first-password
+                         :host "api.openai.com" :user "apiKey")
+                   :stream t
+                   :models '(codestral-latest)))
+  :config
+  (gptel-make-openai "github"
+    :host "models.inference.ai.azure.com"
+    :key (auth-source-pick-first-password
+          :host "models.inference.ai.azure.com" :user "apiKey")
+    :endpoint "/chat/completions"
+    :stream t
+    :models '(gpt-4o))
   :defer t)
 
 (with-eval-after-load 'company
