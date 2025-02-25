@@ -51,7 +51,9 @@
 ;; misc defaults
 (setq inhibit-startup-screen t
       initial-scratch-message nil
-      initial-buffer-choice (if (< (length command-line-args) 2) #'enlight nil)
+      initial-buffer-choice (if (null (cdr command-line-args))
+                                #'enlight
+                              nil)
       initial-major-mode 'text-mode
       sentence-end-double-space nil
       ring-bell-function 'ignore
