@@ -479,7 +479,8 @@
 ;; text completion
 (use-package company
   :defer t
-  :config (add-hook 'prog-mode-hook 'company-mode))
+  :init
+  (add-hook 'prog-mode-hook 'company-mode))
 
 ;; github copilot
 (use-package copilot
