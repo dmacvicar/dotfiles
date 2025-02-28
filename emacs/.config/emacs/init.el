@@ -374,16 +374,18 @@
                    ("integration" "integration/*")
                    "*.info" "*.texi"
                    "*.ti" ("e" "e/*"))))
+
 ;; theme
 (use-package modus-themes
   :custom
   (modus-themes-mixed-fonts t)
   (modus-themes-org-blocks 'gray-background)
-  (modus-themes-fringes 'intense))
+  (modus-themes-fringes 'intense)
+  :config
+  (load-theme 'modus-operandi-tinted :no-confirm))
 
 (elpaca-wait)
 
-(load-theme 'modus-operandi-tinted :no-confirm)
 (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 (set-face-attribute 'default nil :family "Fira Code" :height 130)
