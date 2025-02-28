@@ -47,13 +47,10 @@
 (delete-selection-mode 1)
 (pixel-scroll-mode)
 
-
 ;; misc defaults
 (setq inhibit-startup-screen t
+      initial-buffer-choice nil
       initial-scratch-message nil
-      initial-buffer-choice (if (null (cdr command-line-args))
-                                #'enlight
-                              nil)
       initial-major-mode 'text-mode
       sentence-end-double-space nil
       ring-bell-function 'ignore
@@ -87,7 +84,7 @@
 			   (:eval
 			    (if (buffer-file-name)
 				(abbreviate-file-name (buffer-file-name))
-			    "%b"))))
+			      "%b"))))
 (set-charset-priority 'unicode)
 (prefer-coding-system 'utf-8-unix)
 
@@ -197,6 +194,10 @@
 (use-package enlight
   :ensure (:host github :repo "ichernyshovvv/enlight")
   :after grid
+  :init
+  (add-hook 'after-init-hook (lambda()
+                               (if (null (cdr command-line-args))
+                                   (enlight-open))))
   :config
   (require 'grid)
   :custom
