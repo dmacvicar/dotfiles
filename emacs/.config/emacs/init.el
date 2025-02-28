@@ -480,10 +480,19 @@
 (add-hook 'text-mode #'undo-hl-mode)
 
 ;; text completion
-(use-package company
+(use-package corfu
   :defer t
+  :custom
+  (corfu-auto t)
   :init
-  (add-hook 'prog-mode-hook 'company-mode))
+  (global-corfu-mode))
+
+(use-package cape
+  :bind ("C-c p" . cape-prefix-map)
+  :init
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-elisp-block))
 
 ;; github copilot
 (use-package copilot
@@ -558,6 +567,7 @@
 
 ;; LSP
 (use-package lsp-mode
+  :after corfu
   :defer t
   :commands lsp
   :init
@@ -595,14 +605,6 @@
   (lsp-ui-sideline-show-code-actions t)
   (lsp-ui-sideline-show-diagnostics t)
   :after flycheck)
-
-(use-package company-lsp
-  :defer t
-  :after company
-  :ensure nil
-  :commands company-lsp
-  :config
-  (add-to-list 'company-lsp company-backends))
 
 (use-package flycheck
   :defer t
