@@ -487,10 +487,16 @@
   :init
   (global-corfu-mode))
 
+;; remove with emacs 31
+(use-package corfu-terminal
+  :config
+  (unless (display-graphic-p)
+    (corfu-terminal-mode +1)))
+
 (use-package cape
   :bind ("C-c p" . cape-prefix-map)
   :init
-  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  ;;(add-hook 'completion-at-point-functions #'cape-dabbrev)
   (add-hook 'completion-at-point-functions #'cape-file)
   (add-hook 'completion-at-point-functions #'cape-elisp-block))
 
@@ -565,12 +571,24 @@
       (append '("bundle" "exec") command)
     command))
 
+
+(use-package eglot
+  :after corfu
+  :config
+  (add-hook 'go-ts-mode-hook 'eglot-ensure)
+  (add-hook 'zig-mode-hook 'eglot-ensure)
+  (add-hook 'python-ts-mode-hook 'eglot-ensure)
+  (add-hook 'c-ts-mode-hook 'eglot-ensure)
+  (add-hook 'c++-ts-mode-hook 'eglot-ensure))
+
 ;; LSP
 (use-package lsp-mode
+  :disabled t
   :after corfu
   :defer t
   :commands lsp
   :init
+  (add-hook 'zig-mode-hook #'lsp-deferred)
   (add-hook 'go-ts-mode-hook #'lsp-deferred)
   (add-hook 'enh-ruby-mode-hook #'lsp-deferred)
   (add-hook 'c-ts-mode-hook #'lsp-deferred)
@@ -587,6 +605,9 @@
   (lsp-auto-guess-root t)
   (lsp-solargraph-use-bundler t)
   (lsp-file-watch-threshold 2000)
+  (lsp-completion-provider :none)
+  (lsp-diagnostics-provider :flycheck)
+  (lsp-enable-xref t)
   :config
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
   :hook 'lsp-ui-mode
@@ -596,6 +617,7 @@
 
 (use-package lsp-ui
   :defer t
+  :disabled t
   :custom
   (lsp-ui-doc-enable t)
   (lsp-ui-peek-enable t)
