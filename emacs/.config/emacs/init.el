@@ -487,6 +487,8 @@
 ;; github copilot
 (use-package copilot
   :defer t
+  :custom
+  (copilot-install-dir (expand-file-name "emacs/copilot/" (xdg-cache-home)))
   :ensure (:host github :repo "copilot-emacs/copilot.el"
                  :files ("dist" "*.el"))
   :bind (:map copilot-completion-map
