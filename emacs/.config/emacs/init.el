@@ -127,10 +127,6 @@
   (auth-source-cache-expiry nil)
   (auth-source-debug 'trivia))
 
-(use-package expand-region
-  :defer t
-  :bind ("C-=" . er/expand-region))
-
 ;; copy from clipboard in terminal
 (use-package xclip
   :custom
@@ -550,7 +546,6 @@
 (use-package magit
   :defer t)
 
- ; `M-x combobulate' (or `C-c o o') to start using Combobulate
 (use-package treesit
   :init
   (setq =treesit-grammar-cache-directory (convert-standard-filename
@@ -586,6 +581,7 @@
   :config
   (global-treesit-auto-mode))
 
+;; structured navigation including expand region
 (use-package combobulate
   :defer t
   :after treesit
