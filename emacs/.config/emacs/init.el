@@ -184,7 +184,7 @@
 
 ;; modeline
 (use-package doom-modeline
-  :config (doom-modeline-mode 1))
+  :hook (after-init . doom-modeline-mode))
 
 ;; dashboard screen
 
