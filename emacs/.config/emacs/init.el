@@ -546,112 +546,15 @@
   (add-to-list 'backup-directory-alist
 	       (cons tramp-file-name-regexp nil)))
 
-;; helper to find bundler project root
-(defun duncan/ruby-bundler-project-root ()
-  (let* ((current (project-current))
-	 (root (if current (project-root current))))
-    (if root
-	(if (and
-	     (or (equal major-mode 'enh-ruby-mode) (equal major-mode 'ruby-mode))
-	     (file-exists-p (expand-file-name "Gemfile" root))
-	     (file-directory-p (expand-file-name ".bundle" root)))
-	    root))))
-
-(defun duncan/ruby-solargraph-project-p ()
-  (let ((root (duncan/ruby-bundler-project-root))
-	(case-fold-search t))
-    (if root
-	(with-temp-buffer
-	  (insert-file-contents (expand-file-name "Gemfile.lock" root))
-	  (goto-char (point-min))
-	  (ignore-errors (search-forward-regexp "solargraph"))))))
-
-(defun duncan/ruby-wrap-when-bundler-project (command)
-  (if (duncan/ruby-bundler-project-root)
-      (append '("bundle" "exec") command)
-    command))
-
-
+;; LSP
 (use-package eglot
   :after corfu
-  :config
-  (add-hook 'go-ts-mode-hook 'eglot-ensure)
-  (add-hook 'zig-mode-hook 'eglot-ensure)
-  (add-hook 'python-ts-mode-hook 'eglot-ensure)
-  (add-hook 'c-ts-mode-hook 'eglot-ensure)
-  (add-hook 'c++-ts-mode-hook 'eglot-ensure))
-
-;; LSP
-(use-package lsp-mode
-  :disabled t
-  :after corfu
-  :defer t
-  :commands lsp
-  :init
-  (add-hook 'zig-mode-hook #'lsp-deferred)
-  (add-hook 'go-ts-mode-hook #'lsp-deferred)
-  (add-hook 'enh-ruby-mode-hook #'lsp-deferred)
-  (add-hook 'c-ts-mode-hook #'lsp-deferred)
-  (add-hook 'c++-ts-mode-hook #'lsp-deferred)
-  (add-hook 'python-ts-mode-hook #'lsp-deferred)
-  (add-hook 'java-ts-mode-hook #'lsp-deferred)
-  (add-hook 'ruby-ts-mode-hook #'(lambda ()
-				(if (duncan/ruby-solargraph-project-p)
-				    (let ((lsp-solargraph-use-bundler t)) (lsp-deferred)))))
-  :custom
-  ;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
-  (lsp-server-install-dir (convert-standard-filename
-                           (expand-file-name  "emacs/lsp" (xdg-cache-home))))
-  (lsp-auto-guess-root t)
-  (lsp-solargraph-use-bundler t)
-  (lsp-file-watch-threshold 2000)
-  (lsp-completion-provider :none)
-  (lsp-diagnostics-provider :flycheck)
-  (lsp-enable-xref t)
-  :config
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  :hook 'lsp-ui-mode
-  :hook (lsp-mode . (lambda ()
-                      (let ((lsp-keymap-prefix "C-c l"))
-                        (lsp-enable-which-key-integration)))))
-
-(use-package lsp-ui
-  :defer t
-  :disabled t
-  :custom
-  (lsp-ui-doc-enable t)
-  (lsp-ui-peek-enable t)
-  (lsp-ui-sideline-enable t)
-  (lsp-ui-imenu-enable t)
-  (lsp-ui-flycheck-enable t)
-  (lsp-ui-sideline-show-code-actions t)
-  (lsp-ui-sideline-show-diagnostics t)
-  :after flycheck)
-
-(use-package flycheck
-  :defer t
-  :after projectile
-  :custom
-  (flycheck-command-wrapper-function #'duncan/ruby-wrap-when-bundler-project)
-  (flycheck-check-syntax-automatically '(idle-change save mode-enabled new-line))
-  :config
-  (global-flycheck-mode))
-
-(use-package flycheck-pos-tip
-  :defer t
-  :after (flycheck)
-  :config
-  (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)))
-
-(use-package lsp-java
-  :defer t
-  :after lsp
-  :config (add-hook 'java-mode-hook 'lsp)
-  :custom
-  lsp-file-watch-ignored '(".idea" ".ensime_cache" ".eunit" "node_modules"
-			   ".git" ".hg" ".fslckout" "_FOSSIL_"
-			   ".bzr" "_darcs" ".tox" ".svn" ".stack-work"
-			   "build" "data"))
+  :hook
+  ((go-ts-mode
+    zig-mode
+    python-ts-mode
+    c-ts-mode
+    c++-ts-mode) . eglot-ensure))
 
 ;; meson build system
 (use-package meson-mode
