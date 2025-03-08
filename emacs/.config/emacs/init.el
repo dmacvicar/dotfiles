@@ -1008,10 +1008,6 @@
 (use-package htmlize :defer t)
 (use-package protobuf-mode :defer t)
 
-;; start services
-(use-package prodigy :defer t)
-(use-package rg :defer t)
-
 ;; load specific configuration for different user accounts (work, home)
 ;; from .config/emacs.$profile/*.el
 (dolist (profile-name '("work" "home"))
