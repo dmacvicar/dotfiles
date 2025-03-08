@@ -550,13 +550,6 @@
 (use-package magit
   :defer t)
 
-;; never lose your cursor
-(use-package beacon
-  :defer 5
-  :config
-  (setq beacon-push-mark 5)
-  (setq beacon-size 25))
-
  ; `M-x combobulate' (or `C-c o o') to start using Combobulate
 (use-package treesit
   :init
