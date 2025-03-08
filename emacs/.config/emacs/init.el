@@ -472,6 +472,8 @@
 (use-package kind-icon
   :ensure t
   :after corfu
+  :custom
+  (svg-lib-icons-dir (expand-file-name "emacs/svg-lib/" (xdg-cache-home)))
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
