@@ -469,6 +469,12 @@
   (unless (display-graphic-p)
     (corfu-terminal-mode +1)))
 
+(use-package kind-icon
+  :ensure t
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
 (use-package cape
   :bind ("C-c p" . cape-prefix-map)
   :init
