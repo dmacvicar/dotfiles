@@ -264,30 +264,6 @@
  ("M-RET" . consult-buffer)
  ("C-M-j" . consult-buffer))
 
-(use-package dashboard-elfeed
-  :defer t
-  :disabled
-  :ensure (:host nil :type git :repo "git@github.com:dmacvicar/emacs-dashboard-elfeed"))
-
-(use-package dashboard
-  :defer t
-  :custom
-  (dashboard-set-footer nil)
-  (dashboard-banner-logo-title "My Dashboard")
-  (dashboard-startup-banner 'logo)
-  (dashboard-projects-backend 'project-el)
-  (dashboard-set-init-info t)
-  (dashboard-set-heading-icons t)
-  (dashboard-set-file-icons t)
-  (dashboard-items '((agenda . 5)
-                     (recents . 5)
-                     (bookmarks . 5)
-                     (projects . 5)))
-;                     (elfeed . 6)))
-  (dashboard-center-content t)
-  (dashboard-week-agenda t))
-;(add-hook 'elpaca-after-init-hook #'dashboard-open)
-
 (use-package perspective
   :after consult
   :config
