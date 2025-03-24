@@ -493,6 +493,12 @@
 
 ;; different gpt models
 (use-package gptel
+  :bind
+  (("C-c g m" . gptel-menu)
+   ("C-c g c" . gptel)
+   ("C-c g s" . gptel-send)
+   ("C-c g a" . gptel-add)
+   ("C-c g A" . gptel-abort))
   :custom
   (gptel-model 'codestral-latest)
   (gptel-backend (gptel-make-openai "Mistral AI"
