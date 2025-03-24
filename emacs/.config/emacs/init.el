@@ -515,6 +515,11 @@
     :endpoint "/chat/completions"
     :stream t
     :models '(gpt-4o))
+  (gptel-make-openai "openai"
+    :key (auth-source-pick-first-password
+          :host "api.openai.com" :user "apiKey")
+    :stream t
+    :models '("gpt-4o-mini" "gpt-4o"))
   :defer t)
 
 (with-eval-after-load 'company
