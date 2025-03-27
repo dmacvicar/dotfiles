@@ -383,16 +383,7 @@
 
 ;; window splitting functions
 (use-package windmove
-  :ensure nil
-  :config
-  ;; do not set ever windmove-wrap-around as it prevents jumping to tmux panes
-  :bind
-  (("C-x -" . (lambda ()
-               (interactive) (split-window-vertically) (other-window 1) (switch-to-buffer "*scratch*")))
-  ("C-x |" . (lambda ()
-               (interactive) (split-window-horizontally) (other-window 1) (switch-to-buffer "*scratch*")))
-  ("C-x x" . (lambda ()
-               (interactive) (kill-buffer (current-buffer)) (if (one-window-p) () (delete-window))))))
+  :ensure nil)
 
 (use-package tmux-pane
   :if (not (display-graphic-p))
