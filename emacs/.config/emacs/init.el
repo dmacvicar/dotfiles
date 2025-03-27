@@ -285,6 +285,8 @@
 (use-package marginalia
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
+  :custom
+  (marginalia-align 'right)
   :init
   (marginalia-mode))
 
