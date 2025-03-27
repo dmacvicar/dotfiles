@@ -283,9 +283,8 @@
 
 ;; add context to completions. eg. help to M-x functions
 (use-package marginalia
-  :bind (("M-A" . marginalia-cycle)
-         :map minibuffer-local-map
-         ("M-A" . marginalia-cycle))
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle))
   :init
   (marginalia-mode))
 
