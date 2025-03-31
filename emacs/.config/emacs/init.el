@@ -2,7 +2,6 @@
 
 ;; make startup faster by avoiding gc pauses
 (setq gc-cons-threshold (* 50 1000 1000))
-(defconst emacs-start-time (current-time))
 
 ;; disable UI elements, do this early
 (menu-bar-mode -1)
@@ -1337,10 +1336,7 @@
   (add-hook 'emacs-startup-hook
 	    (lambda ()
 	      (message "Emacs ready in %s with %d garbage collections."
-		       (format "%.2f seconds"
-			       (float-time
-				(time-subtract after-init-time before-init-time)))
-		       gcs-done))))
+		       (emacs-init-time) gcs-done))))
 
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
