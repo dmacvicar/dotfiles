@@ -3,70 +3,66 @@
 ;; make startup faster by avoiding gc pauses
 (setq gc-cons-threshold (* 50 1000 1000))
 
-;; disable UI elements, do this early
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-
-(prefer-coding-system 'utf-8)
-
-(require 'bind-key)
-
-(setq custom-file
-      (convert-standard-filename
-       (expand-file-name  "emacs/custom.el" (xdg-cache-home))))
-(when (file-exists-p custom-file)
+(use-package emacs
+  :ensure nil
+  :custom
+  (inhibit-startup-screen t)
+  (initial-buffer-choice nil)
+  (initial-scratch-message nil)
+  (initial-major-mode 'text-mode)
+  (sentence-end-double-space nil)
+  (ring-bell-function 'ignore)
+  (visible-bell nil)
+  (save-interprogram-paste-before-kill t)
+  (use-dialog-box nil)
+  (mark-even-if-inactive nil)
+  (kill-whole-line t)
+  (compilation-read-command nil)
+  (compilation-scroll-output 'first-error)
+  (use-short-answers t)
+  (fast-but-imprecise-scrolling t)
+  (load-prefer-newer t)
+  (confirm-kill-processes nil)
+  (native-comp-async-report-warnings-errors 'silent)
+  (truncate-string-ellipsis "…")
+  (confirm-kill-emacs nil)
+  (global-auto-revert-mode t)
+  (auto-revert-use-notify t)
+  (global-auto-revert-non-file-buffers t)
+  (auto-revert-verbose nil)
+  (delete-by-moving-to-trash t)
+  (fill-column 80)
+  (make-backup-files nil)
+  (auto-save-default nil)
+  (create-lockfiles nil)
+  (dired-listing-switches "-lt")
+  (frame-title-format '(""
+			invocation-name
+			" - "
+			(:eval
+			 (if (buffer-file-name)
+			     (abbreviate-file-name (buffer-file-name))
+			   "%b"))))
+  (custom-file
+   (convert-standard-filename
+    (expand-file-name  "emacs/custom.el" (xdg-cache-home))))
+  (set-charset-priority 'unicode)
+  (prefer-coding-system 'utf-8-unix)
+  :config
+  ;; disable UI elements, do this early
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (prefer-coding-system 'utf-8)
+  (when (file-exists-p custom-file)
     (load custom-file :noerror))
-
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
-(add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
-(add-hook 'text-mode-hook (lambda () (setq show-trailing-whitespace t)))
-
-(column-number-mode)
-;; if you type with text selected, delete it
-(delete-selection-mode 1)
-(pixel-scroll-mode)
-
-;; misc defaults
-(setq inhibit-startup-screen t
-      initial-buffer-choice nil
-      initial-scratch-message nil
-      initial-major-mode 'text-mode
-      sentence-end-double-space nil
-      ring-bell-function 'ignore
-      visible-bell nil
-      save-interprogram-paste-before-kill t
-      use-dialog-box nil
-      mark-even-if-inactive nil
-      kill-whole-line t
-      compilation-read-command nil
-      compilation-scroll-output 'first-error
-      use-short-answers t
-      fast-but-imprecise-scrolling t
-      load-prefer-newer t
-      confirm-kill-processes nil
-      native-comp-async-report-warnings-errors 'silent
-      truncate-string-ellipsis "…"
-      confirm-kill-emacs nil
-      global-auto-revert-mode t
-      auto-revert-use-notify t
-      global-auto-revert-non-file-buffers t
-      auto-revert-verbose nil
-      delete-by-moving-to-trash t
-      fill-column 80
-      make-backup-files nil
-      auto-save-default nil
-      create-lockfiles nil
-      dired-listing-switches "-lt"
-      frame-title-format '(""
-			   invocation-name
-			   " - "
-			   (:eval
-			    (if (buffer-file-name)
-				(abbreviate-file-name (buffer-file-name))
-			      "%b"))))
-(set-charset-priority 'unicode)
-(prefer-coding-system 'utf-8-unix)
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+  (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
+  (add-hook 'text-mode-hook (lambda () (setq show-trailing-whitespace t)))
+  (column-number-mode)
+  ;; if you type with text selected, delete it
+  (delete-selection-mode 1)
+  (pixel-scroll-mode))
 
 (defvar elpaca-installer-version 0.11)
 (defvar elpaca-directory (expand-file-name "emacs/elpaca/" (xdg-cache-home)))
