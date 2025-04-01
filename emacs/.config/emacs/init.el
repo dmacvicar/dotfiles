@@ -206,7 +206,10 @@
           help-mode
           compilation-mode
 	  go-test-mode
-	  xref-mode))
+	  xref-mode
+          (lambda (bufname)
+            (with-current-buffer bufname
+              (bound-and-true-p gptel-mode)))))
   (popper-mode +1)
   (popper-echo-mode +1))
 
@@ -390,6 +393,18 @@
 (duncan/set-frame-size-according-to-resolution)
 ;; not decided yet if maximizing is better?
 ;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(use-package window
+  :ensure nil
+  :custom
+  (display-buffer-alist
+   '(((lambda (bufname action)
+        (with-current-buffer bufname
+          (bound-and-true-p gptel-mode)))
+      (display-buffer-in-side-window)
+      (window-width . 25)
+      (side . right)
+      (slot . 0)))))
 
 ;; window splitting functions
 (use-package windmove
