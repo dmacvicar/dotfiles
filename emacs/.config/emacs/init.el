@@ -551,16 +551,12 @@
   :defer t)
 
 (use-package treesit
-  :init
-  (setq =treesit-grammar-cache-directory (convert-standard-filename
-                                          (expand-file-name  "emacs/tree-sitter" (xdg-cache-home))))
-  (when (boundp 'treesit-extra-load-path)
-    (add-to-list 'treesit-extra-load-path =treesit-grammar-cache-directory))
   :config
-  (advice-add #'treesit--install-language-grammar-1 :around
-	          (lambda (fn out-dir &rest args)
-	            (apply fn (or out-dir =treesit-grammar-cache-directory) args)))
-
+  (let ((=treesit-grammar-cache-directory (convert-standard-filename
+                                          (expand-file-name "emacs/tree-sitter" (xdg-cache-home)))))
+    (when (boundp 'treesit-extra-load-path)
+      (add-to-list 'treesit-extra-load-path =treesit-grammar-cache-directory)
+      (add-to-list 'treesit--install-language-grammar-out-dir-history =treesit-grammar-cache-directory)))
   (dolist (mode
            '((bash-mode       . bash-ts-mode)
              (c-mode          . c-ts-mode)
