@@ -189,30 +189,6 @@
            ("Emacs Configuration" (find-file user-init-file) "c")
            ("Home folder" (dired "~/") "h")))))))
 
-;; popups
-(use-package popper
-  :bind (("C-`"   . popper-toggle-latest)
-         ("M-`"   . popper-cycle)
-         ("C-M-`" . popper-toggle-type))
-  :init
-  (setq popper-reference-buffers
-        '("\\*Messages\\*"
-          "\\*Warnings\\*"
-          "\\*grep\\*"
-          "\\*rg*\\*"
-          "\\*Org Agenda\\*"
-          "Output\\*$"
-          "\\*Async Shell Command\\*"
-          help-mode
-          compilation-mode
-	  go-test-mode
-	  xref-mode
-          (lambda (bufname)
-            (with-current-buffer bufname
-              (bound-and-true-p gptel-mode)))))
-  (popper-mode +1)
-  (popper-echo-mode +1))
-
 ;; discoverability
 (use-package which-key
   :config
@@ -391,13 +367,39 @@
   :ensure nil
   :custom
   (display-buffer-alist
-   '(((lambda (bufname action)
+   '(("\\*\\(Messages\\|Warnings\\|grep\\|rg\\|Org Agenda\\|Output\\|Async Shell Command\\|compilation\\)\\*"
+      (display-buffer-in-side-window)
+      (window-height . 0.25)
+      (side . bottom)
+      (slot . 0))
+     ((lambda (bufname action)
         (with-current-buffer bufname
           (bound-and-true-p gptel-mode)))
       (display-buffer-in-side-window)
-      (window-width . 25)
+      (window-width . 0.25)
       (side . right)
       (slot . 0)))))
+
+;; popups
+(use-package popper
+  :bind (("C-`"   . popper-toggle-latest)
+         ("M-`"   . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+  :custom
+  ; respect display-buffer-alist
+  (popper-display-control nil)
+  :init
+  (setq popper-reference-buffers
+        '("\\*\\(Messages\\|Warnings\\|grep\\|rg\\|Org Agenda\\|Output\\|Async Shell Command\\|compilation\\)\\*"
+          help-mode
+          compilation-mode
+	  go-test-mode
+	  xref-mode
+          (lambda (bufname)
+            (with-current-buffer bufname
+              (bound-and-true-p gptel-mode)))))
+  (popper-mode +1)
+  (popper-echo-mode +1))
 
 ;; window splitting functions
 (use-package windmove
