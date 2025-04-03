@@ -53,6 +53,10 @@
 
 (use-package emacs
   :ensure nil
+  :bind
+  (("M-g r" . recentf)
+   ("M-s g" . grep)
+   ("M-s f" . find-name-dired))
   :custom
   (inhibit-startup-screen t)
   (initial-buffer-choice nil)
@@ -557,7 +561,14 @@
     zig-mode
     python-ts-mode
     c-ts-mode
-    c++-ts-mode) . eglot-ensure))
+    c++-ts-mode) . eglot-ensure)
+  :bind (:map
+         eglot-mode-map
+         ("C-c l a" . eglot-code-actions)
+         ("C-c l o" . eglot-code-actions-organize-imports)
+         ("C-c l r" . eglot-rename)
+         ("C-c l f" . eglot-format)))
+
 (use-package eldoc
   :ensure nil
   :defer t)
