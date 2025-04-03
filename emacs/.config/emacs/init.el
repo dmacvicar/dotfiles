@@ -558,6 +558,23 @@
     python-ts-mode
     c-ts-mode
     c++-ts-mode) . eglot-ensure))
+(use-package eldoc
+  :ensure nil
+  :defer t)
+
+(use-package pulsar
+  :defer t)
+
+(use-package repeat
+  :ensure nil
+  :config
+  (repeat-mode))
+
+(use-package dape
+  :config
+  (add-hook 'dape-display-source-hook 'pulse-momentary-highlight-one-line)
+  ;; (remove-hook 'dape-start-hook 'dape-info)
+  (remove-hook 'dape-start-hook 'dape-repl))
 
 ;; meson build system
 (use-package meson-mode
