@@ -537,9 +537,14 @@
   (add-to-list 'backup-directory-alist
 	       (cons tramp-file-name-regexp nil)))
 
+
+(use-package flymake
+  :defer t)
+
 ;; LSP
 (use-package eglot
   :after corfu
+  :after flymake
   :hook
   ((go-ts-mode
     zig-mode
