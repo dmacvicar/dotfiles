@@ -31,6 +31,6 @@ fi
 [ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/bash"
 
 # avoid enabling starship in emacs terminal unless in eat
-if exists starship && [[ -z "$INSIDE_EMACS" || "$INSIDE_EMACS" =~ .*eat.* ]]; then
+if exists starship && [[ ( -z "$INSIDE_EMACS" || "$INSIDE_EMACS" =~ .*eat.* ) && -z "$CURSOR_TRACE_ID" ]]; then
     eval "$(starship init bash)"
 fi
