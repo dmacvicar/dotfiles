@@ -222,13 +222,20 @@
   :custom
   (which-key-popup-type 'minibuffer))
 
+;; hide commands in M-x which do not apply to the current mode.
+(setq read-extended-command-predicate #'command-completion-default-include-p)
+
 ;; completion system (alternative to ivy)
 (use-package vertico
   :init
   (vertico-mode)
-  :ensure (vertico
-             :files (:defaults "extensions/vertico-directory.el")
-             :includes (vertico-directory)))
+  :ensure (:files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el")))
+
+(use-package vertico-sort
+  :ensure nil
+  :init
+  (setq vertico-sort-function #'vertico-sort-history-alpha)
+  :after vertico)
 
 ;; configure directory extension
 (use-package vertico-directory
