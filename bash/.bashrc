@@ -6,7 +6,7 @@ exists()
 
 HISTCONTROL=ignoredups:ignorespace
 
-for dir in $HOME/.config/emacs/bin $HOME/go/bin $HOME/.npm-global/bin $HOME/.nix-profile/bin; do
+for dir in $HOME/.local/bin $HOME/.config/emacs/bin $HOME/go/bin $HOME/.npm-global/bin $HOME/.nix-profile/bin; do
     test -d "$dir" && export PATH=$dir:$PATH
 done
 
