@@ -496,6 +496,14 @@
               ("<tab>" . copilot-accept-completion)
               ("TAB" . copilot-accept-completion)))
 
+(use-package claude-code-ide
+  :ensure (:type git :host github :repo "manzaltu/claude-code-ide.el")
+  :bind ("C-c C-'" . claude-code-ide-menu)
+  :custom
+  (claude-code-ide-terminal-backend 'eat)
+  :config
+  (claude-code-ide-emacs-tools-setup))
+
 ;; different gpt models
 (use-package gptel
   :bind
