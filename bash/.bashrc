@@ -42,5 +42,5 @@ eval "$(pyenv init - bash)"
 
 export PATH="$HOME/.tfenv/bin:$PATH"
 export TFENV_INSTALL_DIR="~/.tfenv"
-
+export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 
