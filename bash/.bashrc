@@ -35,12 +35,10 @@ if exists starship && [[ ( -z "$INSIDE_EMACS" || "$INSIDE_EMACS" =~ .*eat.* ) &&
     eval "$(starship init bash)"
 fi
 
+if exists mise; then
+    eval "$(mise activate bash)"
+    eval "$(mise activate bash --shims)"
+fi
 
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - bash)"
-
-export PATH="$HOME/.tfenv/bin:$PATH"
-export TFENV_INSTALL_DIR="~/.tfenv"
 export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 
