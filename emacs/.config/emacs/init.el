@@ -769,6 +769,11 @@
 (use-package go-gen-test
   :defer t)
 
+(use-package pet
+  :defer t
+  :config
+  (add-hook 'python-base-mode-hook 'pet-mode -10))
+
 (use-package rust-mode
   :defer t)
 (use-package elixir-mode
