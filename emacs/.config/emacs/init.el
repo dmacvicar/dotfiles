@@ -227,34 +227,42 @@
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
+;; use project specific switching if there is a project
+(defun duncan/switch-buffer ()
+  (interactive)
+  (if (project-current)
+      (call-interactively #'consult-project-buffer)
+    (call-interactively #'consult-buffer)))
+
 ;; reimpl of common emacs command using completion-system/vertico
 ;; alternative to consul
 (use-package consult
   :demand t
-  :init
   :custom
   (xref-show-xrefs-function #'consult-xref)
   (xref-show-definitions-function #'consult-xref)
   (consult-preview-key '("S-<down>" "S-<up>"))
   :bind
   ("C-s" . consult-line)
-  ("C-x b" . consult-buffer)
+  ("C-x b" . duncan/switch-buffer)
   :config)
 
-(bind-keys*
- ("M-RET" . consult-buffer)
- ("C-M-j" . consult-buffer))
-
-(use-package perspective
-  :after consult
-  :config
-  (consult-customize consult--source-buffer :hidden t :default nil)
-  (add-to-list 'consult-buffer-sources persp-consult-source)
-  :custom
-  (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
-  (persp-suppress-no-prefix-key-warning t)
+(use-package tab-bar
+  :ensure nil
   :init
-  (persp-mode))
+  (tab-bar-mode)
+  :custom
+  (tab-bar-show 1))
+
+(use-package project
+  :ensure nil
+  :config
+  (defun duncan/project-create-tab ()
+    (interactive)
+    (tab-bar-new-tab)
+    (tab-bar-rename-tab (project-name (project-current)))
+    (project-dired))
+  (setq project-switch-commands #'duncan/project-create-tab))
 
 ;; complete in any order
 (use-package orderless
