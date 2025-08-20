@@ -629,6 +629,7 @@
                                           (expand-file-name  "emacs/tree-sitter" (xdg-cache-home))))
   (when (boundp 'treesit-extra-load-path)
     (add-to-list 'treesit-extra-load-path =treesit-grammar-cache-directory))
+  (setq treesit--install-language-grammar-out-dir-history treesit-extra-load-path)
   :config
   (let ((=treesit-grammar-cache-directory (convert-standard-filename
                                           (expand-file-name "emacs/tree-sitter" (xdg-cache-home)))))
