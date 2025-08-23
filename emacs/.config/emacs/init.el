@@ -721,6 +721,12 @@
   :ensure t
   :defer t)
 
+(use-package terraform-ts-mode
+  :defer t
+  :mode
+  "\\.tf\\'"
+  :ensure (:host github :repo "kgrotel/terraform-ts-mode"))
+
 ;; guess indentation params
 (use-package dtrt-indent
   :custom
