@@ -251,6 +251,9 @@
   :ensure nil
   :init
   (tab-bar-mode)
+  :config
+  (bind-key* "M-S-<left>" #'tab-previous)
+  (bind-key* "M-S-<right>" #'tab-next)
   :custom
   (tab-bar-show 1))
 
