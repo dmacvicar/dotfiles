@@ -227,13 +227,6 @@
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
-;; use project specific switching if there is a project
-(defun duncan/switch-buffer ()
-  (interactive)
-  (if (project-current)
-      (call-interactively #'consult-project-buffer)
-    (call-interactively #'consult-buffer)))
-
 ;; reimpl of common emacs command using completion-system/vertico
 ;; alternative to consul
 (use-package consult
@@ -244,7 +237,9 @@
   (consult-preview-key '("S-<down>" "S-<up>"))
   :bind
   ("C-s" . consult-line)
-  ("C-x b" . duncan/switch-buffer)
+  ("C-x b" . consult-buffer)
+  ("C-x p b" . consult-project-buffer)
+
   :config)
 
 (use-package tab-bar
