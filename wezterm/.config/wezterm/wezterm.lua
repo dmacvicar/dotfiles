@@ -16,8 +16,6 @@ config.window_frame = {
   border_top_color = '#9f9690',
 }
 
-
-
 config.use_fancy_tab_bar = false
 -- we don't need tabs if using sway, most likely we will
 -- use say splits
@@ -25,38 +23,24 @@ if string.match(os.getenv("DESKTOP_SESSION"), "sway") then
    config.hide_tab_bar_if_only_one_tab = true
 end
 
-config.colors = {
-  -- Modus Operandi Tinded
-  -- https://protesilaos.com/emacs/modus-themes-colors
-  ansi = {
-    "#000000", -- black
-    "#A60000", -- maroon
-    "#006800", -- green
-    "#6F5500", -- olive
-    "#0031A9", -- navy
-    "#721045", -- purple
-    "#00538B", -- teal
-    "#DFD6CD", -- silver
-  },
-  brights = {
-    "#585858", -- grey
-    "#972500", -- red
-    "316500", -- lime
-    "#884900", -- yellow
-    "#354FCF", -- blue
-    "#531AB6", -- fuchsia
-    "#005A5F", -- aqua
-    "#FBF7F0", -- white
-  },
+-- wezterm.gui is not available to the mux server, so take care to
+-- do something reasonable when this config is evaluated by the mux
+function get_appearance()
+  if wezterm.gui then
+    return wezterm.gui.get_appearance()
+  end
+  return 'Dark'
+end
 
-  cursor_bg = '#dfa0f0',
-  cursor_border = '#dfa0f0',
-  cursor_fg = '#fbf7f0',
-  background = '#fbf7f0',
-  foreground = '#000000',
-  selection_bg = '#c2bcb5',
-  selection_fg = '#000000',
-}
+function scheme_for_appearance(appearance)
+  if appearance:find 'Dark' then
+    return 'Modus-Vivendi-Tinted'
+  else
+    return 'Modus-Operandi-Tinted'
+  end
+end
+
+config.color_scheme = scheme_for_appearance(get_appearance())
 
 config.enable_scroll_bar = false
 config.term = "wezterm"
