@@ -337,11 +337,11 @@
     "Change the theme based on a D-Bus property.
 
 VALUE should be an integer or an arbitrarily nested list that
-contains an integer.  When VALUE is equal to 2 then a light theme
-will be selected, otherwise a dark theme will be selected."
-    (load-theme (if (= 2 (car (flatten-list value)))
-                    'modus-operandi-tinted
-                  'modus-vivendi-tinted)
+contains an integer.  When VALUE is equal to 2 then a dark theme
+will be selected, otherwise a light theme will be selected (0 is default)"
+    (load-theme (if (= 1 (car (flatten-list value)))
+                    'modus-vivendi-tinted
+                  'modus-operandi-tinted)
                 t))
   (require 'dbus)
   ;; Set the current theme based on what the system theme is right now
