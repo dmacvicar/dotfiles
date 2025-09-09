@@ -333,7 +333,36 @@
   (modus-themes-org-blocks 'gray-background)
   (modus-themes-fringes 'intense)
   :config
-  (load-theme 'modus-operandi-tinted :no-confirm))
+  (defun duncan/theme-from-dbus (value)
+    "Change the theme based on a D-Bus property.
+
+VALUE should be an integer or an arbitrarily nested list that
+contains an integer.  When VALUE is equal to 2 then a light theme
+will be selected, otherwise a dark theme will be selected."
+    (load-theme (if (= 2 (car (flatten-list value)))
+                    'modus-operandi-tinted
+                  'modus-vivendi-tinted)
+                t))
+  (require 'dbus)
+  ;; Set the current theme based on what the system theme is right now
+  (dbus-call-method-asynchronously
+   :session "org.freedesktop.portal.Desktop"
+   "/org/freedesktop/portal/desktop"
+   "org.freedesktop.portal.Settings"
+   "Read"
+   #'duncan/theme-from-dbus
+   "org.freedesktop.appearance"
+   "color-scheme")
+  ;; Register to be notified when the system theme changes:
+  (dbus-register-signal
+   :session "org.freedesktop.portal.Desktop"
+   "/org/freedesktop/portal/desktop"
+   "org.freedesktop.portal.Settings"
+   "SettingChanged"
+   (lambda (path var value)
+     (when (and (string-equal path "org.freedesktop.appearance")
+                (string-equal var "color-scheme"))
+       (duncan/theme-from-dbus value)))))
 
 (elpaca-wait)
 
