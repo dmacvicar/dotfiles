@@ -18,10 +18,6 @@ fi
 alias df="df -h"
 alias ls="ls --color=auto"
 
-if exists direnv; then
-    eval "$(direnv hook bash)"
-fi
-
 if [[ "$XDG_CURRENT_DESKTOP" =~ .*KDE.* ]]; then
     for f in $HOME/.config/plasma-workspace/env/*; do
         test -f "$f" && source "$f"
