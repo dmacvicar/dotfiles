@@ -1223,7 +1223,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
         ("f" . mu4e-views-toggle-auto-view-selected-message)) ;; toggle opening messages automatically when moving in the headers view)
   :config
   (setq mu4e-views-next-previous-message-behaviour 'always-switch-to-view)
-  (setq mu4e-views-completion-method 'ivy)
+  (setq mu4e-views-completion-method 'default)
   (setq mu4e-views-default-view-method "text")
   (mu4e-views-mu4e-use-view-msg-method "text")
   (setq mu4e-views-auto-view-selected-message nil))
