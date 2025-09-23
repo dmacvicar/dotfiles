@@ -344,26 +344,32 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                     'modus-vivendi-tinted
                   'modus-operandi-tinted)
                 t))
-  (require 'dbus)
-  ;; Set the current theme based on what the system theme is right now
-  (dbus-call-method-asynchronously
-   :session "org.freedesktop.portal.Desktop"
-   "/org/freedesktop/portal/desktop"
-   "org.freedesktop.portal.Settings"
-   "Read"
-   #'duncan/theme-from-dbus
-   "org.freedesktop.appearance"
-   "color-scheme")
-  ;; Register to be notified when the system theme changes:
-  (dbus-register-signal
-   :session "org.freedesktop.portal.Desktop"
-   "/org/freedesktop/portal/desktop"
-   "org.freedesktop.portal.Settings"
-   "SettingChanged"
-   (lambda (path var value)
-     (when (and (string-equal path "org.freedesktop.appearance")
-                (string-equal var "color-scheme"))
-       (duncan/theme-from-dbus value)))))
+  (if (featurep 'dbusbind)
+      (condition-case err
+          (progn
+            (require 'dbus)
+            ;; Set the current theme based on what the system theme is right now
+            (dbus-call-method-asynchronously
+             :session "org.freedesktop.portal.Desktop"
+             "/org/freedesktop/portal/desktop"
+             "org.freedesktop.portal.Settings"
+             "Read"
+             #'duncan/theme-from-dbus
+             "org.freedesktop.appearance"
+             "color-scheme")
+            ;; Register to be notified when the system theme changes:
+            (dbus-register-signal
+             :session "org.freedesktop.portal.Desktop"
+             "/org/freedesktop/portal/desktop"
+             "org.freedesktop.portal.Settings"
+             "SettingChanged"
+             (lambda (path var value)
+               (when (and (string-equal path "org.freedesktop.appearance")
+                          (string-equal var "color-scheme"))
+                 (duncan/theme-from-dbus value)))))
+        (error
+         (message "D-Bus theme sync unavailable: %s" (error-message-string err))))
+    (message "D-Bus not available; skipping theme sync")))
 
 (elpaca-wait)
 
