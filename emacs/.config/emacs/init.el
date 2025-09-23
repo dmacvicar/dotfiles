@@ -481,8 +481,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; respect style of projects
 (use-package editorconfig
-  :defer t
-  :config
+  :init
   (editorconfig-mode 1))
 
 ;; parenthesis
