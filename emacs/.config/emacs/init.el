@@ -368,7 +368,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
-(set-face-attribute 'default nil :family "Fira Code" :height 130)
+(set-face-attribute 'default nil :family "FiraCode Nerd Font Mono" :height 130)
 (set-face-attribute 'variable-pitch nil :family "Noto Sans")
 (set-face-attribute 'fixed-pitch nil :family (face-attribute 'default :family) :height 110)
 
