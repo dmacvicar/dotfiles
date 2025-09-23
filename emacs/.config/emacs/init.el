@@ -303,6 +303,7 @@
 ;; todo, set custom (emojify-display-style) when
 ;; we get a good font
 (use-package emojify
+  :disabled t
   :custom
   (emojify-emojis-dir (convert-standard-filename
                        (expand-file-name  "emacs/emojis" (xdg-cache-home))))
