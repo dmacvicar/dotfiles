@@ -471,12 +471,13 @@ will be selected, otherwise a light theme will be selected (0 is default)"
       (bind-key* "<XF86Forward>" (lambda () (interactive) (other-window 1)))
       (bind-key "<XF86Back>" (lambda () (interactive) (other-window -1)))
       (bind-key "<XF86Forward>" (lambda () (interactive) (other-window 1))))
-      ;; else, move across tmux panes too
-      (tmux-pane-mode)
-      (bind-key* "M-<left>" #'tmux-pane-omni-window-left)
-      (bind-key* "M-<right>" #'tmux-pane-omni-window-right)
-      (bind-key* "M-<up>" #'tmux-pane-omni-window-up)
-      (bind-key* "M-<down>" #'tmux-pane-omni-window-down))
+  ;; else, move across tmux panes too
+  (progn
+    (tmux-pane-mode)
+    (bind-key* "M-<left>" #'tmux-pane-omni-window-left)
+    (bind-key* "M-<right>" #'tmux-pane-omni-window-right)
+    (bind-key* "M-<up>" #'tmux-pane-omni-window-up)
+    (bind-key* "M-<down>" #'tmux-pane-omni-window-down)))
 
 ;; respect style of projects
 (use-package editorconfig
