@@ -4,17 +4,22 @@ local config = {}
 config = wezterm.config_builder()
 -- do not start a login shell
 config.default_prog = { "/bin/bash" }
-config.window_decorations = "TITLE"
-config.window_frame = {
-  border_left_width = '1px',
-  border_right_width = '1px',
-  border_bottom_height = '1px',
-  border_top_height = '1px',
-  border_left_color = '#9f9690',
-  border_right_color = '#9f9690',
-  border_bottom_color = '#9f9690',
-  border_top_color = '#9f9690',
-}
+
+if string.match(os.getenv("DESKTOP_SESSION"), "hyprland|niri") then
+    config.window_decorations = "NONE"
+else
+    config.window_decorations = "TITLE"
+    config.window_frame = {
+        border_left_width = '1px',
+        border_right_width = '1px',
+        border_bottom_height = '1px',
+        border_top_height = '1px',
+        border_left_color = '#9f9690',
+        border_right_color = '#9f9690',
+        border_bottom_color = '#9f9690',
+        border_top_color = '#9f9690',
+    }
+end
 
 config.use_fancy_tab_bar = false
 -- we don't need tabs if using sway, most likely we will
