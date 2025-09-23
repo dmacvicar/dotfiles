@@ -257,9 +257,12 @@
   :config
   (defun duncan/project-create-tab ()
     (interactive)
-    (tab-bar-new-tab)
-    (tab-bar-rename-tab (project-name (project-current)))
-    (project-dired))
+    (if-let ((project (project-current)))
+        (progn
+          (tab-bar-new-tab)
+          (tab-bar-rename-tab (project-name project))
+          (project-dired project))
+      (user-error "No project in current directory")))
   (setq project-switch-commands #'duncan/project-create-tab))
 
 ;; complete in any order
