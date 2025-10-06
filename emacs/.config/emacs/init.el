@@ -404,9 +404,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
           (height-px (floor (* (display-pixel-height) 0.85)))
           (height (floor (/ height-px (frame-char-height))))
           (top-px (floor (/ (- (display-pixel-height) height-px) 2))))
-      (add-to-list 'default-frame-alist
+      (add-to-list 'initial-frame-alist
                    (cons 'height height))
-      (add-to-list 'default-frame-alist
+      (add-to-list 'initial-frame-alist
                    (cons 'width width)))))
 
 (duncan/set-frame-size-according-to-resolution)
