@@ -28,5 +28,5 @@ selection_bg = "#c2bcb5"
 selection_fg = "#000000"
 
 [metadata]
-name = "Modus Operandi Tinted (Faithful)"
+name = "modus-operandi-tinted"
 origin_url = "https://protesilaos.com/emacs/modus-themes-colors"

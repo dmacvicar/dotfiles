@@ -39,11 +39,9 @@ end
 
 function scheme_for_appearance(appearance)
   if appearance:find 'Dark' then
-    return "Builtin Dark"
-    --return 'Modus-Vivendi-Tinted'
+    return 'modus-vivendi-tinted'
   else
-    return "Builtin Light"
-    --return 'Modus-Operandi-Tinted'
+    return 'modus-operandi-tinted'
   end
 end
 
