@@ -1,0 +1,32 @@
+[colors]
+ansi = [
+    "#000000", # black
+    "#A60000", # red
+    "#006800", # green
+    "#6F5500", # yellow
+    "#0031A9", # blue
+    "#721045", # magenta
+    "#00538B", # cyan
+    "#DFD6CD", # white
+]
+brights = [
+    "#585858", # bright black
+    "#972500", # bright red
+    "#316500", # bright green
+    "#884900", # bright yellow
+    "#354FCF", # bright blue
+    "#531AB6", # bright magenta
+    "#005A5F", # bright cyan
+    "#FBF7F0", # bright white
+]
+background = "#FBF7F0"
+foreground = "#000000"
+cursor_bg = "#dfa0f0"
+cursor_border = "#dfa0f0"
+cursor_fg = "#fbf7f0"
+selection_bg = "#c2bcb5"
+selection_fg = "#000000"
+
+[metadata]
+name = "Modus Operandi Tinted (Faithful)"
+origin_url = "https://protesilaos.com/emacs/modus-themes-colors"
