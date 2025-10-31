@@ -17,4 +17,5 @@ diary
 elpa
 excorporate
 tree-sitter
-
+tabsession.el
+tramp
