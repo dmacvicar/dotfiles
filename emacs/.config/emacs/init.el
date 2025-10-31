@@ -744,6 +744,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package yaml-mode
   :defer t)
 
+(use-package docker
+  :ensure t
+  defer t
+  :bind ("C-c d" . docker))
+
 (use-package dockerfile-ts-mode
   :ensure nil
   :mode
