@@ -188,7 +188,9 @@
           ("Calendar/TODO"
             ("Agenda" (org-agenda-list "1") "a")
             ("todo.org"
-              (find-file (seq-find (lambda (x) (string-match "todo.org" x)) org-agenda-files)) "t"))
+             (progn
+              (require 'org)
+              (find-file (seq-find (lambda (x) (string-match "todo.org" x)) org-agenda-files))) "t"))
           ("Misc"
            ("Emacs Configuration" (find-file user-init-file) "c")
            ("Home folder" (dired "~/") "h")))))))
