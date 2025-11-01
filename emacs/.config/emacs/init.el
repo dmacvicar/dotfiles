@@ -1153,6 +1153,14 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :config
   (add-hook 'mu4e-compose-mode-hook (lambda () (setq show-trailing-whitespace t)))
   (add-hook 'mu4e-search-bookmark-hook (lambda (_) (setq mu4e-headers-include-related nil)))
+  ;; signature
+  ;(flycheck-add-mode 'vale 'mu4e-compose-mode)
+  ;; minor modes for compose mode
+  (add-hook 'mu4e-compose-mode-hook (lambda ()
+                                        (flyspell-mode)
+                                        (auto-fill-mode -1)
+                                        (visual-line-mode 1)
+                                        (turn-off-smartparens-mode)))
   :init
   ;; nerdfonts for marks
   (setq mu4e-headers-unread-mark    '("u" . ""))
@@ -1169,7 +1177,14 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (setq mu4e-headers-signed-mark    '("s" . "󰷼 "))
   (setq mu4e-headers-personal-mark  '("P" . ""))
   :custom
+  (mu4e-completing-read-function 'completing-read)
+  (mu4e-view-use-gnus nil)
   (mu4e-compose-format-flowed t)
+  ;(mu4e-html2text-command 'mu4e-shr2text)
+  (mu4e-html2text-command "w3m -dump -T text/html")
+  (mu4e-context-policy 'pick-first)
+  (mu4e-compose-context-policy 'ask)
+  (mail-user-agent 'mu4e-user-agent)
   (mu4e-date-format "%F")
   (mu4e-headers-date-format "%F")
   (mu4e-use-fancy-chars t)
@@ -1185,7 +1200,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (smtpmail-queue-mail nil)
   (mu4e-get-mail-command "/usr/bin/mbsync -aV")
   (mu4e-change-filenames-when-moving t)
+  (message-kill-buffer-on-exit t)
   (message-send-mail-function 'message-send-mail-with-sendmail)
+  (user-full-name "Duncan Mac-Vicar P.")
   (sendmail-program "/usr/bin/msmtp"))
 
 (use-package outlook
