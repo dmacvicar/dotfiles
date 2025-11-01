@@ -1031,14 +1031,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :commands
   (org-babel-execute:http
    org-babel-expand-body:http))
-(use-package ob-grpc
-  :ensure (ob-grpc :type git :host github :repo "shsms/ob-grpc")
-  :commands
-  (org-babel-execute:grpc
-   org-babel-expand-body:grpc)
-  :bind (:map org-mode-map
-              ("C-c g i" . ob-grpc-init)
-              ("C-c g b" . ob-grpc-insert-block)))
+
 (use-package ob-shell
   :ensure nil
   :requires (org-plus-contrib)
