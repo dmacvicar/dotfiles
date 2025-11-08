@@ -1419,6 +1419,12 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;;my favourite contacts - these will be put at front of list
 (setq dmacvicar/contact-file "~/.favorite-contacts.txt")
 
+(use-package obsolete
+  :ensure (obsolete
+           :repo "dmacvicar/obsolete.el"
+           :host github
+           :protocol ssh))
+
 (use-package emacs
   :ensure nil
   :config
