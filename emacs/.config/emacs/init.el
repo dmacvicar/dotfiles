@@ -542,6 +542,17 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (add-hook 'completion-at-point-functions #'cape-file)
   (add-hook 'completion-at-point-functions #'cape-elisp-block))
 
+;; dictation
+(use-package whisper
+  :ensure (:type git :host github :repo "natrys/whisper.el")
+  :bind ("C-x !" . whisper-run)
+  :config
+  (setq whisper-install-directory (expand-file-name "emacs/whisper.el/" (xdg-cache-home))
+        whisper-model "base"
+        whisper-language "en"
+        whisper-translate nil
+        whisper-use-threads 4))
+
 ;; github copilot
 (use-package copilot
   :defer t
