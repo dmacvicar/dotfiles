@@ -582,12 +582,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
    ("C-c g A" . gptel-abort))
   :custom
   (gptel-model 'codestral-latest)
-  (gptel-backend (gptel-make-openai "Mistral AI"
-                   :host "api.mistral.ai"
+  (gptel-backend (gptel-make-openai "openai"
                    :key (auth-source-pick-first-password
-                         :host "api.mistral.ai" :user "apiKey")
+                         :host "api.openai.com" :user "apiKey")
                    :stream t
-                   :models '(codestral-latest)))
+                   :models '("gpt-5-mini" "gpt-5")))
   :config
   (gptel-make-openai "github"
     :host "models.inference.ai.azure.com"
@@ -596,11 +595,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
     :endpoint "/chat/completions"
     :stream t
     :models '(gpt-4o))
-  (gptel-make-openai "openai"
-    :key (auth-source-pick-first-password
-          :host "api.openai.com" :user "apiKey")
-    :stream t
-    :models '("gpt-4o-mini" "gpt-4o"))
   :defer t)
 
 (with-eval-after-load 'company
