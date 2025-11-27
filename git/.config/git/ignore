@@ -2,3 +2,4 @@
 .emacs.desktop.lock
 
 **/.claude/settings.local.json
+.mise.local.toml
