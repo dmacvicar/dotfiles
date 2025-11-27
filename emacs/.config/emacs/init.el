@@ -614,14 +614,12 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (add-to-list 'backup-directory-alist
 	       (cons tramp-file-name-regexp nil)))
 
-
 (use-package flymake
-  :defer t)
+  :defer t
+  :hook (prog-mode-hook . flymake-mode))
 
 ;; LSP
 (use-package eglot
-  :after corfu
-  :after flymake
   :hook
   ((go-ts-mode
     zig-mode
