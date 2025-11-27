@@ -495,6 +495,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :init
   (editorconfig-mode 1))
 
+;; put env variables and PATH in emacs process environment
+(use-package mise
+  :hook (elpaca-after-init-hook . global-mise-mode))
+
 ;; parenthesis
 (use-package paren
   :defer t
@@ -804,24 +808,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (if (file-exists-p "CMakeLists.txt") (cmake-project-mode)))
 (add-hook 'c-ts-mode-hook 'maybe-cmake-project-hook)
 (add-hook 'c++-ts-mode-hook 'maybe-cmake-project-hook)
-
-(use-package pyvenv
-  :commands (pyvenv-workon
-             pyvenv-activate
-             pyvenv-deactivate)
-  :config
-  (defun duncan/pyvenv-auto-activate ()
-    "Try to activate a .venv in the project root automatically."
-    (interactive)
-    ;; Check if .venv exists in the project root and activate it
-    (when (file-directory-p (concat (project-root (project-current)) ".venv"))
-      (pyvenv-activate (concat (project-root (project-current)) ".venv"))))
-  (add-hook 'pyvenv-post-activate-hooks (lambda ()
-                                          (eglot-ensure)))
-  :custom
-  (pyvenv-menu t)
-  :hook
-  ((python-mode python-ts-mode) . duncan/pyvenv-auto-activate))
 
 ;; go
 (use-package go-ts-mode
