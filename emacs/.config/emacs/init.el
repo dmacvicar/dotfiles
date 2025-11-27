@@ -160,7 +160,7 @@
 
 ;; modeline
 (use-package doom-modeline
-  :hook (after-init . doom-modeline-mode))
+  :hook (elpaca-after-init-hook . doom-modeline-mode))
 
 ;; dashboard screen
 
@@ -171,7 +171,7 @@
   :ensure (:host github :repo "ichernyshovvv/enlight")
   :after grid
   :init
-  (add-hook 'after-init-hook (lambda()
+  (add-hook 'elpaca-after-init-hook (lambda()
                                (if (null (cdr command-line-args))
                                    (enlight-open))))
   :config
