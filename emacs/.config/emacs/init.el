@@ -789,6 +789,39 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :hook (prog-mode . dtrt-indent-mode))
 (setq-default tab-width 8)
 
+(use-package paredit
+  :hook
+  (ielm-mode-hook . paredit-mode)
+  :config
+  ;; Infortunately there is a key conflict between Paredit and IELM.
+  ;; Paredit overrides return to execute paredit-RET, meaning that the
+  ;; original ielm-return is not called.
+  ;; https://www.reddit.com/r/emacs/comments/101uwgd/enable_paredit_mode_for_evalexpression_mini/
+  (defun duncan/paredit-RET ()
+    "Wraps `paredit-RET' to provide a sensible minibuffer experience"
+    (interactive)
+    (cond
+     ((minibufferp)
+      (read--expression-try-read))
+     ((and (eq major-mode 'inferior-emacs-lisp-mode)
+           (string-prefix-p "*ielm*" (buffer-name)))
+      (ielm-return))
+     (t
+      (paredit-RET))))
+  :bind
+  (:map paredit-mode-map
+        ("RET" . duncan/paredit-RET)
+        ("C-j" . paredit-newline)))
+
+;; elisp
+(use-package ielm
+  :ensure nil
+  :config
+  (add-hook 'ielm-mode-hook (lambda () (paredit-mode 1)))
+  (add-hook 'ielm-mode-hook 'eldoc-mode)
+  :custom
+  (ielm-history-file-name (expand-file-name "emacs/ielm-history.eld" (xdg-cache-home))))
+
 ;; C
 (setq-default c-default-style "linux")
 
