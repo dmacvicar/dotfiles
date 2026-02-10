@@ -761,7 +761,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package docker
   :ensure t
-  defer t
+  :defer t
   :bind ("C-c d" . docker))
 
 (use-package dockerfile-ts-mode
