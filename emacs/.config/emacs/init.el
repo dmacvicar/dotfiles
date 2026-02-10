@@ -665,32 +665,26 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :defer t)
 
 (use-package treesit
+  :ensure nil
   :init
-  (setq =treesit-grammar-cache-directory (convert-standard-filename
-                                          (expand-file-name  "emacs/tree-sitter" (xdg-cache-home))))
-  (when (boundp 'treesit-extra-load-path)
-    (add-to-list 'treesit-extra-load-path =treesit-grammar-cache-directory))
-  (setq treesit--install-language-grammar-out-dir-history treesit-extra-load-path)
+  (defvar duncan/treesit-grammar-dir
+    (expand-file-name "emacs/tree-sitter" (xdg-cache-home)))
+  (add-to-list 'treesit-extra-load-path duncan/treesit-grammar-dir)
+  (setq treesit--install-language-grammar-out-dir-history
+        (list duncan/treesit-grammar-dir))
   :config
-  (let ((=treesit-grammar-cache-directory (convert-standard-filename
-                                          (expand-file-name "emacs/tree-sitter" (xdg-cache-home)))))
-    (when (boundp 'treesit-extra-load-path)
-      (add-to-list 'treesit-extra-load-path =treesit-grammar-cache-directory)
-      (add-to-list 'treesit--install-language-grammar-out-dir-history =treesit-grammar-cache-directory)))
-  (dolist (mode
-           '((bash-mode       . bash-ts-mode)
-             (c-mode          . c-ts-mode)
-             (c++-mode        . c++-ts-mode)
-             (cmake-mode        . cmake-ts-mode)
-             (python-mode     . python-ts-mode)
-             (css-mode        . css-ts-mode)
-             (dockerfile-mode . dockerfile-ts-mode)
-             (go-mode         . go-ts-mode)
-             (javascript-mode . js-ts-mode)
-             (js-json-mode    . json-ts-mode)
-             (typescript-mode . typescript-ts-mode)))
-    (add-to-list 'major-mode-remap-alist mode))
-  :ensure nil)
+  (dolist (mode '((bash-mode       . bash-ts-mode)
+                  (c-mode          . c-ts-mode)
+                  (c++-mode        . c++-ts-mode)
+                  (cmake-mode      . cmake-ts-mode)
+                  (python-mode     . python-ts-mode)
+                  (css-mode        . css-ts-mode)
+                  (dockerfile-mode . dockerfile-ts-mode)
+                  (go-mode         . go-ts-mode)
+                  (javascript-mode . js-ts-mode)
+                  (js-json-mode    . json-ts-mode)
+                  (typescript-mode . typescript-ts-mode)))
+    (add-to-list 'major-mode-remap-alist mode)))
 
 (use-package treesit-auto
   :custom
