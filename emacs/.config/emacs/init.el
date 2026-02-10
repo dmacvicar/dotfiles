@@ -101,10 +101,6 @@
   (set-charset-priority 'unicode)
   (prefer-coding-system 'utf-8-unix)
   :config
-  ;; disable UI elements, do this early
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
   (prefer-coding-system 'utf-8)
   (when (file-exists-p custom-file)
     (load custom-file :noerror))

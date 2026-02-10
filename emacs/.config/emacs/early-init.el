@@ -1,5 +1,10 @@
 (setq package-enable-at-startup nil)
 
+;; disable UI elements early to prevent flicker
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
 (require 'xdg)
 
 (setq straight-base-dir
