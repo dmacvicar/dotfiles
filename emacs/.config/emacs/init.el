@@ -1,7 +1,8 @@
 ;; -*- coding: utf-8; lexical-binding: t -*-
 
 ;; make startup faster by avoiding gc pauses
-(setq gc-cons-threshold most-positive-fixnum)
+(setq gc-cons-threshold most-positive-fixnum
+      native-comp-jit-compilation t)
 
 (defvar elpaca-installer-version 0.11)
 (defvar elpaca-directory (expand-file-name "emacs/elpaca/" (xdg-cache-home)))
