@@ -98,10 +98,9 @@
   (custom-file
    (convert-standard-filename
     (expand-file-name  "emacs/custom.el" (xdg-cache-home))))
+  :config
   (set-charset-priority 'unicode)
   (prefer-coding-system 'utf-8-unix)
-  :config
-  (prefer-coding-system 'utf-8)
   (when (file-exists-p custom-file)
     (load custom-file :noerror))
   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
