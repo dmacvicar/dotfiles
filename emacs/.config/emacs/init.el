@@ -48,7 +48,8 @@
 (elpaca elpaca-use-package
   (elpaca-use-package-mode)                 ; enable :elpaca use-package keyword
   (setq elpaca-use-package-by-default t     ; assume :elpaca t unless otherwise specified
-        use-package-always-defer t))        ; defer by default, use :demand t when needed
+        use-package-always-defer t          ; defer by default, use :demand t when needed
+        use-package-expand-minimally t))    ; reduce macro expansion overhead
 
 ; block until current queue is processed - this will allow use of use-package right away
 (elpaca-wait)
