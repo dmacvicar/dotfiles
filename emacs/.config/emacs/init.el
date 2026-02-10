@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8; lexical-binding: t -*-
 
 ;; make startup faster by avoiding gc pauses
-(setq gc-cons-threshold (* 50 1000 1000))
+(setq gc-cons-threshold most-positive-fixnum)
 
 (defvar elpaca-installer-version 0.11)
 (defvar elpaca-directory (expand-file-name "emacs/elpaca/" (xdg-cache-home)))
@@ -1502,7 +1502,12 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 	      (message "Emacs ready in %s with %d garbage collections."
 		       (emacs-init-time) gcs-done))))
 
-;; Make gc pauses faster by decreasing the threshold.
-(setq gc-cons-threshold (* 2 1000 1000))
+;; intelligent garbage collection during idle time
+(use-package gcmh
+  :hook (elpaca-after-init-hook . gcmh-mode)
+  :custom
+  (gcmh-idle-delay 'auto)
+  (gcmh-high-cons-threshold (* 64 1024 1024)))
+
 (provide 'init)
 ;;; init.el ends here
