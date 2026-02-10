@@ -46,7 +46,8 @@
 ;; Install use-package support
 (elpaca elpaca-use-package
   (elpaca-use-package-mode)                 ; enable :elpaca use-package keyword
-  (setq elpaca-use-package-by-default t))   ; assume :elpaca t unless otherwise specified
+  (setq elpaca-use-package-by-default t     ; assume :elpaca t unless otherwise specified
+        use-package-always-defer t))        ; defer by default, use :demand t when needed
 
 ; block until current queue is processed - this will allow use of use-package right away
 (elpaca-wait)
@@ -115,7 +116,6 @@
 ;; TODO add keepass
 (use-package auth-source
   :ensure nil
-  :defer t
   :custom
   (auth-sources '("secrets:login"))
   (auth-source-cache-expiry nil)
@@ -123,15 +123,16 @@
 
 ;; copy from clipboard in terminal
 (use-package xclip
+  :demand t
   :custom
   (xclip-method (if (getenv "WAYLAND_DISPLAY") 'wl-copy 'xclip))
-  :init
+  :config
   (xclip-mode))
 
 ;; recent files
 (use-package recentf
   :ensure nil
-  :defer t
+  :demand t
   :config
   (recentf-mode)
   :custom
@@ -147,10 +148,11 @@
 ;; minibuffer history
 (use-package savehist
   :ensure nil
+  :demand t
   :custom
   (savehist-file (convert-standard-filename
        (expand-file-name  "emacs/history" (xdg-state-home))))
-  :init
+  :config
   (savehist-mode))
 
 ;; modeline
@@ -160,10 +162,12 @@
 ;; dashboard screen
 
 (use-package grid
-  :ensure (:host github :repo "ichernyshovvv/grid.el"))
+  :ensure (:host github :repo "ichernyshovvv/grid.el")
+  :demand t)
 
 (use-package enlight
   :ensure (:host github :repo "ichernyshovvv/enlight")
+  :demand t
   :after grid
   :init
   (add-hook 'elpaca-after-init-hook (lambda()
@@ -192,6 +196,7 @@
 
 ;; discoverability
 (use-package which-key
+  :demand t
   :config
   (which-key-mode)
   :custom
@@ -202,15 +207,17 @@
 
 ;; completion system (alternative to ivy)
 (use-package vertico
-  :init
-  (vertico-mode)
-  :ensure (:files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el")))
+  :demand t
+  :ensure (:files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el"))
+  :config
+  (vertico-mode))
 
 (use-package vertico-sort
   :ensure nil
-  :init
-  (setq vertico-sort-function #'vertico-sort-history-alpha)
-  :after vertico)
+  :demand t
+  :after vertico
+  :config
+  (setq vertico-sort-function #'vertico-sort-history-alpha))
 
 ;; configure directory extension
 (use-package vertico-directory
@@ -241,9 +248,9 @@
 
 (use-package tab-bar
   :ensure nil
-  :init
-  (tab-bar-mode)
+  :demand t
   :config
+  (tab-bar-mode)
   (bind-key* "M-S-<left>" #'tab-previous)
   (bind-key* "M-S-<right>" #'tab-next)
   :custom
@@ -251,6 +258,7 @@
 
 (use-package project
   :ensure nil
+  :demand t
   :config
   (defun duncan/project-create-tab ()
     (interactive)
@@ -264,7 +272,8 @@
 
 ;; complete in any order
 (use-package orderless
-  :init
+  :demand t
+  :config
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
   ;;       orderless-component-separator #'orderless-escapable-split-on-space)
@@ -274,17 +283,19 @@
 
 ;; add context to completions. eg. help to M-x functions
 (use-package marginalia
+  :demand t
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
   :custom
   (marginalia-align 'right)
-  :init
+  :config
   (marginalia-mode))
 
 (use-package nerd-icons
   :if (display-graphic-p))
 
 (use-package nerd-icons-completion
+  :demand t
   :after marginalia
   :config
   (nerd-icons-completion-mode)
@@ -310,7 +321,6 @@
   :hook (after-init . global-emojify-mode))
 
 (use-package shell-pop
-  :defer t
   :custom
   (shell-pop-universal-key "C-t"))
 
@@ -319,7 +329,6 @@
 ;; if TERM is not functional, install tic (terminfo compiler) from
 ;; ncurses devel and run eat-compile-termifo
 (use-package eat
-  :defer t
   :ensure (:host nil :type git
            :repo "https://codeberg.org/akib/emacs-eat"
            :files ("*.el" "dir"
@@ -329,6 +338,7 @@
 
 ;; theme
 (use-package modus-themes
+  :demand t
   :custom
   (modus-themes-mixed-fonts t)
   (modus-themes-org-blocks 'gray-background)
@@ -380,7 +390,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (set-face-attribute 'fixed-pitch nil :family (face-attribute 'default :family) :height 110)
 
 (use-package visual-fill-column
-  :defer t
   :custom
   (visual-fill-column-adjust-for-text-scale t)
   (visual-fill-column-width 100)
@@ -389,7 +398,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust)
 
 (use-package mixed-pitch
-  :defer t
   :custom
   (mixed-pitch-variable-pitch-cursor '(bar . 3)))
 
@@ -487,7 +495,8 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; respect style of projects
 (use-package editorconfig
-  :init
+  :demand t
+  :config
   (editorconfig-mode 1))
 
 ;; put env variables and PATH in emacs process environment
@@ -496,38 +505,36 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; parenthesis
 (use-package paren
-  :defer t
   :ensure nil
   :hook ((prog-mode . show-paren-mode))
   :custom (show-paren-style 'expression))
 
 (use-package rainbow-delimiters
-  :defer t
   :hook ((prog-mode . rainbow-delimiters-mode)))
 
 ;; highlight undoed text
 (use-package undo-hl
-  :defer t
-  :ensure (:host github :repo "casouri/undo-hl"))
-(add-hook 'prog-mode-hook #'undo-hl-mode)
-(add-hook 'text-mode-hook #'undo-hl-mode)
+  :ensure (:host github :repo "casouri/undo-hl")
+  :hook ((prog-mode text-mode) . undo-hl-mode))
 
 ;; text completion
 (use-package corfu
-  :defer t
+  :demand t
   :custom
   (corfu-auto t)
-  :init
+  :config
   (global-corfu-mode))
 
 ;; remove with emacs 31
 (use-package corfu-terminal
+  :demand t
   :config
   (unless (display-graphic-p)
     (corfu-terminal-mode +1)))
 
 (use-package kind-icon
   :ensure t
+  :demand t
   :after corfu
   :custom
   (svg-lib-icons-dir (expand-file-name "emacs/svg-lib/" (xdg-cache-home)))
@@ -554,7 +561,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; github copilot
 (use-package copilot
-  :defer t
   :custom
   (copilot-install-dir (expand-file-name "emacs/copilot/" (xdg-cache-home)))
   :ensure (:host github :repo "copilot-emacs/copilot.el"
@@ -593,8 +599,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
           :host "models.inference.ai.azure.com" :user "apiKey")
     :endpoint "/chat/completions"
     :stream t
-    :models '(gpt-4o))
-  :defer t)
+    :models '(gpt-4o)))
 
 (with-eval-after-load 'company
   ;; disable inline previews
@@ -602,7 +607,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; remote file access
 (use-package tramp
-  :defer t
   :ensure nil
   :config
   (setq vc-ignore-dir-regexp
@@ -614,7 +618,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 	       (cons tramp-file-name-regexp nil)))
 
 (use-package flymake
-  :defer t
   :hook (prog-mode-hook . flymake-mode))
 
 ;; LSP
@@ -639,14 +642,13 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                                           "pylsp")))))
 
 (use-package eldoc
-  :ensure nil
-  :defer t)
+  :ensure nil)
 
-(use-package pulsar
-  :defer t)
+(use-package pulsar)
 
 (use-package repeat
   :ensure nil
+  :demand t
   :config
   (repeat-mode))
 
@@ -657,12 +659,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (remove-hook 'dape-start-hook 'dape-repl))
 
 ;; meson build system
-(use-package meson-mode
-  :defer t)
+(use-package meson-mode)
 
 ;; git
-(use-package magit
-  :defer t)
+(use-package magit)
 
 (use-package treesit
   :ensure nil
@@ -687,6 +687,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
     (add-to-list 'major-mode-remap-alist mode)))
 
 (use-package treesit-auto
+  :demand t
   :custom
   (treesit-auto-install 'prompt)
   ; those are broken
@@ -697,7 +698,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; structured navigation including expand region
 (use-package combobulate
-  :defer t
   :after treesit
   :ensure (:host github :repo "mickeynp/combobulate")
   :hook ((python-ts-mode . combobulate-mode)
@@ -709,12 +709,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; replace built-in pdf viewer with something we
 ;; can copy paste, based on poppler
-(use-package pdf-tools
-  :defer t)
+(use-package pdf-tools)
 
 ;; markdown
 (use-package markdown-mode
-  :defer t
   :hook
   (markdown-mode . visual-line-mode)
   (markdown-mode . visual-fill-column-mode)
@@ -723,50 +721,41 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; use lang modes inside org src blocks
 (use-package poly-org
-  :defer t
-  :init
+  :demand t
+  :config
   (add-to-list 'auto-mode-alist '("\\.org\\'" . poly-org-mode)))
 ;; use lang modes inside markdow code fences
 (use-package poly-markdown
-  :defer t
-  :init
+  :demand t
+  :config
   (add-to-list 'auto-mode-alist '("\\.md\\'" . poly-gfm-mode)))
-(use-package web-mode :mode "\\.qtpl\\'"
-  :defer t)
-(use-package vue-html-mode
-  :defer t)
+(use-package web-mode
+  :mode "\\.qtpl\\'")
+(use-package vue-html-mode)
 ;; vue single file component mode (uses polymode)
 (use-package sfc-mode
-  :defer t
   :ensure (:host github :repo "gexplorer/sfc-mode")
   :custom
   (sfc-template-default-mode 'vue-html-mode)
   :mode "\\.vue\\'")
 
-(use-package json-mode
-  :defer t)
-(use-package yaml-mode
-  :defer t)
+(use-package json-mode)
+(use-package yaml-mode)
 
 (use-package docker
   :ensure t
-  :defer t
   :bind ("C-c d" . docker))
 
 (use-package dockerfile-ts-mode
   :ensure nil
   :mode
   "Dockerfile\\'"
-  "\\.dockerfile\\'"
-  :defer t)
+  "\\.dockerfile\\'")
 (use-package docker-compose-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package terraform-ts-mode
-  :defer t
-  :mode
-  "\\.tf\\'"
+  :mode "\\.tf\\'"
   :ensure (:host github :repo "kgrotel/terraform-ts-mode"))
 
 ;; guess indentation params
@@ -816,14 +805,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package cmake-ts-mode
   :ensure nil
-  :mode
-  "CMakeLists\\.txt\\'"
-  :defer t)
+  :mode "CMakeLists\\.txt\\'")
 
 ;; integrate compile command for project with cmake
 (use-package cmake-project
   :ensure t
-  :defer t
   :custom
   (cmake-project-default-build-dir-name "build"))
 (defun maybe-cmake-project-hook ()
@@ -834,63 +820,50 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; go
 (use-package go-ts-mode
   :ensure nil
-  :defer t
   :custom
   (go-test-verbose t)
   (gofmt-args '("-s")))
 
 ;; like play.golang.org
 (use-package go-playground
-  :defer t
   :bind (:map go-playground-mode-map
               ([M-return] . nil)
               ("C-c C-c" . go-playground-exec)))
 ;; generates tests from funcs
-(use-package go-gen-test
-  :defer t)
+(use-package go-gen-test)
 
 (use-package pet
-  :defer t
   :config
   (add-hook 'python-base-mode-hook 'pet-mode -10))
 
-(use-package rust-mode
-  :defer t)
-(use-package elixir-mode
-  :defer t)
-(use-package zig-mode
-  :defer t)
-(use-package nix-mode
-  :defer t)
-(use-package lua-mode
-  :defer t)
+(use-package rust-mode)
+(use-package elixir-mode)
+(use-package zig-mode)
+(use-package nix-mode)
+(use-package lua-mode)
 (use-package typescript-mode
-  :init
-  (add-to-list 'auto-mode-alist '("\\.ts[x]?\\'" . typescript-mode))
-  :defer t)
+  :demand t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.ts[x]?\\'" . typescript-mode)))
 
 ;; browse HN
 (use-package hackernews
-  :defer t
   :custom
   (hackernews-visited-links-file (convert-standard-filename
                                   (expand-file-name  "emacs/hackernews/visited-links.el" (xdg-cache-home)))))
 
 ;; https://d2lang.com/tour/intro/
-(use-package d2-mode
-  :defer t)
+(use-package d2-mode)
 
 (custom-set-variables '(ad-redefinition-action (quote accept)))
 
 (use-package calendar
-  :defer t
   :ensure nil
   :init
   (setq calendar-view-diary-initially-flag t)
   (setq calendar-date-style 'european))
 
 (use-package diary
-  :defer t
   :ensure nil
   :after calendar
   :init
@@ -904,13 +877,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package beancount
   :ensure (:host github :repo "beancount/beancount-mode")
-  :mode ("\\.beancount\\'" . beancount-mode)
-  :defer t)
+  :mode ("\\.beancount\\'" . beancount-mode))
 
 ;; org mode
 (use-package org
   :ensure nil
-  :defer t
   :hook
   ;; handwriten style
   (org-mode . (lambda() (buffer-face-set '(:family "Purisa"))))
@@ -990,13 +961,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (org-agenda-include-diary t))
 
 (use-package org-timeblock
-  :defer t
   :ensure (:host github :repo "ichernyshovvv/org-timeblock"))
 
 ;; this takes care of being able to display inline images in the buffer
 (use-package org-yt
   :after org
-  :defer t
   ;;:ensure (org-yt :host github :repo "TobiasZawada/org-yt"))
   ;; https://github.com/TobiasZawada/org-yt/pull/1
   ;; don't require imagemagick for resizing
@@ -1005,11 +974,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package org-super-agenda
   :hook (org-agenda-mode . org-super-agenda-mode))
 ;(use-package org-ql
-;  :after org
-;  :defer t)
+;  :after org)
 (use-package org-superstar              ; supersedes `org-bullets'
   :after org
-  :defer t
   :custom
   (org-superstar-remove-leading-stars t)
   (org-superstar-headline-bullets-list '(" ")) ;; '("🞛" "◉" "○" "▷")
@@ -1020,7 +987,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :hook (org-mode . org-superstar-mode))
 
 (use-package org-fancy-priorities ; priority icons
-  :defer t
   :after org
   :hook (org-mode . org-fancy-priorities-mode)
   :hook (org-agenda-mode . org-fancy-priorities-mode)
@@ -1028,12 +994,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (org-fancy-priorities-list '("⚑" "⬆" "■")))
 
 (use-package org-modern
-  :defer t
   :hook (org-mode . org-modern-mode))
 
 (use-package org-appear
   :after org
-  :defer t
   :hook (org-mode . org-appear-mode)
   :custom
   (org-appear-autoemphasis  t)
@@ -1102,16 +1066,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :ensure (:host github :repo "dmacvicar/ob-d2")
   :requires (org-plus-contrib)
   :commands (org-babel-execute:d2))
-(use-package ox-gfm
-  :defer t)
-(use-package ox-reveal
-  :defer t)
-(use-package org-tree-slide
-  :defer t)
-(use-package hide-mode-line
-  :defer t)
+(use-package ox-gfm)
+(use-package ox-reveal)
+(use-package org-tree-slide)
+(use-package hide-mode-line)
 (use-package org-present
-  :defer t
   :init
   (add-hook 'org-present-mode-hook #'(lambda ()
                                        (setq-local face-remap-cookies
@@ -1151,23 +1110,20 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                                        (toggle-frame-fullscreen))))
 ;; I also tried jupyter packagebut did not work
 (use-package ein
-  :defer t
   :custom
   (ein:output-area-inlined-images t))
 
 (use-package denote
-  :defer t
   :bind ("C-c d" . denote)
   :config
   (with-eval-after-load 'org
     (require 'denote)))
 
 (use-package consult-notes
-  :defer t
   :commands (consult-notes
              consult-notes-search-in-all-notes))
-(use-package htmlize :defer t)
-(use-package protobuf-mode :defer t)
+(use-package htmlize)
+(use-package protobuf-mode)
 
 ;; load specific configuration for different user accounts (work, home)
 ;; from .config/emacs.$profile/*.el
@@ -1181,7 +1137,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; email
 (defconst mu4e-system-path "/usr/share/emacs/site-lisp/mu4e")
 (use-package mu4e
-  :defer t
   :ensure nil
   :load-path mu4e-system-path
   :commands 'mu4e
@@ -1241,35 +1196,28 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package outlook
   :after mu4e
-  :defer t
   :init
   (require 'outlook-mu4e))
 
 (use-package mu4e-jump-to-list
-  :after mu4e
-    :defer t)
+  :after mu4e)
 (use-package mu4e-contrib
   :ensure nil
   :after mu4e
-  :defer t
   :load-path mu4e-system-path)
 
 (use-package mu4e-conversation
-  :after mu4e
-  :defer t)
+  :after mu4e)
 
 (use-package mu4e-query-fragments
-  :after mu4e
-  :defer t)
+  :after mu4e)
 
 (use-package org-mu4e
-  :defer t
   :ensure nil
   :after mu4e
   :load-path mu4e-system-path)
 
 (use-package mu4e-icalendar
-  :defer t
   :ensure nil
   :after mu4e
   :load-path mu4e-system-path
@@ -1278,7 +1226,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (mu4e-icalendar-setup))
 
 (use-package mu4e-views
-  :defer t
   :after mu4e
   :bind (:map mu4e-headers-mode-map
 	      ("v" . mu4e-views-mu4e-select-view-msg-method) ;; select viewing method
@@ -1294,7 +1241,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package mu4e-column-faces
   :after mu4e
-  :defer t
   :config (mu4e-column-faces-mode))
 
 ;; takes all calendars generated by vdirsyncer in .cache/vdirsyncer/calendars
@@ -1327,8 +1273,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                 (insert (format "#include \"%s\"\n" diary-file-path))))))
       (message "No vdirsyncer calendars directory at %s; skipping diary generation" ics-directory))))
 
-(use-package org-web-tools
-  :defer t)
+(use-package org-web-tools)
 
 (defun --elfeed-mark-all-as-read ()
   (interactive)
@@ -1358,7 +1303,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; feeds
 (use-package elfeed
-  :defer t
   :bind (("C-c 3" . elfeed)
          :map elfeed-search-mode-map
          ("R" . --elfeed-mark-all-as-read)
@@ -1377,7 +1321,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                    :use-authinfo t))))
 
 (use-package elfeed-protocol
-  :defer t
   :after elfeed
   :custom
   ;; allow to use nextcloud news
@@ -1385,7 +1328,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;(advice-add 'elfeed :after #'elfeed-protocol-enable)
 
 (use-package elfeed-score
-  :defer t
   :after elfeed
   :config
   (progn
@@ -1427,7 +1369,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; eww
 ;; disable because the org-inhibit version check thing
 (use-package shr-tag-code-highlight
-  :defer t
   :disabled
   :ensure (:host github :repo "dmacvicar/shr-tag-code-highlight.el")
   :after shr
@@ -1437,7 +1378,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; maps
 (use-package osm
-  :defer t
   :bind (("C-c m h" . osm-home)
          ("C-c m s" . osm-search)
          ("C-c m v" . osm-server)
