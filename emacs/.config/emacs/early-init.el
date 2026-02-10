@@ -1,5 +1,11 @@
 (setq package-enable-at-startup nil)
 
+;; skip regex matching on file operations during init
+(defvar duncan/file-name-handler-alist file-name-handler-alist)
+(setq file-name-handler-alist nil)
+(add-hook 'emacs-startup-hook
+  (lambda () (setq file-name-handler-alist duncan/file-name-handler-alist)))
+
 ;; disable UI elements early to prevent flicker
 (menu-bar-mode -1)
 (tool-bar-mode -1)
