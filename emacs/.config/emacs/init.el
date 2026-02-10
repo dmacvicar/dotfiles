@@ -515,7 +515,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :defer t
   :ensure (:host github :repo "casouri/undo-hl"))
 (add-hook 'prog-mode-hook #'undo-hl-mode)
-(add-hook 'text-mode #'undo-hl-mode)
+(add-hook 'text-mode-hook #'undo-hl-mode)
 
 ;; text completion
 (use-package corfu
