@@ -261,6 +261,10 @@
 (use-package project
   :ensure nil
   :demand t
+  :custom
+  (project-vc-extra-root-markers
+   '(".project" "Cargo.toml" "go.mod" "package.json" "pyproject.toml"
+     "build.zig" "CMakeLists.txt" "meson.build" "Makefile"))
   :config
   (defun duncan/project-create-tab ()
     (interactive)
