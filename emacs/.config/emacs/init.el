@@ -818,10 +818,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :ensure t
   :custom
   (cmake-project-default-build-dir-name "build"))
-(defun maybe-cmake-project-hook ()
+(defun duncan/maybe-cmake-project-hook ()
   (if (file-exists-p "CMakeLists.txt") (cmake-project-mode)))
-(add-hook 'c-ts-mode-hook 'maybe-cmake-project-hook)
-(add-hook 'c++-ts-mode-hook 'maybe-cmake-project-hook)
+(add-hook 'c-ts-mode-hook 'duncan/maybe-cmake-project-hook)
+(add-hook 'c++-ts-mode-hook 'duncan/maybe-cmake-project-hook)
 
 ;; go
 (use-package go-ts-mode
@@ -930,7 +930,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (org-crypt-use-before-save-magic)
   ;; this allows to retrieve http images and show them inline (with
   ;; helo from org-yt)
-  (defun org-http-image-data-fn (protocol link _description)
+  (defun duncan/org-http-image-data-fn (protocol link _description)
     "Interpret LINK as an URL to an image file."
     (when (and (image-type-from-file-name link)
                (not (eq org-display-remote-inline-images 'skip)))
@@ -941,8 +941,8 @@ will be selected, otherwise a light theme will be selected (0 is default)"
             (buffer-substring-no-properties (point) (point-max)))
         (message "Download of image \"%s\" failed" link)
         nil)))
-  (org-link-set-parameters "http"  :image-data-fun #'org-http-image-data-fn)
-  (org-link-set-parameters "https" :image-data-fun #'org-http-image-data-fn)
+  (org-link-set-parameters "http"  :image-data-fun #'duncan/org-http-image-data-fn)
+  (org-link-set-parameters "https" :image-data-fun #'duncan/org-http-image-data-fn)
   (set-face-attribute 'org-headline-done nil :strike-through t))
 
 (use-package org-agenda
@@ -1281,13 +1281,13 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package org-web-tools)
 
-(defun --elfeed-mark-all-as-read ()
+(defun duncan/elfeed-mark-all-as-read ()
   (interactive)
   (mark-whole-buffer)
   (elfeed-search-untag-all-unread))
 
 ;; From nooker blog.
-(defun --elfeed-eww-open (&optional use-generic-p)
+(defun duncan/elfeed-eww-open (&optional use-generic-p)
   "open with eww"
   (interactive "P")
   (let ((entries (elfeed-search-selected)))
@@ -1298,7 +1298,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
     (mapc #'elfeed-search-update-entry entries)
     (unless (use-region-p) (forward-line))))
 
-(defun --elfeed-firefox-open (&optional use-generic-p)
+(defun duncan/elfeed-firefox-open (&optional use-generic-p)
   "open with firefox"
   (interactive "P")
   (let ((entries (elfeed-search-selected)))
@@ -1311,13 +1311,13 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package elfeed
   :bind (("C-c 3" . elfeed)
          :map elfeed-search-mode-map
-         ("R" . --elfeed-mark-all-as-read)
+         ("R" . duncan/elfeed-mark-all-as-read)
          ("I" . elfeed-protocol-owncloud-reinit)
          ("O" . elfeed-protocol-owncloud-update-older)
          ("S" . elfeed-protocol-owncloud-update-star)
          ("U" . elfeed-protocol-owncloud-update)
-         ("f" . --elfeed-firefox-open)
-         ("e" . --elfeed-eww-open))
+         ("f" . duncan/elfeed-firefox-open)
+         ("e" . duncan/elfeed-eww-open))
   :custom
   (shr-max-image-proportion 0.3)
   (elfeed-search-filter "+unread @1-week-ago")
@@ -1342,7 +1342,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; pinboard feed has no content. This inserts a cleaned up html into the elfeed db
 ;; adapted from https://punchagan.muse-amuse.in/blog/elfeed-hook-to-fetch-full-content/
-(defun --elfeed-get-entry-content (entry)
+(defun duncan/elfeed-get-entry-content (entry)
   "Fetches content for pinboard entries that are not tweets."
   (interactive
    (let ((entry elfeed-show-entry))
@@ -1365,10 +1365,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                                          (html (cdr doc)))
                                     (setf (elfeed-entry-content entry) (elfeed-ref html)))
                                 (setf (elfeed-entry-content entry) (elfeed-ref "<h1>Not found</h1>"))))))))
-(add-hook 'elfeed-new-entry-hook  #'--elfeed-get-entry-content)
+(add-hook 'elfeed-new-entry-hook  #'duncan/elfeed-get-entry-content)
 
-(defun --elfeed-log-entry (entry) (message (elfeed-entry-feed-id entry)))
-(add-hook 'elfeed-new-entry-hook  #'--elfeed-log-entry)
+(defun duncan/elfeed-log-entry (entry) (message (elfeed-entry-feed-id entry)))
+(add-hook 'elfeed-new-entry-hook  #'duncan/elfeed-log-entry)
 ;(add-hook 'elfeed-new-entry-hook
 ;          (elfeed-make-tagger :feed-url "pinboard\\.in"
 ;                              :add 'saved))
@@ -1397,13 +1397,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                        (expand-file-name  "emacs/osm/" (xdg-cache-home)))))
 
 ;; contacts completion
-;; http://pragmaticemacs.com/emacs/tweaking-email-contact-completion-in-mu4e/
-;;need this for hash access
-(require 'subr-x)
-
-;;my favourite contacts - these will be put at front of list
-(setq dmacvicar/contact-file "~/.favorite-contacts.txt")
-
 (use-package obsolete
   :ensure (obsolete
            :repo "dmacvicar/obsolete.el"
@@ -1427,13 +1420,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package envrc
  :config
  (envrc-global-mode))
-
-(defun dmacvicar/read-contact-list ()
-  "Return a list of email addresses"
-  (with-temp-buffer
-    (when (file-exists-p dmacvicar/contact-file)
-      (insert-file-contents dmacvicar/contact-file))
-    (split-string (buffer-string) "\n" t)))
 
 (when (getenv "EMACS_PROFILE_START")
   (add-hook 'emacs-startup-hook
