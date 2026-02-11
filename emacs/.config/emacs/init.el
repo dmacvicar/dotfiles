@@ -468,6 +468,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package tmux-pane
   :if (not (display-graphic-p))
+  :demand t
   :config
   (setq -override-map-enable nil))
 ;; define M-arrows using escape codes so that they
