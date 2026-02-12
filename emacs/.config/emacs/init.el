@@ -654,7 +654,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   ;; bulb emoji changes line height on TUI
   ;; https://lists.nongnu.org/archive/html/bug-gnu-emacs/2025-10/msg01604.html
   ;; prevent margin eglot-code-action-indicator
-  (eglot-code-action-indications '(eldoc-hint mode-line)
+  (eglot-code-action-indications '(eldoc-hint mode-line))
   (eglot-extend-to-xref t)
   :config
   (add-to-list 'eglot-server-programs
