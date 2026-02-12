@@ -534,10 +534,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; text completion
 (use-package corfu
   :demand t
+  :init
+  (global-corfu-mode)
+  (corfu-popupinfo-mode 1)
   :custom
-  (corfu-auto t)
-  :config
-  (global-corfu-mode))
+  (corfu-auto t))
 
 ;; remove with emacs 31
 (use-package corfu-terminal
