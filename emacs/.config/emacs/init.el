@@ -640,6 +640,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :hook
   ((go-ts-mode
     zig-mode
+    rust-ts-mode
     python-ts-mode
     c-ts-mode
     c++-ts-mode) . eglot-ensure)
