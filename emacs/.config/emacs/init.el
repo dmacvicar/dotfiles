@@ -1027,6 +1027,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (org-appear-autosubmarkers t))
 
 ;; Avoid `org-babel-do-load-languages' since it does an eager require.
+(use-package ob-mermaid
+  :custom
+  (ob-mermaid-cli-path "mmdr")
+  :commands (org-babel-execute:mermaid))
 (use-package ob-C
   :ensure nil
   :requires (org-plus-contrib)
