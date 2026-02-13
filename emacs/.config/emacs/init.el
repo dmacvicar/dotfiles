@@ -301,7 +301,7 @@
               ("M-A" . marginalia-cycle))
   :custom
   (marginalia-align 'right)
-  :config
+  :init
   (marginalia-mode))
 
 (use-package nerd-icons
