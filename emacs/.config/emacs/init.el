@@ -897,10 +897,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
   (add-hook 'diary-list-entries-hook 'diary-sort-entries))
 
-(use-package beancount
-  :ensure (:host github :repo "beancount/beancount-mode")
-  :mode ("\\.beancount\\'" . beancount-mode))
-
 ;; org mode
 (use-package org
   :ensure nil
