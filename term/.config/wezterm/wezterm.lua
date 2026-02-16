@@ -164,6 +164,12 @@ keys = {
     mods = 'LEADER',
     action = wezterm.action.PasteFrom 'Clipboard',
   },
+  {
+    -- avoid ~2 when pressing shift space on terminal
+    key = " ",
+    mods = "SHIFT",
+    action = wezterm.action.SendString(" ")
+   }
 }
 
 -- tmux emacs style copy paste
