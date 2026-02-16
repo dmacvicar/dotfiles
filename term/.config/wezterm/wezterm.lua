@@ -5,7 +5,8 @@ config = wezterm.config_builder()
 -- do not start a login shell
 config.default_prog = { "/bin/bash" }
 
-if string.match(os.getenv("DESKTOP_SESSION"), "hyprland|niri") then
+local session = os.getenv("DESKTOP_SESSION") or ""
+if string.match(session, "hyprland") or string.match(session, "niri") then
     config.window_decorations = "NONE"
 else
     config.window_decorations = "TITLE"
@@ -24,7 +25,7 @@ end
 config.use_fancy_tab_bar = false
 -- we don't need tabs if using sway, most likely we will
 -- use say splits
-if string.match(os.getenv("DESKTOP_SESSION"), "sway") then
+if string.match(os.getenv("DESKTOP_SESSION") or "", "sway") then
    config.hide_tab_bar_if_only_one_tab = true
 end
 
