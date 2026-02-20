@@ -197,7 +197,7 @@
             ("Agenda" (org-agenda-list "1") "a")
             ("todo.org"
              (progn
-              (require 'org)
+              (require 'org-agenda)
               (find-file (seq-find (lambda (x) (string-match "todo.org" x)) org-agenda-files))) "t"))
           ("Misc"
            ("Emacs Configuration" (find-file user-init-file) "c")
