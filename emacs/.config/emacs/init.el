@@ -584,6 +584,27 @@ will be selected, otherwise a light theme will be selected (0 is default)"
               ("<tab>" . copilot-accept-completion)
               ("TAB" . copilot-accept-completion)))
 
+(use-package shell-maker
+  :ensure (:type git :host github :repo "xenodium/shell-maker" :ref "v0.85.2"))
+
+(use-package agent-shell
+  :custom
+  (agent-shell-openai-codex-acp-command '("codex" "--full-auto"))
+  (agent-shell-agent-configs `(,(agent-shell-openai-make-codex-config)
+                               ,(agent-shell-anthropic-make-claude-code-config)))
+  :bind (:map agent-shell-mode-map
+              ("RET" . newline)
+              ("C-c C-c" . shell-maker-submit)
+              ("C-c C-k" . agent-shell-interrupt)))
+
+(use-package agent-shell-sidebar
+  :after agent-shell
+  :ensure (:host github :repo "cmacrae/agent-shell-sidebar")
+  :custom
+  agent-shell-sidebar-width "25%")
+(global-set-key (kbd "C-c a s") #'agent-shell-sidebar-toggle)
+(global-set-key (kbd "C-c a f") #'agent-shell-sidebar-toggle-focus)
+
 (use-package claude-code-ide
   :ensure (:type git :host github :repo "manzaltu/claude-code-ide.el")
   :bind ("C-c C-'" . claude-code-ide-menu)
