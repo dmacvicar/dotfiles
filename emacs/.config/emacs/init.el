@@ -727,14 +727,13 @@ will be selected, otherwise a light theme will be selected (0 is default)"
     (add-to-list 'major-mode-remap-alist mode)))
 
 (use-package treesit-auto
-  :demand t
+  :hook (after-init . global-treesit-auto-mode)
   :custom
   (treesit-auto-install 'prompt)
   ; those are broken
   (treesit-auto-opt-out-list
         '(markdown protobuf ruby r yaml))
-  :config
-  (global-treesit-auto-mode))
+  )
 
 ;; structured navigation including expand region
 (use-package combobulate
@@ -761,14 +760,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; use lang modes inside org src blocks
 (use-package poly-org
-  :demand t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.org\\'" . poly-org-mode)))
+  :mode ("\\.org\\'" . poly-org-mode))
 ;; use lang modes inside markdow code fences
 (use-package poly-markdown
-  :demand t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . poly-gfm-mode)))
+  :mode ("\\.md\\'" . poly-gfm-mode))
 (use-package web-mode
   :mode "\\.qtpl\\'")
 (use-package vue-html-mode)
@@ -882,9 +877,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package nix-mode)
 (use-package lua-mode)
 (use-package typescript-mode
-  :demand t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.ts[x]?\\'" . typescript-mode)))
+  :mode ("\\.ts[x]?\\'" . typescript-mode))
 
 ;; browse HN
 (use-package hackernews
