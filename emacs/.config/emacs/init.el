@@ -1110,10 +1110,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :custom
   (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
   :commands (org-babel-execute:plantuml))
-(use-package ob-d2
-  :ensure (:host github :repo "dmacvicar/ob-d2")
-  :requires (org-plus-contrib)
-  :commands (org-babel-execute:d2))
+;; ob-d2 removed
 (use-package ox-gfm)
 (use-package ox-reveal)
 (use-package org-tree-slide)
