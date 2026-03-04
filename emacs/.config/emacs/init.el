@@ -246,11 +246,13 @@
   (xref-show-xrefs-function #'consult-xref)
   (xref-show-definitions-function #'consult-xref)
   (consult-preview-key '("S-<down>" "S-<up>"))
-  :bind
-  ("C-s" . consult-line)
-  ("C-x b" . consult-buffer)
-  ("C-x p b" . consult-project-buffer)
-  )
+  :init
+  (add-hook 'elpaca-after-init-hook
+            (lambda ()
+              (require 'consult)
+              (global-set-key (kbd "C-s") #'consult-line)
+              (global-set-key (kbd "C-x b") #'consult-buffer)
+              (global-set-key (kbd "C-x p b") #'consult-project-buffer))))
 
 (use-package tab-bar
   :ensure nil
