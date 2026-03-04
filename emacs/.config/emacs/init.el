@@ -737,17 +737,15 @@ will be selected, otherwise a light theme will be selected (0 is default)"
     (add-to-list 'major-mode-remap-alist mode)))
 
 (use-package treesit-auto
+  :hook (after-init . global-treesit-auto-mode)
   :custom
   (treesit-auto-install 'prompt)
   ; those are broken
   (treesit-auto-opt-out-list
         '(markdown protobuf ruby r yaml))
-  :init
-  ;; Avoid startup error if package isn't installed yet.
-  (add-hook 'after-init-hook
-            (lambda ()
-              (when (require 'treesit-auto nil t)
-                (global-treesit-auto-mode 1)))))
+  )
+;; ensure treesit-auto is installed before after-init hooks run
+(elpaca-wait)
 
 ;; structured navigation including expand region
 (use-package combobulate
