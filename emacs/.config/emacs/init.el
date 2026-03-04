@@ -529,7 +529,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :custom (show-paren-style 'expression))
 
 (use-package rainbow-delimiters
-  :hook ((prog-mode . rainbow-delimiters-mode)))
+  :init
+  (add-hook 'elpaca-after-init-hook
+            (lambda ()
+              (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))))
 
 ;; highlight undoed text
 (use-package undo-hl
