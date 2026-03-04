@@ -540,10 +540,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; text completion
 (use-package corfu
-  :hook (after-init . global-corfu-mode)
   :init
-  (with-eval-after-load 'corfu
-    (corfu-popupinfo-mode 1))
+  (add-hook 'after-init-hook #'global-corfu-mode)
+  (add-hook 'after-init-hook #'corfu-popupinfo-mode)
   :custom
   (corfu-auto t))
 
