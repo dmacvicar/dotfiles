@@ -211,17 +211,17 @@
 
 ;; completion system (alternative to ivy)
 (use-package vertico
-  :demand t
+  :hook (after-init . vertico-mode)
   :ensure (:files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el"))
-  :config
-  (vertico-mode))
+  )
 
 (use-package vertico-sort
   :ensure nil
-  :demand t
   :after vertico
-  :config
-  (setq vertico-sort-function #'vertico-sort-history-alpha))
+  :init
+  (with-eval-after-load 'vertico
+    (require 'vertico-sort)
+    (setq vertico-sort-function #'vertico-sort-history-alpha)))
 
 ;; configure directory extension
 (use-package vertico-directory
@@ -238,7 +238,10 @@
 ;; reimpl of common emacs command using completion-system/vertico
 ;; alternative to consul
 (use-package consult
-  :demand t
+  :commands (consult-xref
+             consult-line
+             consult-buffer
+             consult-project-buffer)
   :custom
   (xref-show-xrefs-function #'consult-xref)
   (xref-show-definitions-function #'consult-xref)
@@ -247,8 +250,7 @@
   ("C-s" . consult-line)
   ("C-x b" . consult-buffer)
   ("C-x p b" . consult-project-buffer)
-
-  :config)
+  )
 
 (use-package tab-bar
   :ensure nil
@@ -279,8 +281,7 @@
 
 ;; complete in any order
 (use-package orderless
-  :demand t
-  :config
+  :init
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
   ;;       orderless-component-separator #'orderless-escapable-split-on-space)
@@ -290,23 +291,21 @@
 
 ;; add context to completions. eg. help to M-x functions
 (use-package marginalia
-  :demand t
+  :hook (after-init . marginalia-mode)
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
   :custom
   (marginalia-align 'right)
-  :init
-  (marginalia-mode))
+  )
 
 (use-package nerd-icons
   :if (display-graphic-p))
 
 (use-package nerd-icons-completion
-  :demand t
   :after marginalia
-  :config
-  (nerd-icons-completion-mode)
-  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+  :hook
+  (after-init . nerd-icons-completion-mode)
+  (marginalia-mode . nerd-icons-completion-marginalia-setup))
 
 (use-package nerd-icons-dired
   :after nerd-icons
