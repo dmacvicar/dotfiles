@@ -807,7 +807,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (dtrt-indent-max-lines 2000)
   (dtrt-indent-verbosity 2)
   :diminish
-  :hook (prog-mode . dtrt-indent-mode))
+  :hook (elpaca-after-init-hook . dtrt-indent-mode))
 (setq-default tab-width 8)
 
 (use-package paredit
