@@ -263,21 +263,20 @@
 
 (use-package project
   :ensure nil
-  :demand t
-  :custom
-  (project-vc-extra-root-markers
-   '(".project" "Cargo.toml" "go.mod" "package.json" "pyproject.toml"
-     "build.zig" "CMakeLists.txt" "meson.build" "Makefile"))
-  :config
-  (defun duncan/project-create-tab ()
-    (interactive)
-    (if-let ((project (project-current)))
-        (progn
-          (tab-bar-new-tab)
-          (tab-bar-rename-tab (project-name project))
-          (project-dired project))
-      (user-error "No project in current directory")))
-  (setq project-switch-commands #'duncan/project-create-tab))
+  :init
+  (setq project-vc-extra-root-markers
+        '(".project" "Cargo.toml" "go.mod" "package.json" "pyproject.toml"
+          "build.zig" "CMakeLists.txt" "meson.build" "Makefile"))
+  (with-eval-after-load 'project
+    (defun duncan/project-create-tab ()
+      (interactive)
+      (if-let ((project (project-current)))
+          (progn
+            (tab-bar-new-tab)
+            (tab-bar-rename-tab (project-name project))
+            (project-dired project))
+        (user-error "No project in current directory")))
+    (setq project-switch-commands #'duncan/project-create-tab)))
 
 ;; complete in any order
 (use-package orderless
@@ -477,8 +476,8 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package tmux-pane
   :if (not (display-graphic-p))
-  :demand t
-  :config
+  :hook (after-init . tmux-pane-mode)
+  :init
   (setq -override-map-enable nil))
 ;; define M-arrows using escape codes so that they
 ;; work in terminal
@@ -503,7 +502,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
       (bind-key "<XF86Forward>" (lambda () (interactive) (other-window 1))))
   ;; else, move across tmux panes too
   (progn
-    (tmux-pane-mode)
     (bind-key* "M-<left>" #'tmux-pane-omni-window-left)
     (bind-key* "M-<right>" #'tmux-pane-omni-window-right)
     (bind-key* "M-<up>" #'tmux-pane-omni-window-up)
