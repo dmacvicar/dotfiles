@@ -584,7 +584,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package copilot
   :custom
   (copilot-install-dir (expand-file-name "emacs/copilot/" (xdg-cache-home)))
-  :ensure (:host github :repo "copilot-emacs/copilot.el"
+  :ensure (:host github :repo "copilot-emacs/copilot.el" :branch "main"
                  :files ("dist" "*.el"))
   :bind (:map copilot-completion-map
               ("<tab>" . copilot-accept-completion)
