@@ -342,6 +342,11 @@
                    "*.ti" ("e" "e/*"))))
 
 ;; theme
+;; Some environments override EMACSLOADPATH; ensure built-in lisp dir is present.
+(let ((builtin-lisp (expand-file-name "../lisp" data-directory)))
+  (when (and (not (locate-library "modus-themes"))
+             (file-directory-p builtin-lisp))
+    (add-to-list 'load-path builtin-lisp)))
 (use-package modus-themes
   :ensure nil
   :demand t
