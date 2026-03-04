@@ -1522,13 +1522,6 @@ not include EXDATEs for its overridden instances."
   (osm-tile-directory (convert-standard-filename
                        (expand-file-name  "emacs/osm/" (xdg-cache-home)))))
 
-;; contacts completion
-(use-package obsolete
-  :ensure (obsolete
-           :repo "dmacvicar/obsolete.el"
-           :host github
-           :protocol ssh))
-
 (use-package emacs
   :ensure nil
   :config
