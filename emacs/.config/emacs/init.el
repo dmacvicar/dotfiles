@@ -133,7 +133,7 @@
 ;; copy from clipboard in terminal
 (use-package xclip
   :if (not (display-graphic-p))
-  :hook (after-init . xclip-mode)
+  :hook (elpaca-after-init-hook . xclip-mode)
   :custom
   (xclip-method (if (getenv "WAYLAND_DISPLAY") 'wl-copy 'xclip))
   )
@@ -141,7 +141,7 @@
 ;; recent files
 (use-package recentf
   :ensure nil
-  :hook (after-init . recentf-mode)
+  :hook (elpaca-after-init-hook . recentf-mode)
   :custom
   (recentf-save-file
    (convert-standard-filename
@@ -155,7 +155,7 @@
 ;; minibuffer history
 (use-package savehist
   :ensure nil
-  :hook (after-init . savehist-mode)
+  :hook (elpaca-after-init-hook . savehist-mode)
   :custom
   (savehist-file (convert-standard-filename
        (expand-file-name  "emacs/history" (xdg-state-home))))
@@ -202,7 +202,7 @@
 
 ;; discoverability
 (use-package which-key
-  :hook (after-init . which-key-mode)
+  :hook (elpaca-after-init-hook . which-key-mode)
   :custom
   (which-key-popup-type 'minibuffer))
 
@@ -211,7 +211,7 @@
 
 ;; completion system (alternative to ivy)
 (use-package vertico
-  :hook (after-init . vertico-mode)
+  :hook (elpaca-after-init-hook . vertico-mode)
   :ensure (:files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el"))
   )
 
@@ -251,12 +251,10 @@
   ("C-x b" . consult-buffer)
   ("C-x p b" . consult-project-buffer)
   )
-;; ensure consult is installed so keybindings resolve on first launch
-(elpaca-wait)
 
 (use-package tab-bar
   :ensure nil
-  :hook (after-init . tab-bar-mode)
+  :hook (elpaca-after-init-hook . tab-bar-mode)
   :config
   (bind-key* "M-S-<left>" #'tab-previous)
   (bind-key* "M-S-<right>" #'tab-next)
@@ -292,7 +290,7 @@
 
 ;; add context to completions. eg. help to M-x functions
 (use-package marginalia
-  :hook (after-init . marginalia-mode)
+  :hook (elpaca-after-init-hook . marginalia-mode)
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
   :custom
@@ -305,7 +303,7 @@
 (use-package nerd-icons-completion
   :after marginalia
   :hook
-  (after-init . nerd-icons-completion-mode)
+  (elpaca-after-init-hook . nerd-icons-completion-mode)
   (marginalia-mode . nerd-icons-completion-marginalia-setup))
 
 (use-package nerd-icons-dired
@@ -326,7 +324,7 @@
   :custom
   (emojify-emojis-dir (convert-standard-filename
                        (expand-file-name  "emacs/emojis" (xdg-cache-home))))
-  :hook (after-init . global-emojify-mode))
+  :hook (elpaca-after-init-hook . global-emojify-mode))
 
 (use-package shell-pop
   :custom
@@ -462,8 +460,8 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :bind (("C-`"   . popper-toggle-latest)
          ("M-`"   . popper-cycle)
          ("C-M-`" . popper-toggle-type))
-  :hook ((after-init . popper-mode)
-         (after-init . popper-echo-mode))
+  :hook ((elpaca-after-init-hook . popper-mode)
+         (elpaca-after-init-hook . popper-echo-mode))
   :custom
   ; respect display-buffer-alist
   (popper-display-control nil)
@@ -485,7 +483,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package tmux-pane
   :if (not (display-graphic-p))
-  :hook (after-init . tmux-pane-mode)
+  :hook (elpaca-after-init-hook . tmux-pane-mode)
   :init
   (setq -override-map-enable nil))
 ;; define M-arrows using escape codes so that they
@@ -518,7 +516,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; respect style of projects
 (use-package editorconfig
-  :hook (after-init . editorconfig-mode))
+  :hook (elpaca-after-init-hook . editorconfig-mode))
 
 ;; put env variables and PATH in emacs process environment
 (use-package mise
@@ -541,8 +539,8 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; text completion
 (use-package corfu
   :init
-  (add-hook 'after-init-hook #'global-corfu-mode)
-  (add-hook 'after-init-hook #'corfu-popupinfo-mode)
+  (add-hook 'elpaca-after-init-hook #'global-corfu-mode)
+  (add-hook 'elpaca-after-init-hook #'corfu-popupinfo-mode)
   :custom
   (corfu-auto t))
 
@@ -550,7 +548,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package corfu-terminal
   :after corfu
   :if (not (display-graphic-p))
-  :hook (after-init . corfu-terminal-mode))
+  :hook (elpaca-after-init-hook . corfu-terminal-mode))
 
 (use-package kind-icon
   :ensure t
@@ -700,7 +698,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package repeat
   :ensure nil
-  :hook (after-init . repeat-mode))
+  :hook (elpaca-after-init-hook . repeat-mode))
 
 (use-package dape
   :config
@@ -737,15 +735,13 @@ will be selected, otherwise a light theme will be selected (0 is default)"
     (add-to-list 'major-mode-remap-alist mode)))
 
 (use-package treesit-auto
-  :hook (after-init . global-treesit-auto-mode)
+  :hook (elpaca-after-init-hook . global-treesit-auto-mode)
   :custom
   (treesit-auto-install 'prompt)
   ; those are broken
   (treesit-auto-opt-out-list
         '(markdown protobuf ruby r yaml))
   )
-;; ensure treesit-auto is installed before after-init hooks run
-(elpaca-wait)
 
 ;; structured navigation including expand region
 (use-package combobulate
