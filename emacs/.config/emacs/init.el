@@ -459,6 +459,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :bind (("C-`"   . popper-toggle-latest)
          ("M-`"   . popper-cycle)
          ("C-M-`" . popper-toggle-type))
+  :hook
+  (after-init . popper-mode)
+  (after-init . popper-echo-mode)
   :custom
   ; respect display-buffer-alist
   (popper-display-control nil)
@@ -467,13 +470,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
         '("\\*\\(Messages\\|Warnings\\|grep\\|rg\\|Org Agenda\\|Output\\|Async Shell Command\\|compilation\\)\\*"
           help-mode
           compilation-mode
-	  go-test-mode
-	  xref-mode
+          go-test-mode
+          xref-mode
           (lambda (bufname)
             (with-current-buffer bufname
-              (bound-and-true-p gptel-mode)))))
-  (popper-mode +1)
-  (popper-echo-mode +1))
+              (bound-and-true-p gptel-mode)))))))
 
 ;; window splitting functions
 (use-package windmove
