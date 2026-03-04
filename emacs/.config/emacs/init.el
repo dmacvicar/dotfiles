@@ -807,7 +807,12 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (dtrt-indent-max-lines 2000)
   (dtrt-indent-verbosity 2)
   :diminish
-  :hook (elpaca-after-init-hook . dtrt-indent-mode))
+  :hook (prog-mode . dtrt-indent-mode)
+  :init
+  ;; Ensure the prog-mode hook is only added after elpaca finishes.
+  (add-hook 'elpaca-after-init-hook
+            (lambda ()
+              (add-hook 'prog-mode-hook #'dtrt-indent-mode))))
 (setq-default tab-width 8)
 
 (use-package paredit
