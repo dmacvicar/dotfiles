@@ -533,28 +533,27 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; text completion
 (use-package corfu
-  :demand t
   :init
-  (global-corfu-mode)
-  (corfu-popupinfo-mode 1)
+  (add-hook 'after-init-hook #'global-corfu-mode)
+  (add-hook 'after-init-hook #'corfu-popupinfo-mode)
   :custom
   (corfu-auto t))
 
 ;; remove with emacs 31
 (use-package corfu-terminal
-  :demand t
-  :config
-  (unless (display-graphic-p)
-    (corfu-terminal-mode +1)))
+  :after corfu
+  :if (not (display-graphic-p))
+  :hook (after-init . corfu-terminal-mode))
 
 (use-package kind-icon
   :ensure t
-  :demand t
   :after corfu
   :custom
   (svg-lib-icons-dir (expand-file-name "emacs/svg-lib/" (xdg-cache-home)))
-  :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+  :init
+  (with-eval-after-load 'corfu
+    (require 'kind-icon)
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 
 (use-package cape
   :bind ("C-c p" . cape-prefix-map)
