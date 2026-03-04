@@ -342,59 +342,58 @@
                    "*.ti" ("e" "e/*"))))
 
 ;; theme
-;; Some environments override EMACSLOADPATH; ensure built-in lisp dir is present.
-(let ((builtin-lisp (expand-file-name "../lisp" data-directory)))
-  (when (and (not (locate-library "modus-themes"))
-             (file-directory-p builtin-lisp))
-    (add-to-list 'load-path builtin-lisp)))
-(use-package modus-themes
-  :ensure nil
-  :demand t
-  :custom
-  (modus-themes-mixed-fonts t)
-  (modus-themes-org-blocks 'gray-background)
-  (modus-themes-fringes 'intense)
-  :config
-  (defun duncan/theme-from-dbus (value)
-    "Change the theme based on a D-Bus property.
+;; Built-in Modus themes: do not (require 'modus-themes); just load-theme.
+(setq modus-themes-mixed-fonts t
+      modus-themes-org-blocks 'gray-background
+      modus-themes-fringes 'intense)
+(defun duncan/theme-from-dbus (value)
+  "Change the theme based on a D-Bus property.
 
 VALUE should be an integer or an arbitrarily nested list that
 contains an integer.  When VALUE is equal to 2 then a dark theme
 will be selected, otherwise a light theme will be selected (0 is default)"
-    (load-theme (if (= 1 (car (flatten-list value)))
-                    'modus-vivendi-tinted
-                  'modus-operandi-tinted)
-                t))
-  (if (featurep 'dbusbind)
-      (condition-case err
-          (progn
-            (require 'dbus)
-            ;; Set the current theme based on what the system theme is right now
-            (dbus-call-method-asynchronously
-             :session "org.freedesktop.portal.Desktop"
-             "/org/freedesktop/portal/desktop"
-             "org.freedesktop.portal.Settings"
-             "Read"
-             #'duncan/theme-from-dbus
-             "org.freedesktop.appearance"
-             "color-scheme")
-            ;; Register to be notified when the system theme changes:
-            (dbus-register-signal
-             :session "org.freedesktop.portal.Desktop"
-             "/org/freedesktop/portal/desktop"
-             "org.freedesktop.portal.Settings"
-             "SettingChanged"
-             (lambda (path var value)
-               (when (and (string-equal path "org.freedesktop.appearance")
-                          (string-equal var "color-scheme"))
-                 (duncan/theme-from-dbus value)))))
-        (error
-         (message "D-Bus theme sync unavailable: %s" (error-message-string err))))
-    (message "D-Bus not available; skipping theme sync")))
+  (load-theme (if (= 1 (car (flatten-list value)))
+                  'modus-vivendi-tinted
+                'modus-operandi-tinted)
+              t))
+(if (featurep 'dbusbind)
+    (condition-case err
+        (progn
+          (require 'dbus)
+          ;; Set the current theme based on what the system theme is right now
+          (dbus-call-method-asynchronously
+           :session "org.freedesktop.portal.Desktop"
+           "/org/freedesktop/portal/desktop"
+           "org.freedesktop.portal.Settings"
+           "Read"
+           #'duncan/theme-from-dbus
+           "org.freedesktop.appearance"
+           "color-scheme")
+          ;; Register to be notified when the system theme changes:
+          (dbus-register-signal
+           :session "org.freedesktop.portal.Desktop"
+           "/org/freedesktop/portal/desktop"
+           "org.freedesktop.portal.Settings"
+           "SettingChanged"
+           (lambda (path var value)
+             (when (and (string-equal path "org.freedesktop.appearance")
+                        (string-equal var "color-scheme"))
+               (duncan/theme-from-dbus value)))))
+      (error
+       (message "D-Bus theme sync unavailable: %s" (error-message-string err))))
+  (message "D-Bus not available; skipping theme sync"))
 
 (elpaca-wait)
 
-(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
+(defun duncan/modus-toggle ()
+  "Toggle between the two Modus themes."
+  (interactive)
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme (if (eq (car custom-enabled-themes) 'modus-vivendi-tinted)
+                  'modus-operandi-tinted
+                'modus-vivendi-tinted)
+              t))
+(define-key global-map (kbd "<f5>") #'duncan/modus-toggle)
 
 (when (display-graphic-p)
   (let ((current-height (face-attribute 'default :height)))
