@@ -343,6 +343,7 @@
 
 ;; theme
 (use-package modus-themes
+  :ensure nil
   :demand t
   :custom
   (modus-themes-mixed-fonts t)
