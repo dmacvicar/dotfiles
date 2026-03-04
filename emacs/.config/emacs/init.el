@@ -313,6 +313,7 @@
   :hook (dired-mode . nerd-icons-dired-mode))
 
 (use-package transient
+  :ensure t
   :custom
   (transient-history-file (convert-standard-filename
                            (expand-file-name  "emacs/transient/history.el" (xdg-cache-home)))))
@@ -590,7 +591,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
               ("TAB" . copilot-accept-completion)))
 
 (use-package shell-maker
-  :ensure (:type git :host github :repo "xenodium/shell-maker" :ref "v0.85.2"))
+  :ensure (:type git :host github :repo "xenodium/shell-maker"))
 
 (use-package agent-shell
   :custom
