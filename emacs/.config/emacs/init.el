@@ -251,6 +251,8 @@
   ("C-x b" . consult-buffer)
   ("C-x p b" . consult-project-buffer)
   )
+;; ensure consult is installed so keybindings resolve on first launch
+(elpaca-wait)
 
 (use-package tab-bar
   :ensure nil
@@ -738,6 +740,8 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (treesit-auto-opt-out-list
         '(markdown protobuf ruby r yaml))
   )
+;; ensure treesit-auto is installed before after-init hooks run
+(elpaca-wait)
 
 ;; structured navigation including expand region
 (use-package combobulate
