@@ -581,7 +581,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
         whisper-use-threads 4))
 
 ;; github copilot
+(use-package track-changes
+  :ensure t)
 (use-package copilot
+  :after track-changes
   :custom
   (copilot-install-dir (expand-file-name "emacs/copilot/" (xdg-cache-home)))
   :ensure (:host github :repo "copilot-emacs/copilot.el" :branch "main"
