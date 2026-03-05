@@ -414,7 +414,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (set-face-attribute 'fixed-pitch nil :family (face-attribute 'default :family) :height 110)
 
 (use-package visual-fill-column
-
   :custom
   (visual-fill-column-adjust-for-text-scale t)
   (visual-fill-column-width 100)
@@ -423,7 +422,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust)
 
 (use-package mixed-pitch
-
   :custom
   (mixed-pitch-variable-pitch-cursor '(bar . 3)))
 
@@ -463,15 +461,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; popups
 (use-package popper
-
   :bind (("C-`"   . popper-toggle-latest)
          ("M-`"   . popper-cycle)
          ("C-M-`" . popper-toggle-type))
   :hook ((elpaca-after-init-hook . popper-mode)
          (elpaca-after-init-hook . popper-echo-mode))
-  :custom
-  ; respect display-buffer-alist
-  (popper-display-control nil)
   :init
   (setq popper-reference-buffers
         '("\\*\\(Messages\\|Warnings\\|grep\\|rg\\|Org Agenda\\|Output\\|Async Shell Command\\|compilation\\)\\*"
@@ -482,14 +476,15 @@ will be selected, otherwise a light theme will be selected (0 is default)"
           (lambda (bufname)
             (with-current-buffer bufname
               (bound-and-true-p gptel-mode)))))
-  )
+  :custom
+  ; respect display-buffer-alist
+  (popper-display-control nil))
 
 ;; window splitting functions
 (use-package windmove
   :ensure nil)
 
 (use-package tmux-pane
-
   :if (not (display-graphic-p))
   :hook (elpaca-after-init-hook . tmux-pane-mode)
   :init
