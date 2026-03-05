@@ -907,7 +907,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; like play.golang.org
 (use-package go-playground
-
   :bind (:map go-playground-mode-map
               ([M-return] . nil)
               ("C-c C-c" . go-playground-exec)))
@@ -916,7 +915,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   )
 
 (use-package pet
-
   :config
   (add-hook 'python-base-mode-hook 'pet-mode -10))
 
@@ -931,12 +929,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package lua-mode
   )
 (use-package typescript-mode
-
   :mode ("\\.ts[x]?\\'" . typescript-mode))
 
 ;; browse HN
 (use-package hackernews
-
   :custom
   (hackernews-visited-links-file (convert-standard-filename
                                   (expand-file-name  "emacs/hackernews/visited-links.el" (xdg-cache-home)))))
@@ -968,14 +964,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; org mode
 (use-package org
   :ensure nil
-  :hook
-  ;; handwriten style
-  (org-mode . (lambda() (buffer-face-set '(:family "Purisa"))))
-  (org-babel-after-execute . org-redisplay-inline-images)
-  (org-mode . visual-line-mode)
-  (org-mode . visual-fill-column-mode)
-  (org-mode . mixed-pitch-mode)
-  (org-mode . buffer-face-mode)
   :custom
   (org-hide-emphasis-markers t)
   (org-log-repeat nil)
@@ -1004,10 +992,18 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (org-agenda-category-icon-alist
    `(("emacs"
       ,(list (if (fboundp 'nerd-icons-sucicon)
-                 (nerd-icons-sucicon "nf-custom-emacs")
+               (nerd-icons-sucicon "nf-custom-emacs")
                "E")
              nil nil :ascent 'center))))
   ;;(org-agenda-prefix-format "○ ")
+  :hook
+  ;; handwriten style
+  (org-mode . (lambda() (buffer-face-set '(:family "Purisa"))))
+  (org-babel-after-execute . org-redisplay-inline-images)
+  (org-mode . visual-line-mode)
+  (org-mode . visual-fill-column-mode)
+  (org-mode . mixed-pitch-mode)
+  (org-mode . buffer-face-mode)
   :config
   (require 'org-crypt)
   (require 'org-tempo)
@@ -1035,8 +1031,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :init
   ;; do not ask to reload the calendar when regenerated
   (add-to-list 'revert-without-query "\\.cache/.+\\.ics")
-  :config
-  (org-agenda-dim-blocked-tasks t)
   :init
   (advice-add 'org-agenda :before 'duncan/generate-diary-from-calendars)
   (advice-add 'org-agenda-exit :after
@@ -1048,7 +1042,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                   (when (or (eq major-mode 'diary-mode) (eq major-mode 'dcl-mode))
                     (kill-buffer buffer))))))
   :custom
-  (org-agenda-include-diary t))
+  (org-agenda-include-diary t)
+  :config
+  (org-agenda-dim-blocked-tasks t))
 
 (use-package org-timeblock
   :ensure (:host github :repo "ichernyshovvv/org-timeblock"))
@@ -1056,7 +1052,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; org-yt removed
 
 (use-package org-super-agenda
-
   :hook (org-agenda-mode . org-super-agenda-mode))
 (defun duncan/org-element-at-point-silent (orig &rest args)
   "Return nil instead of warning when called from non-Org buffers."
@@ -1066,7 +1061,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;(use-package org-ql
 ;  :after org)
 (use-package org-superstar              ; supersedes `org-bullets'
-
   :after org
   :custom
   (org-superstar-remove-leading-stars t)
@@ -1078,19 +1072,16 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :hook (org-mode . org-superstar-mode))
 
 (use-package org-fancy-priorities ; priority icons
-
   :after org
-  :hook (org-mode . org-fancy-priorities-mode)
-  :hook (org-agenda-mode . org-fancy-priorities-mode)
+  :hook ((org-mode . org-fancy-priorities-mode)
+         (org-agenda-mode . org-fancy-priorities-mode))
   :custom
   (org-fancy-priorities-list '("⚑" "⬆" "■")))
 
 (use-package org-modern
-
   :hook (org-mode . org-modern-mode))
 
 (use-package org-appear
-
   :after org
   :hook (org-mode . org-appear-mode)
   :custom
@@ -1100,7 +1091,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; Avoid `org-babel-do-load-languages' since it does an eager require.
 (use-package ob-mermaid
-
   :custom
   (ob-mermaid-cli-path "mmdr")
   :commands (org-babel-execute:mermaid))
