@@ -1252,9 +1252,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (sendmail-program "/usr/bin/msmtp"))
 
 (use-package outlook
+  :ensure t
   :after mu4e)
 
 (use-package mu4e-jump-to-list
+  :ensure t
   :after mu4e)
 (use-package mu4e-contrib
   :ensure nil
@@ -1262,6 +1264,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :load-path mu4e-system-path)
 
 (use-package mu4e-conversation
+  :ensure t
   :after mu4e)
 
 (use-package mu4e-query-fragments
@@ -1282,6 +1285,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (mu4e-icalendar-setup))
 
 (use-package mu4e-views
+  :ensure t
   :after mu4e
   :bind (:map mu4e-headers-mode-map
 	      ("v" . mu4e-views-mu4e-select-view-msg-method) ;; select viewing method
@@ -1296,6 +1300,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (setq mu4e-views-auto-view-selected-message nil))
 
 (use-package mu4e-column-faces
+  :ensure t
   :after mu4e
   :config (mu4e-column-faces-mode))
 
