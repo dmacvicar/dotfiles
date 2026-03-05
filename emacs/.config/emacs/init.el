@@ -214,7 +214,8 @@
 
 ;; completion system (alternative to ivy)
 (use-package vertico
-  :elpaca (vertico :wait t :files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el"))
+  :ensure nil
+  :elpaca (vertico :files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el"))
   :demand t
   :config
   (vertico-mode))
@@ -242,7 +243,7 @@
 ;; reimpl of common emacs command using completion-system/vertico
 ;; alternative to consul
 (use-package consult
-  :elpaca (:wait t)
+  :ensure (:wait t)
   :demand t
   :custom
   (xref-show-xrefs-function #'consult-xref)
@@ -257,6 +258,7 @@
   (global-set-key (kbd "C-x p b") #'consult-project-buffer)
   (global-set-key (kbd "C-s") #'consult-line)
   (define-key global-map [remap switch-to-buffer] #'consult-buffer))
+(elpaca-wait)
 
 (use-package tab-bar
   :ensure nil
@@ -307,10 +309,9 @@
   )
 
 (use-package nerd-icons
-
+  :ensure nil
   :if (display-graphic-p)
-  :elpaca (:wait t)
-  :demand t)
+  :after doom-modeline)
 
 (use-package nerd-icons-completion
 
