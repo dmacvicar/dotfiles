@@ -252,8 +252,6 @@
   (global-set-key (kbd "C-x p b") #'consult-project-buffer)
   (global-set-key (kbd "C-s") #'consult-line)
   (define-key global-map [remap switch-to-buffer] #'consult-buffer))
-(elpaca-wait)
-
 (use-package tab-bar
   :ensure nil
   :hook (elpaca-after-init-hook . tab-bar-mode)
@@ -388,8 +386,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
        (message "D-Bus theme sync unavailable: %s" (error-message-string err))))
   (message "D-Bus not available; skipping theme sync"))
 
-(elpaca-wait)
-
 (defun duncan/modus-toggle ()
   "Toggle between the two Modus themes."
   (interactive)
@@ -495,8 +491,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (define-key input-decode-map "\e\eOB" [(meta down)])
 (define-key input-decode-map "\e\eOC" [(meta right)])
 (define-key input-decode-map "\e\eOD" [(meta left)])
-
-(elpaca-wait)
 
 (if (display-graphic-p)
     (progn
