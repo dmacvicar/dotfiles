@@ -208,8 +208,7 @@
 
 ;; completion system (alternative to ivy)
 (use-package vertico
-  :ensure nil
-  :elpaca (vertico :files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el"))
+  :ensure (vertico :files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el"))
   :demand t
   :config
   (vertico-mode))
@@ -995,7 +994,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :init
   ;; do not ask to reload the calendar when regenerated
   (add-to-list 'revert-without-query "\\.cache/.+\\.ics")
-  :init
   (advice-add 'org-agenda :before 'duncan/generate-diary-from-calendars)
   (advice-add 'org-agenda-exit :after
             (lambda (&rest _)
