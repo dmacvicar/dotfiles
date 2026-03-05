@@ -526,10 +526,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :custom (show-paren-style 'expression))
 
 (use-package rainbow-delimiters
-  :init
-  (add-hook 'elpaca-after-init-hook
-            (lambda ()
-              (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))))
+  :hook (elpaca-after-init-hook . rainbow-delimiters-mode))
 
 ;; highlight undoed text
 (use-package undo-hl
@@ -810,11 +807,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (dtrt-indent-max-lines 2000)
   (dtrt-indent-verbosity 2)
   :diminish
-  :init
-  ;; Ensure the prog-mode hook is only added after elpaca finishes.
-  (add-hook 'elpaca-after-init-hook
-            (lambda ()
-              (add-hook 'prog-mode-hook #'dtrt-indent-mode))))
+  :hook (elpaca-after-init-hook . dtrt-indent-mode))
 (setq-default tab-width 8)
 
 (use-package paredit
