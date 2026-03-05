@@ -1153,7 +1153,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :commands (org-babel-execute:plantuml))
 ;; ob-d2 removed
 (use-package ox-gfm
-    )
+  )
 (use-package ox-reveal
   )
 (use-package org-tree-slide
@@ -1161,7 +1161,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package hide-mode-line
   )
 (use-package org-present
-
   :init
   (add-hook 'org-present-mode-hook #'(lambda ()
                                        (setq-local face-remap-cookies
@@ -1202,23 +1201,20 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                                        (toggle-frame-fullscreen))))
 ;; I also tried jupyter packagebut did not work
 (use-package ein
-
   :custom
   (ein:output-area-inlined-images t))
 
 (use-package denote
-
   :bind ("C-c d" . denote)
   :config
   (with-eval-after-load 'org
     (require 'denote)))
 
 (use-package consult-notes
-
   :commands (consult-notes
              consult-notes-search-in-all-notes))
 (use-package htmlize
-    )
+  )
 (use-package protobuf-mode
   )
 
@@ -1292,11 +1288,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (sendmail-program "/usr/bin/msmtp"))
 
 (use-package outlook
-
   :after mu4e)
 
 (use-package mu4e-jump-to-list
-
   :after mu4e)
 (use-package mu4e-contrib
   :ensure nil
@@ -1304,7 +1298,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :load-path mu4e-system-path)
 
 (use-package mu4e-conversation
-
   :after mu4e)
 
 (use-package mu4e-query-fragments
@@ -1325,7 +1318,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (mu4e-icalendar-setup))
 
 (use-package mu4e-views
-
   :after mu4e
   :bind (:map mu4e-headers-mode-map
 	      ("v" . mu4e-views-mu4e-select-view-msg-method) ;; select viewing method
@@ -1340,7 +1332,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (setq mu4e-views-auto-view-selected-message nil))
 
 (use-package mu4e-column-faces
-
   :after mu4e
   :config (mu4e-column-faces-mode))
 
