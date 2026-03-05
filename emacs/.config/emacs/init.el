@@ -666,7 +666,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 	       (cons tramp-file-name-regexp nil)))
 
 (use-package flymake
-  :hook (prog-mode-hook . flymake-mode))
+  :hook (prog-mode . flymake-mode))
 
 ;; LSP
 (use-package eglot
@@ -969,7 +969,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (org-agenda-category-icon-alist
    `(("emacs"
       ,(list (if (fboundp 'nerd-icons-sucicon)
-               (nerd-icons-sucicon "nf-custom-emacs")
+                 (nerd-icons-sucicon "nf-custom-emacs")
                "E")
              nil nil :ascent 'center))))
   ;;(org-agenda-prefix-format "○ ")
