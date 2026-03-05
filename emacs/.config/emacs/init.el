@@ -204,7 +204,6 @@
 
 ;; discoverability
 (use-package which-key
-
   :hook (elpaca-after-init-hook . which-key-mode)
   :custom
   (which-key-popup-type 'minibuffer))
@@ -245,14 +244,14 @@
 (use-package consult
   :ensure (:wait t)
   :demand t
-  :custom
-  (xref-show-xrefs-function #'consult-xref)
-  (xref-show-definitions-function #'consult-xref)
-  (consult-preview-key '("S-<down>" "S-<up>"))
   :bind (("C-x b" . consult-buffer)
          ("C-x p b" . consult-project-buffer)
          ("C-s" . consult-line)
          ([remap switch-to-buffer] . consult-buffer))
+  :custom
+  (xref-show-xrefs-function #'consult-xref)
+  (xref-show-definitions-function #'consult-xref)
+  (consult-preview-key '("S-<down>" "S-<up>"))
   :config
   (global-set-key (kbd "C-x b") #'consult-buffer)
   (global-set-key (kbd "C-x p b") #'consult-project-buffer)
@@ -263,11 +262,11 @@
 (use-package tab-bar
   :ensure nil
   :hook (elpaca-after-init-hook . tab-bar-mode)
+  :custom
+  (tab-bar-show 1)
   :config
   (bind-key* "M-S-<left>" #'tab-previous)
-  (bind-key* "M-S-<right>" #'tab-next)
-  :custom
-  (tab-bar-show 1))
+  (bind-key* "M-S-<right>" #'tab-next))
 
 (use-package project
   :ensure nil
@@ -300,13 +299,11 @@
 
 ;; add context to completions. eg. help to M-x functions
 (use-package marginalia
-
   :hook (elpaca-after-init-hook . marginalia-mode)
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
   :custom
-  (marginalia-align 'right)
-  )
+  (marginalia-align 'right))
 
 (use-package nerd-icons
   :ensure nil
@@ -314,19 +311,15 @@
   :after doom-modeline)
 
 (use-package nerd-icons-completion
-
   :after marginalia
-  :hook
-  (elpaca-after-init-hook . nerd-icons-completion-mode)
-  (marginalia-mode . nerd-icons-completion-marginalia-setup))
+  :hook ((elpaca-after-init-hook . nerd-icons-completion-mode)
+         (marginalia-mode . nerd-icons-completion-marginalia-setup)))
 
 (use-package nerd-icons-dired
-
   :after nerd-icons
   :hook (dired-mode . nerd-icons-dired-mode))
 
 (use-package transient
-
   :custom
   (transient-history-file (convert-standard-filename
                            (expand-file-name  "emacs/transient/history.el" (xdg-cache-home)))))
