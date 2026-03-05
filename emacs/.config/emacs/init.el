@@ -666,12 +666,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 	       (cons tramp-file-name-regexp nil)))
 
 (use-package flymake
-
   :hook (prog-mode-hook . flymake-mode))
 
 ;; LSP
 (use-package eglot
-
   :hook
   ((go-ts-mode
     zig-mode
@@ -705,12 +703,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   )
 
 (use-package repeat
-
   :ensure nil
   :hook (elpaca-after-init-hook . repeat-mode))
 
 (use-package dape
-
   :config
   (add-hook 'dape-display-source-hook 'pulse-momentary-highlight-one-line)
   ;; (remove-hook 'dape-start-hook 'dape-info)
@@ -747,14 +743,12 @@ will be selected, otherwise a light theme will be selected (0 is default)"
     (add-to-list 'major-mode-remap-alist mode)))
 
 (use-package treesit-auto
-
   :hook (elpaca-after-init-hook . global-treesit-auto-mode)
   :custom
   (treesit-auto-install 'prompt)
   ; those are broken
   (treesit-auto-opt-out-list
-        '(markdown protobuf ruby r yaml))
-  )
+   '(markdown protobuf ruby r yaml)))
 
 ;; structured navigation including expand region
 (use-package combobulate
@@ -773,7 +767,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; markdown
 (use-package markdown-mode
-
   :hook
   (markdown-mode . visual-line-mode)
   (markdown-mode . visual-fill-column-mode)
@@ -782,20 +775,16 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; use lang modes inside org src blocks
 (use-package poly-org
-
   :mode ("\\.org\\'" . poly-org-mode))
 ;; use lang modes inside markdow code fences
 (use-package poly-markdown
-
   :mode ("\\.md\\'" . poly-gfm-mode))
 (use-package web-mode
-
   :mode "\\.qtpl\\'")
 (use-package vue-html-mode
     )
 ;; vue single file component mode (uses polymode)
 (use-package sfc-mode
-
   :ensure (:host github :repo "gexplorer/sfc-mode")
   :custom
   (sfc-template-default-mode 'vue-html-mode)
@@ -807,7 +796,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   )
 
 (use-package docker
-
   :bind ("C-c d" . docker))
 
 (use-package dockerfile-ts-mode
@@ -824,7 +812,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; guess indentation params
 (use-package dtrt-indent
-
   :custom
   (dtrt-indent-max-lines 2000)
   (dtrt-indent-verbosity 2)
