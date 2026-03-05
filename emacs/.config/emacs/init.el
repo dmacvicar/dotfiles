@@ -1458,7 +1458,6 @@ not include EXDATEs for its overridden instances."
 
 ;; feeds
 (use-package elfeed
-
   :bind (("C-c 3" . elfeed)
          :map elfeed-search-mode-map
          ("R" . duncan/elfeed-mark-all-as-read)
@@ -1477,7 +1476,6 @@ not include EXDATEs for its overridden instances."
                    :use-authinfo t))))
 
 (use-package elfeed-protocol
-
   :after elfeed
   :custom
   ;; allow to use nextcloud news
@@ -1549,7 +1547,6 @@ not include EXDATEs for its overridden instances."
 
 (use-package emacs
   :ensure nil
-  :config
   :commands (duncan/cwd-fn)
   :config
   (defun duncan/cwd-fn ()
@@ -1562,8 +1559,8 @@ not include EXDATEs for its overridden instances."
            default-directory)))))
 
 (use-package envrc
- :config
- (envrc-global-mode))
+  :config
+  (envrc-global-mode))
 
 (when (getenv "EMACS_PROFILE_START")
   (add-hook 'emacs-startup-hook
