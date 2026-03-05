@@ -529,12 +529,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; respect style of projects
 (use-package editorconfig
-
   :hook (elpaca-after-init-hook . editorconfig-mode))
 
 ;; put env variables and PATH in emacs process environment
 (use-package mise
-
   :hook (elpaca-after-init-hook . global-mise-mode))
 
 ;; parenthesis
@@ -544,7 +542,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :custom (show-paren-style 'expression))
 
 (use-package rainbow-delimiters
-
   :init
   (add-hook 'elpaca-after-init-hook
             (lambda ()
@@ -552,13 +549,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; highlight undoed text
 (use-package undo-hl
-
   :ensure (:host github :repo "casouri/undo-hl")
   :hook ((prog-mode text-mode) . undo-hl-mode))
 
 ;; text completion
 (use-package corfu
-
   :init
   (add-hook 'elpaca-after-init-hook #'global-corfu-mode)
   (add-hook 'elpaca-after-init-hook #'corfu-popupinfo-mode)
@@ -567,23 +562,20 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; remove with emacs 31
 (use-package corfu-terminal
-
   :after corfu
   :if (not (display-graphic-p))
   :hook (elpaca-after-init-hook . corfu-terminal-mode))
 
 (use-package kind-icon
-
   :after corfu
-  :custom
-  (svg-lib-icons-dir (expand-file-name "emacs/svg-lib/" (xdg-cache-home)))
   :init
   (with-eval-after-load 'corfu
     (require 'kind-icon)
-    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+  :custom
+  (svg-lib-icons-dir (expand-file-name "emacs/svg-lib/" (xdg-cache-home))))
 
 (use-package cape
-
   :bind ("C-c p" . cape-prefix-map)
   :init
   ;;(add-hook 'completion-at-point-functions #'cape-dabbrev)
@@ -618,7 +610,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;  :ensure (:type git :host github :repo "xenodium/shell-maker"))
 
 (use-package agent-shell
-
   :custom
   (agent-shell-openai-codex-acp-command '("codex" "--full-auto"))
   (agent-shell-agent-configs `(,(agent-shell-openai-make-codex-config)
@@ -646,7 +637,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; different gpt models
 (use-package gptel
-
   :bind
   (("C-c g m" . gptel-menu)
    ("C-c g c" . gptel)
