@@ -1537,19 +1537,6 @@ not include EXDATEs for its overridden instances."
   (osm-tile-directory (convert-standard-filename
                        (expand-file-name  "emacs/osm/" (xdg-cache-home)))))
 
-(defun duncan/cwd-fn ()
-  (expand-file-name
-   ;; custom-src-directory is supposed to come from .dir-locals.el
-   (if (boundp 'custom-src-directory)
-       custom-src-directory
-     (or (when-let ((project (project-current)))
-           (project-root project))
-         default-directory))))
-
-(use-package emacs
-  :ensure nil
-  :commands (duncan/cwd-fn))
-
 (use-package envrc
   :config
   (envrc-global-mode))
