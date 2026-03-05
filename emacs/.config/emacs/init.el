@@ -47,7 +47,7 @@
 ;; Install use-package support
 (elpaca elpaca-use-package
   (elpaca-use-package-mode)                 ; enable :elpaca use-package keyword
-  (setq elpaca-use-package-by-default t     ; assume :elpaca t unless otherwise specified
+  (setq use-package-always-ensure t         ; assume :ensure t unless otherwise specified
         use-package-always-defer t          ; defer by default, use :demand t when needed
         use-package-expand-minimally t))    ; reduce macro expansion overhead
 
@@ -125,13 +125,14 @@
 
 ;; kitty protocol
 (use-package kkp
-  :ensure t
+
   :config
   ;; (setq kkp-alt-modifier 'alt) ;; use this if you want to map the Alt keyboard modifier to Alt in Emacs (and not to Meta)
   (global-kkp-mode +1))
 
 ;; copy from clipboard in terminal
 (use-package xclip
+
   :if (not (display-graphic-p))
   :hook (elpaca-after-init-hook . xclip-mode)
   :custom
@@ -163,6 +164,7 @@
 
 ;; modeline
 (use-package doom-modeline
+
   :hook (elpaca-after-init-hook . doom-modeline-mode))
 
 ;; dashboard screen
@@ -202,6 +204,7 @@
 
 ;; discoverability
 (use-package which-key
+
   :hook (elpaca-after-init-hook . which-key-mode)
   :custom
   (which-key-popup-type 'minibuffer))
@@ -211,9 +214,10 @@
 
 ;; completion system (alternative to ivy)
 (use-package vertico
-  :hook (elpaca-after-init-hook . vertico-mode)
-  :ensure (:files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el"))
-  )
+  :elpaca (vertico :wait t :files (:defaults "extensions/vertico-directory.el" "extensions/vertico-sort.el"))
+  :demand t
+  :config
+  (vertico-mode))
 
 (use-package vertico-sort
   :ensure nil
@@ -238,21 +242,21 @@
 ;; reimpl of common emacs command using completion-system/vertico
 ;; alternative to consul
 (use-package consult
-  :commands (consult-xref
-             consult-line
-             consult-buffer
-             consult-project-buffer)
+  :elpaca (:wait t)
+  :demand t
   :custom
   (xref-show-xrefs-function #'consult-xref)
   (xref-show-definitions-function #'consult-xref)
   (consult-preview-key '("S-<down>" "S-<up>"))
-  :init
-  (add-hook 'elpaca-after-init-hook
-            (lambda ()
-              (require 'consult)
-              (global-set-key (kbd "C-s") #'consult-line)
-              (global-set-key (kbd "C-x b") #'consult-buffer)
-              (global-set-key (kbd "C-x p b") #'consult-project-buffer))))
+  :bind (("C-x b" . consult-buffer)
+         ("C-x p b" . consult-project-buffer)
+         ("C-s" . consult-line)
+         ([remap switch-to-buffer] . consult-buffer))
+  :config
+  (global-set-key (kbd "C-x b") #'consult-buffer)
+  (global-set-key (kbd "C-x p b") #'consult-project-buffer)
+  (global-set-key (kbd "C-s") #'consult-line)
+  (define-key global-map [remap switch-to-buffer] #'consult-buffer))
 
 (use-package tab-bar
   :ensure nil
@@ -282,7 +286,9 @@
 
 ;; complete in any order
 (use-package orderless
-  :init
+  :ensure (:wait t)
+  :demand t
+  :config
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
   ;;       orderless-component-separator #'orderless-escapable-split-on-space)
@@ -292,6 +298,7 @@
 
 ;; add context to completions. eg. help to M-x functions
 (use-package marginalia
+
   :hook (elpaca-after-init-hook . marginalia-mode)
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
@@ -300,20 +307,25 @@
   )
 
 (use-package nerd-icons
-  :if (display-graphic-p))
+
+  :if (display-graphic-p)
+  :elpaca (:wait t)
+  :demand t)
 
 (use-package nerd-icons-completion
+
   :after marginalia
   :hook
   (elpaca-after-init-hook . nerd-icons-completion-mode)
   (marginalia-mode . nerd-icons-completion-marginalia-setup))
 
 (use-package nerd-icons-dired
+
   :after nerd-icons
   :hook (dired-mode . nerd-icons-dired-mode))
 
 (use-package transient
-  :ensure t
+
   :custom
   (transient-history-file (convert-standard-filename
                            (expand-file-name  "emacs/transient/history.el" (xdg-cache-home)))))
@@ -329,6 +341,7 @@
   :hook (elpaca-after-init-hook . global-emojify-mode))
 
 (use-package shell-pop
+
   :custom
   (shell-pop-universal-key "C-t"))
 
@@ -412,6 +425,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (set-face-attribute 'fixed-pitch nil :family (face-attribute 'default :family) :height 110)
 
 (use-package visual-fill-column
+
   :custom
   (visual-fill-column-adjust-for-text-scale t)
   (visual-fill-column-width 100)
@@ -420,6 +434,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust)
 
 (use-package mixed-pitch
+
   :custom
   (mixed-pitch-variable-pitch-cursor '(bar . 3)))
 
@@ -459,6 +474,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; popups
 (use-package popper
+
   :bind (("C-`"   . popper-toggle-latest)
          ("M-`"   . popper-cycle)
          ("C-M-`" . popper-toggle-type))
@@ -484,6 +500,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :ensure nil)
 
 (use-package tmux-pane
+
   :if (not (display-graphic-p))
   :hook (elpaca-after-init-hook . tmux-pane-mode)
   :init
@@ -518,10 +535,12 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; respect style of projects
 (use-package editorconfig
+
   :hook (elpaca-after-init-hook . editorconfig-mode))
 
 ;; put env variables and PATH in emacs process environment
 (use-package mise
+
   :hook (elpaca-after-init-hook . global-mise-mode))
 
 ;; parenthesis
@@ -531,6 +550,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :custom (show-paren-style 'expression))
 
 (use-package rainbow-delimiters
+
   :init
   (add-hook 'elpaca-after-init-hook
             (lambda ()
@@ -538,11 +558,13 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; highlight undoed text
 (use-package undo-hl
+
   :ensure (:host github :repo "casouri/undo-hl")
   :hook ((prog-mode text-mode) . undo-hl-mode))
 
 ;; text completion
 (use-package corfu
+
   :init
   (add-hook 'elpaca-after-init-hook #'global-corfu-mode)
   (add-hook 'elpaca-after-init-hook #'corfu-popupinfo-mode)
@@ -551,12 +573,13 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; remove with emacs 31
 (use-package corfu-terminal
+
   :after corfu
   :if (not (display-graphic-p))
   :hook (elpaca-after-init-hook . corfu-terminal-mode))
 
 (use-package kind-icon
-  :ensure t
+
   :after corfu
   :custom
   (svg-lib-icons-dir (expand-file-name "emacs/svg-lib/" (xdg-cache-home)))
@@ -566,6 +589,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 
 (use-package cape
+
   :bind ("C-c p" . cape-prefix-map)
   :init
   ;;(add-hook 'completion-at-point-functions #'cape-dabbrev)
@@ -585,7 +609,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; github copilot
 (use-package track-changes
-  :ensure t)
+  )
 (use-package copilot
   :after track-changes
   :custom
@@ -596,10 +620,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
               ("<tab>" . copilot-accept-completion)
               ("TAB" . copilot-accept-completion)))
 
-(use-package shell-maker
-  :ensure (:type git :host github :repo "xenodium/shell-maker"))
+;(use-package shell-maker
+;  :ensure (:type git :host github :repo "xenodium/shell-maker"))
 
 (use-package agent-shell
+
   :custom
   (agent-shell-openai-codex-acp-command '("codex" "--full-auto"))
   (agent-shell-agent-configs `(,(agent-shell-openai-make-codex-config)
@@ -627,6 +652,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; different gpt models
 (use-package gptel
+
   :bind
   (("C-c g m" . gptel-menu)
    ("C-c g c" . gptel)
@@ -666,10 +692,12 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 	       (cons tramp-file-name-regexp nil)))
 
 (use-package flymake
+
   :hook (prog-mode-hook . flymake-mode))
 
 ;; LSP
 (use-package eglot
+
   :hook
   ((go-ts-mode
     zig-mode
@@ -699,23 +727,28 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package eldoc
   :ensure nil)
 
-(use-package pulsar)
+(use-package pulsar
+  )
 
 (use-package repeat
+
   :ensure nil
   :hook (elpaca-after-init-hook . repeat-mode))
 
 (use-package dape
+
   :config
   (add-hook 'dape-display-source-hook 'pulse-momentary-highlight-one-line)
   ;; (remove-hook 'dape-start-hook 'dape-info)
   (remove-hook 'dape-start-hook 'dape-repl))
 
 ;; meson build system
-(use-package meson-mode)
+(use-package meson-mode
+  )
 
 ;; git
-(use-package magit)
+(use-package magit
+  )
 
 (use-package treesit
   :ensure nil
@@ -740,6 +773,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
     (add-to-list 'major-mode-remap-alist mode)))
 
 (use-package treesit-auto
+
   :hook (elpaca-after-init-hook . global-treesit-auto-mode)
   :custom
   (treesit-auto-install 'prompt)
@@ -765,6 +799,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; markdown
 (use-package markdown-mode
+
   :hook
   (markdown-mode . visual-line-mode)
   (markdown-mode . visual-fill-column-mode)
@@ -773,25 +808,32 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; use lang modes inside org src blocks
 (use-package poly-org
+
   :mode ("\\.org\\'" . poly-org-mode))
 ;; use lang modes inside markdow code fences
 (use-package poly-markdown
+
   :mode ("\\.md\\'" . poly-gfm-mode))
 (use-package web-mode
+
   :mode "\\.qtpl\\'")
-(use-package vue-html-mode)
+(use-package vue-html-mode
+    )
 ;; vue single file component mode (uses polymode)
 (use-package sfc-mode
+
   :ensure (:host github :repo "gexplorer/sfc-mode")
   :custom
   (sfc-template-default-mode 'vue-html-mode)
   :mode "\\.vue\\'")
 
-(use-package json-mode)
-(use-package yaml-mode)
+(use-package json-mode
+  )
+(use-package yaml-mode
+  )
 
 (use-package docker
-  :ensure t
+
   :bind ("C-c d" . docker))
 
 (use-package dockerfile-ts-mode
@@ -800,7 +842,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   "Dockerfile\\'"
   "\\.dockerfile\\'")
 (use-package docker-compose-mode
-  :ensure t)
+  )
 
 (use-package terraform-ts-mode
   :mode "\\.tf\\'"
@@ -808,6 +850,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; guess indentation params
 (use-package dtrt-indent
+
   :custom
   (dtrt-indent-max-lines 2000)
   (dtrt-indent-verbosity 2)
@@ -820,6 +863,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (setq-default tab-width 8)
 
 (use-package paredit
+
   :hook
   (ielm-mode-hook . paredit-mode)
   :config
@@ -846,6 +890,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; elisp
 (use-package ielm
   :ensure nil
+  :after paredit
   :config
   (add-hook 'ielm-mode-hook (lambda () (paredit-mode 1)))
   (add-hook 'ielm-mode-hook 'eldoc-mode)
@@ -861,7 +906,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; integrate compile command for project with cmake
 (use-package cmake-project
-  :ensure t
+
   :custom
   (cmake-project-default-build-dir-name "build"))
 (defun duncan/maybe-cmake-project-hook ()
@@ -878,32 +923,43 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; like play.golang.org
 (use-package go-playground
+
   :bind (:map go-playground-mode-map
               ([M-return] . nil)
               ("C-c C-c" . go-playground-exec)))
 ;; generates tests from funcs
-(use-package go-gen-test)
+(use-package go-gen-test
+  )
 
 (use-package pet
+
   :config
   (add-hook 'python-base-mode-hook 'pet-mode -10))
 
-(use-package rust-mode)
-(use-package elixir-mode)
-(use-package zig-mode)
-(use-package nix-mode)
-(use-package lua-mode)
+(use-package rust-mode
+  )
+(use-package elixir-mode
+  )
+(use-package zig-mode
+  )
+(use-package nix-mode
+  )
+(use-package lua-mode
+  )
 (use-package typescript-mode
+
   :mode ("\\.ts[x]?\\'" . typescript-mode))
 
 ;; browse HN
 (use-package hackernews
+
   :custom
   (hackernews-visited-links-file (convert-standard-filename
                                   (expand-file-name  "emacs/hackernews/visited-links.el" (xdg-cache-home)))))
 
 ;; https://d2lang.com/tour/intro/
-(use-package d2-mode)
+(use-package d2-mode
+    )
 
 (custom-set-variables '(ad-redefinition-action (quote accept)))
 
@@ -962,11 +1018,14 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (org-tags-exclude-from-inheritance (quote ("crypt")))
   ;; Does not work in org-ql yet :-(
   (org-agenda-category-icon-alist
-   `(("emacs" ,(list (nerd-icons-sucicon "nf-custom-emacs")) nil nil :ascent center)))
+   `(("emacs"
+      ,(list (if (fboundp 'nerd-icons-sucicon)
+                 (nerd-icons-sucicon "nf-custom-emacs")
+               "E")
+             nil nil :ascent 'center))))
   ;;(org-agenda-prefix-format "○ ")
   :config
   (require 'org-crypt)
-  (require 'org-yt)
   (require 'org-tempo)
   (org-crypt-use-before-save-magic)
   ;; this allows to retrieve http images and show them inline (with
@@ -1010,15 +1069,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package org-timeblock
   :ensure (:host github :repo "ichernyshovvv/org-timeblock"))
 
-;; this takes care of being able to display inline images in the buffer
-(use-package org-yt
-  :after org
-  ;;:ensure (org-yt :host github :repo "TobiasZawada/org-yt"))
-  ;; https://github.com/TobiasZawada/org-yt/pull/1
-  ;; don't require imagemagick for resizing
-  :ensure (org-yt :host github :repo "league/org-yt"))
+;; org-yt removed
 
 (use-package org-super-agenda
+
   :hook (org-agenda-mode . org-super-agenda-mode))
 (defun duncan/org-element-at-point-silent (orig &rest args)
   "Return nil instead of warning when called from non-Org buffers."
@@ -1028,6 +1082,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;(use-package org-ql
 ;  :after org)
 (use-package org-superstar              ; supersedes `org-bullets'
+
   :after org
   :custom
   (org-superstar-remove-leading-stars t)
@@ -1039,6 +1094,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :hook (org-mode . org-superstar-mode))
 
 (use-package org-fancy-priorities ; priority icons
+
   :after org
   :hook (org-mode . org-fancy-priorities-mode)
   :hook (org-agenda-mode . org-fancy-priorities-mode)
@@ -1046,9 +1102,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (org-fancy-priorities-list '("⚑" "⬆" "■")))
 
 (use-package org-modern
+
   :hook (org-mode . org-modern-mode))
 
 (use-package org-appear
+
   :after org
   :hook (org-mode . org-appear-mode)
   :custom
@@ -1058,6 +1116,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; Avoid `org-babel-do-load-languages' since it does an eager require.
 (use-package ob-mermaid
+
   :custom
   (ob-mermaid-cli-path "mmdr")
   :commands (org-babel-execute:mermaid))
@@ -1119,11 +1178,16 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (org-plantuml-jar-path "/usr/share/java/plantuml.jar")
   :commands (org-babel-execute:plantuml))
 ;; ob-d2 removed
-(use-package ox-gfm)
-(use-package ox-reveal)
-(use-package org-tree-slide)
-(use-package hide-mode-line)
+(use-package ox-gfm
+    )
+(use-package ox-reveal
+  )
+(use-package org-tree-slide
+  )
+(use-package hide-mode-line
+  )
 (use-package org-present
+
   :init
   (add-hook 'org-present-mode-hook #'(lambda ()
                                        (setq-local face-remap-cookies
@@ -1164,20 +1228,25 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                                        (toggle-frame-fullscreen))))
 ;; I also tried jupyter packagebut did not work
 (use-package ein
+
   :custom
   (ein:output-area-inlined-images t))
 
 (use-package denote
+
   :bind ("C-c d" . denote)
   :config
   (with-eval-after-load 'org
     (require 'denote)))
 
 (use-package consult-notes
+
   :commands (consult-notes
              consult-notes-search-in-all-notes))
-(use-package htmlize)
-(use-package protobuf-mode)
+(use-package htmlize
+    )
+(use-package protobuf-mode
+  )
 
 ;; load specific configuration for different user accounts (work, home)
 ;; from .config/emacs.$profile/*.el
@@ -1249,11 +1318,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (sendmail-program "/usr/bin/msmtp"))
 
 (use-package outlook
-  :after mu4e
-  :init
-  (require 'outlook-mu4e))
+
+  :after mu4e)
 
 (use-package mu4e-jump-to-list
+
   :after mu4e)
 (use-package mu4e-contrib
   :ensure nil
@@ -1261,9 +1330,11 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :load-path mu4e-system-path)
 
 (use-package mu4e-conversation
+
   :after mu4e)
 
 (use-package mu4e-query-fragments
+  :ensure (:host gitlab :repo "wavexx/mu4e-query-fragments.el")
   :after mu4e)
 
 (use-package org-mu4e
@@ -1280,6 +1351,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (mu4e-icalendar-setup))
 
 (use-package mu4e-views
+
   :after mu4e
   :bind (:map mu4e-headers-mode-map
 	      ("v" . mu4e-views-mu4e-select-view-msg-method) ;; select viewing method
@@ -1294,8 +1366,12 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (setq mu4e-views-auto-view-selected-message nil))
 
 (use-package mu4e-column-faces
+
   :after mu4e
   :config (mu4e-column-faces-mode))
+
+(with-eval-after-load 'mu4e
+  (require 'outlook-mu4e))
 
 ;; takes all calendars generated by vdirsyncer in .cache/vdirsyncer/calendars
 ;; and generates diary files, and a top-level .cache/emacs/diary/calendars-diary
@@ -1440,6 +1516,7 @@ not include EXDATEs for its overridden instances."
 
 ;; feeds
 (use-package elfeed
+
   :bind (("C-c 3" . elfeed)
          :map elfeed-search-mode-map
          ("R" . duncan/elfeed-mark-all-as-read)
@@ -1458,6 +1535,7 @@ not include EXDATEs for its overridden instances."
                    :use-authinfo t))))
 
 (use-package elfeed-protocol
+
   :after elfeed
   :custom
   ;; allow to use nextcloud news
