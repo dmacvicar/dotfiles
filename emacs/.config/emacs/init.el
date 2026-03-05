@@ -125,19 +125,16 @@
 
 ;; kitty protocol
 (use-package kkp
-
   :config
   ;; (setq kkp-alt-modifier 'alt) ;; use this if you want to map the Alt keyboard modifier to Alt in Emacs (and not to Meta)
   (global-kkp-mode +1))
 
 ;; copy from clipboard in terminal
 (use-package xclip
-
   :if (not (display-graphic-p))
   :hook (elpaca-after-init-hook . xclip-mode)
   :custom
-  (xclip-method (if (getenv "WAYLAND_DISPLAY") 'wl-copy 'xclip))
-  )
+  (xclip-method (if (getenv "WAYLAND_DISPLAY") 'wl-copy 'xclip)))
 
 ;; recent files
 (use-package recentf
@@ -146,7 +143,7 @@
   :custom
   (recentf-save-file
    (convert-standard-filename
-       (expand-file-name  "emacs/recentf" (xdg-state-home))))
+    (expand-file-name  "emacs/recentf" (xdg-state-home))))
   (recentf-max-menu-items 25)
   (recentf-max-saved-items 25)
   (recentf-exclude '("/autosave$"
@@ -159,12 +156,10 @@
   :hook (elpaca-after-init-hook . savehist-mode)
   :custom
   (savehist-file (convert-standard-filename
-       (expand-file-name  "emacs/history" (xdg-state-home))))
-  )
+    (expand-file-name  "emacs/history" (xdg-state-home)))))
 
 ;; modeline
 (use-package doom-modeline
-
   :hook (elpaca-after-init-hook . doom-modeline-mode))
 
 ;; dashboard screen
