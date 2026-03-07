@@ -725,6 +725,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 ;; LSP
 (use-package eglot
+  :ensure nil
   :hook
   ((go-ts-mode
     zig-mode
