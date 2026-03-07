@@ -114,6 +114,11 @@
   (delete-selection-mode 1)
   (pixel-scroll-mode))
 
+(use-package ansi-color
+  :ensure nil
+  :hook
+  (compilation-filter . ansi-color-compilation-filter))
+
 ;; use gnome secret service to store passwords
 ;; TODO add keepass
 (use-package auth-source
@@ -276,6 +281,66 @@
             (project-dired project))
         (user-error "No project in current directory")))
     (setq project-switch-commands #'duncan/project-create-tab)))
+
+(use-package compile-multi
+  :after project
+  :bind
+  ([remap compile] . compile-multi)
+  (:map project-prefix-map
+        ("c" . compile-multi))
+  :custom
+  (compile-multi-default-directory #'duncan/project-root-or-default-directory)
+  :config
+  (defun duncan/project-root-or-default-directory ()
+    (if-let ((project (project-current nil)))
+        (project-root project)
+      default-directory))
+
+  (defun duncan/project-root-has-file-p (filename)
+    (file-exists-p (expand-file-name filename
+                                     (duncan/project-root-or-default-directory))))
+
+  (defun duncan/project-root-has-any-file-p (&rest filenames)
+    (catch 'found
+      (dolist (name filenames)
+        (when (duncan/project-root-has-file-p name)
+          (throw 'found t)))
+      nil))
+
+  ;; Route interactive M-x compile calls through compile-multi while preserving
+  ;; programmatic non-interactive compile invocations.
+  (defun duncan/compile-dispatch-advice (orig-fn &rest args)
+    (if (called-interactively-p 'interactive)
+        (call-interactively #'compile-multi)
+      (apply orig-fn args)))
+  (advice-add 'compile :around #'duncan/compile-dispatch-advice)
+
+  ;; Add project-level compile target groups in preferred matching order.
+  (dolist (entry
+           '(((duncan/project-root-has-any-file-p "Makefile" "makefile" "GNUmakefile")
+              ("make" . "make"))
+             ((duncan/project-root-has-file-p "Cargo.toml")
+              ("cargo:check" . "cargo check")
+              ("cargo:build" . "cargo build")
+              ("cargo:test" . "cargo test")
+              ("cargo:run" . "cargo run"))
+             ((duncan/project-root-has-file-p "CMakeLists.txt")
+              ("cmake:configure" . "cmake -S . -B build")
+              ("cmake:build" . "cmake --build build")
+              ("cmake:test" . "ctest --test-dir build --output-on-failure"))
+             ((duncan/project-root-has-file-p "build.zig")
+              ("zig:build" . "zig build")
+              ("zig:test" . "zig build test")
+              ("zig:run" . "zig build run"))
+             ((duncan/project-root-has-file-p "go.mod")
+              ("go:build" . "go build ./...")
+              ("go:test" . "go test ./...")
+              ("go:run" . "go run ."))
+             ((duncan/project-root-has-file-p "uv.lock")
+              ("uv:sync" . "uv sync")
+              ("uv:test" . "uv run pytest")
+              ("uv:run" . "uv run"))))
+    (add-to-list 'compile-multi-config entry t)))
 
 ;; complete in any order
 (use-package orderless
