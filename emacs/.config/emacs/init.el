@@ -1378,6 +1378,14 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package org-web-tools)
 
+(use-package devdocs
+  :custom
+  (devdocs-data-dir
+   (convert-standard-filename
+    (expand-file-name "devdocs/" (xdg-data-home))))
+  :bind (:map help-map
+              ("D" . devdocs-lookup)))
+
 (defun duncan/elfeed-mark-all-as-read ()
   (interactive)
   (mark-whole-buffer)
