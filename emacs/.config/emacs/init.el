@@ -474,7 +474,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;(set-face-attribute 'default nil :family "MesloLGLDZ Nerd Font Mono" :height 125)
 ;(set-face-attribute 'default nil :family "JetBrainsMono Nerd Font Mono" :height 130)
 (set-face-attribute 'variable-pitch nil :family "Noto Sans")
-(set-face-attribute 'fixed-pitch nil :family (face-attribute 'default :family) :height 110)
+;; Keep monospaced Org faces on the default mono font, but let text scaling
+;; control the size instead of pinning an absolute height here.
+(set-face-attribute 'fixed-pitch nil :family (face-attribute 'default :family) :height 'unspecified)
 
 (use-package visual-fill-column
   :custom
