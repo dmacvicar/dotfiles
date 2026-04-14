@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "infomaniak": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Infomaniak",
+      "options": {
+        "baseURL": "https://api.infomaniak.com/2/ai/101461/openai/v1"
+      },
+      "models": {
+        "qwen3": {
+          "name": "Qwen/Qwen3-VL-235B-A22B-Instruct"
+        },
+        "openai/gpt-oss-120b": {
+          "name": "openai/gpt-oss-120b"
+        }
+      }
+    }
+  }
+}
+
