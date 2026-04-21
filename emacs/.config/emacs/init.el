@@ -698,21 +698,28 @@ will be selected, otherwise a light theme will be selected (0 is default)"
    ("C-c g s" . gptel-send)
    ("C-c g a" . gptel-add)
    ("C-c g A" . gptel-abort))
-  :custom
-  (gptel-model 'codestral-latest)
-  (gptel-backend (gptel-make-openai "openai"
-                   :key (auth-source-pick-first-password
-                         :host "api.openai.com" :user "apiKey")
-                   :stream t
-                   :models '("gpt-5-mini" "gpt-5")))
   :config
+  ;;(setq gptel-model 'codestral-latest)
+  (setq gptel-backend
+        (gptel-make-openai "openai"
+          :key (auth-source-pick-first-password
+                :host "api.openai.com" :user "apiKey")
+          :stream t
+          :models '("gpt-5-mini" "gpt-5")))
   (gptel-make-openai "github"
     :host "models.inference.ai.azure.com"
     :key (auth-source-pick-first-password
           :host "models.inference.ai.azure.com" :user "apiKey")
     :endpoint "/chat/completions"
     :stream t
-    :models '(gpt-4o)))
+    :models '(gpt-4o))
+  (gptel-make-openai "infomaniak"
+    :host "api.infomaniak.com"
+    :key (auth-source-pick-first-password
+          :host "api.infomaniak.com" :service "ai" :user "apiKey")
+    :endpoint "/2/ai/101461/openai/v1/chat/completions"
+    :stream t
+    :models '(openai/gpt-oss-120b)))
 
 (with-eval-after-load 'company
   ;; disable inline previews
