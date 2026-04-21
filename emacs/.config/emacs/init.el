@@ -707,10 +707,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
           :stream t
           :models '("gpt-5-mini" "gpt-5")))
   (gptel-make-openai "github"
-    :host "models.inference.ai.azure.com"
+    :host "models.github.ai"
     :key (auth-source-pick-first-password
-          :host "models.inference.ai.azure.com" :user "apiKey")
-    :endpoint "/chat/completions"
+          :host "models.github.ai" :user "apiKey")
+    :endpoint "/inference/chat/completions"
     :stream t
     :models '(gpt-4o))
   (gptel-make-openai "infomaniak"
