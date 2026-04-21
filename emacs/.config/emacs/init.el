@@ -110,12 +110,17 @@
   (when (file-exists-p custom-file)
     (load custom-file :noerror))
   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-  (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
-  (add-hook 'text-mode-hook (lambda () (setq show-trailing-whitespace t)))
   (column-number-mode)
   ;; if you type with text selected, delete it
   (delete-selection-mode 1)
   (pixel-scroll-mode))
+
+;; only lines edited get meaningless whitespace trimmed (e.g. end-of-line).
+(use-package ws-butler
+  ;; nongnu elpa is down
+  :ensure (:host git :repo "https://github.com/lewang/ws-butler" :branch "master")
+  :hook (prog-mode-hook . ws-butler-mode)
+  :hook (text-mode-hook . ws-butler-mode))
 
 (use-package ansi-color
   :ensure nil
