@@ -115,6 +115,12 @@
   (delete-selection-mode 1)
   (pixel-scroll-mode))
 
+;; vertico and consult broke without this explicit install
+;; compat installed version (30 2 9999) lower than min required 31
+(use-package compat
+  :ensure (:wait t)
+  demand t)
+
 ;; only lines edited get meaningless whitespace trimmed (e.g. end-of-line).
 (use-package ws-butler
   ;; nongnu elpa is down
