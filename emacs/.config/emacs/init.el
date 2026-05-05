@@ -834,12 +834,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package combobulate
   :after treesit
   :ensure (:host github :repo "mickeynp/combobulate")
-  :hook ((python-ts-mode . combobulate-mode)
-         (js-ts-mode . combobulate-mode)
-         (css-ts-mode . combobulate-mode)
-         (yaml-ts-mode . combobulate-mode)
-         (typescript-ts-mode . combobulate-mode)
-         (tsx-ts-mode . combobulate-mode)))
+  :hook ((prog-mode . combobulate-mode)))
 
 ;; replace built-in pdf viewer with something we
 ;; can copy paste, based on poppler
