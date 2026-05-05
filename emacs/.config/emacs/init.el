@@ -796,8 +796,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   )
 
 ;; git
-(use-package magit
-  )
+(use-package magit)
+;; .gitignore .gitconfig etc
+(use-package git-modes)
 
 (use-package treesit
   :ensure nil
