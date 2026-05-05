@@ -840,6 +840,13 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; can copy paste, based on poppler
 (use-package pdf-tools)
 
+(use-package jinx
+  :hook
+  (org-mode . global-jinx-mode)
+  (text-mode . global-jinx-mode)
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages)))
+
 ;; markdown
 (use-package markdown-mode
   :hook
