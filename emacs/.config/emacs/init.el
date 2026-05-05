@@ -1294,10 +1294,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   ;(flycheck-add-mode 'vale 'mu4e-compose-mode)
   ;; minor modes for compose mode
   (add-hook 'mu4e-compose-mode-hook (lambda ()
-                                        (flyspell-mode)
+                                        (jinx-mode)
                                         (auto-fill-mode -1)
-                                        (visual-line-mode 1)
-                                        (turn-off-smartparens-mode)))
+                                        (visual-line-mode 1))))
   :init
   ;; nerdfonts for marks
   (setq mu4e-headers-unread-mark    '("u" . ""))
