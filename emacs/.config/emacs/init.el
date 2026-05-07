@@ -1297,7 +1297,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (add-hook 'mu4e-compose-mode-hook (lambda ()
                                         (jinx-mode)
                                         (auto-fill-mode -1)
-                                        (visual-line-mode 1))))
+                                        (visual-line-mode 1)))
   :init
   ;; nerdfonts for marks
   (setq mu4e-headers-unread-mark    '("u" . ""))
