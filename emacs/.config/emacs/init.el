@@ -1284,9 +1284,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; email
 (defconst mu4e-system-path "/usr/share/emacs/site-lisp/mu4e")
 (use-package mu4e
+  :commands (mu4e-compose-new mu4e)
+  :autoload mu4e--start
   :ensure nil
   :load-path mu4e-system-path
-  :commands 'mu4e
   :config
   (add-hook 'mu4e-compose-mode-hook (lambda () (setq show-trailing-whitespace t)))
   (add-hook 'mu4e-search-bookmark-hook (lambda (_) (setq mu4e-headers-include-related nil)))
