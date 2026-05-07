@@ -1314,6 +1314,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (setq mu4e-headers-signed-mark    '("s" . "󰷼 "))
   (setq mu4e-headers-personal-mark  '("P" . ""))
   :custom
+  (mu4e-read-option-use-builtin nil)
   (mu4e-completing-read-function 'completing-read)
   (mu4e-compose-format-flowed t)
   (mm-text-html-renderer 'shr)
