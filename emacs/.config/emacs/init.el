@@ -474,13 +474,9 @@ will be selected, otherwise a light theme will be selected (0 is default)"
               t))
 (define-key global-map (kbd "<f5>") #'duncan/modus-toggle)
 
-(when (display-graphic-p)
-  (let ((current-height (face-attribute 'default :height)))
-    (set-face-attribute 'default nil
-                        :height (+ current-height 10))))
-
+;; pin an absolute height; a relative bump off the default face is tiny on emacs 31
 ;(set-face-attribute 'default nil :family "Iosevka Nerd Font Mono")
-;(set-face-attribute 'default nil :family "FiraCode Nerd Font Mono" :height 130)
+(set-face-attribute 'default nil :family "FiraCode Nerd Font Mono" :height 130)
 ;(set-face-attribute 'default nil :family "SauceCodePro Nerd Font Mono" :height 130)
 ;(set-face-attribute 'default nil :family "MesloLGLDZ Nerd Font Mono" :height 125)
 ;(set-face-attribute 'default nil :family "JetBrainsMono Nerd Font Mono" :height 130)
@@ -768,6 +764,8 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   ;; prevent margin eglot-code-action-indicator
   (eglot-code-action-indications '(eldoc-hint mode-line))
   (eglot-extend-to-xref t)
+  ;; render LSP hover docs through markdown-ts
+  (eglot-documentation-renderer 'markdown-ts-view-mode)
   :config
   (add-to-list 'eglot-server-programs
                `(python-ts-mode
@@ -776,7 +774,30 @@ will be selected, otherwise a light theme will be selected (0 is default)"
                                           "pylsp")))))
 
 (use-package eldoc
-  :ensure nil)
+  :ensure nil
+  :custom
+  (eldoc-help-at-pt t)
+  (eldoc-echo-area-prefer-doc-buffer t))
+
+;; quality-of-life knobs, guarded so this still loads on emacs 30
+(dolist (kv '((kill-region-dwim . emacs-word)
+              (ibuffer-human-readable-size . t)
+              (uniquify-after-kill-buffer-flag . t)
+              (delete-pair-push-mark . t)
+              (view-lossage-auto-refresh . t)
+              (native-comp-async-on-battery-power . nil)))
+  (when (boundp (car kv))
+    (set-default (car kv) (cdr kv))))
+
+(when (fboundp 'window-layout-transpose)
+  (keymap-global-set "C-x w t" #'window-layout-transpose)
+  (keymap-global-set "C-x w r" #'window-layout-rotate-clockwise)
+  (keymap-global-set "C-x w f h" #'window-layout-flip-leftright)
+  (keymap-global-set "C-x w f v" #'window-layout-flip-topdown))
+
+;; tooltips in the terminal
+(when (fboundp 'tty-tip-mode)
+  (tty-tip-mode 1))
 
 (use-package pulsar
   )
@@ -808,27 +829,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (add-to-list 'treesit-extra-load-path duncan/treesit-grammar-dir)
   (setq treesit--install-language-grammar-out-dir-history
         (list duncan/treesit-grammar-dir))
-  :config
-  (dolist (mode '((bash-mode       . bash-ts-mode)
-                  (c-mode          . c-ts-mode)
-                  (c++-mode        . c++-ts-mode)
-                  (cmake-mode      . cmake-ts-mode)
-                  (python-mode     . python-ts-mode)
-                  (css-mode        . css-ts-mode)
-                  (dockerfile-mode . dockerfile-ts-mode)
-                  (go-mode         . go-ts-mode)
-                  (javascript-mode . js-ts-mode)
-                  (js-json-mode    . json-ts-mode)
-                  (typescript-mode . typescript-ts-mode)))
-    (add-to-list 'major-mode-remap-alist mode)))
-
-(use-package treesit-auto
-  :hook (elpaca-after-init-hook . global-treesit-auto-mode)
   :custom
-  (treesit-auto-install 'prompt)
-  ; those are broken
-  (treesit-auto-opt-out-list
-   '(markdown protobuf ruby r yaml)))
+  ;; use ts modes everywhere, install missing grammars on demand
+  (treesit-enabled-modes t)
+  (treesit-auto-install-grammar 'ask))
 
 ;; structured navigation including expand region
 (use-package combobulate
@@ -848,19 +852,23 @@ will be selected, otherwise a light theme will be selected (0 is default)"
          ("C-M-$" . jinx-languages)))
 
 ;; markdown
-(use-package markdown-mode
+;; kept for gfm-mode; .md editing uses the tree-sitter mode below
+(use-package markdown-mode)
+
+;; builtin tree-sitter markdown, fontifies code fences natively
+(use-package markdown-ts-mode
+  :ensure nil
+  :mode (("\\.md\\'" . markdown-ts-mode)
+         ("\\.markdown\\'" . markdown-ts-mode))
   :hook
-  (markdown-mode . visual-line-mode)
-  (markdown-mode . visual-fill-column-mode)
-  (markdown-mode . mixed-pitch-mode)
-  :mode ("\\.md\\'" . gfm-mode))
+  (markdown-ts-mode . visual-line-mode)
+  (markdown-ts-mode . visual-fill-column-mode)
+  (markdown-ts-mode . mixed-pitch-mode))
 
 ;; use lang modes inside org src blocks
 (use-package poly-org
   :mode ("\\.org\\'" . poly-org-mode))
-;; use lang modes inside markdow code fences
-(use-package poly-markdown
-  :mode ("\\.md\\'" . poly-gfm-mode))
+;; poly-markdown removed: markdown-ts-mode fontifies code fences natively.
 (use-package web-mode
   :mode "\\.qtpl\\'")
 (use-package vue-html-mode

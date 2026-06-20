@@ -1,3 +1,4 @@
+;;; early-init.el --- Early init -*- lexical-binding: t; -*-
 (setq package-enable-at-startup nil)
 
 ;; skip regex matching on file operations during init
