@@ -742,16 +742,19 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package flymake
   :hook (prog-mode . flymake-mode))
 
+(use-package envrc)
+
 ;; LSP
 (use-package eglot
   :ensure nil
   :hook
-  ((go-ts-mode
-    zig-mode
-    rust-ts-mode
-    python-ts-mode
-    c-ts-mode
-    c++-ts-mode) . eglot-ensure)
+  (prog-mode
+   .
+   (lambda ()
+     ;; make sure nix and flake path is loaded before eglot tries to spawn
+     ;; the LSP server
+     (envrc-mode)
+     (eglot-ensure)))
   :bind (:map
          eglot-mode-map
          ("C-c l a" . eglot-code-actions)
@@ -1530,10 +1533,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (osm-copyright t)
   (osm-tile-directory (convert-standard-filename
                        (expand-file-name  "emacs/osm/" (xdg-cache-home)))))
-
-(use-package envrc
-  :config
-  (envrc-global-mode))
 
 (when (getenv "EMACS_PROFILE_START")
   (add-hook 'emacs-startup-hook
