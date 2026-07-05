@@ -591,10 +591,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package editorconfig
   :hook (elpaca-after-init-hook . editorconfig-mode))
 
-;; put env variables and PATH in emacs process environment
-(use-package mise
-  :hook (elpaca-after-init-hook . global-mise-mode))
-
 ;; parenthesis
 (use-package paren
   :ensure nil
