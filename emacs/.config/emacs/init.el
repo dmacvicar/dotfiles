@@ -415,12 +415,40 @@
 ;; if TERM is not functional, install tic (terminfo compiler) from
 ;; ncurses devel and run eat-compile-termifo
 (use-package eat
+  :disabled t
   :ensure (:host nil :type git
            :repo "https://codeberg.org/akib/emacs-eat"
            :files ("*.el" "dir"
                    ("integration" "integration/*")
                    "*.info" "*.texi"
                    "*.ti" ("e" "e/*"))))
+
+
+(use-package ghostel
+  :ensure (:host github :repo "dakra/ghostel")
+  :bind (("C-x m" . ghostel)
+         :map ghostel-mode-map
+         ("<f7>" . org-clock-goto)
+         ("C-s"  . consult-line)
+         ;; I'm used to go up/down the shell history with M-n/p from eshell
+         ;; Simulate this behavior in ghostel by sending C-p and C-n
+         ("M-p" . (lambda () (interactive) (ghostel-send-key "p" "ctrl")))
+         ("M-n" . (lambda () (interactive) (ghostel-send-key "n" "ctrl")))
+         :map project-prefix-map
+         ("m" . ghostel-project))
+  :config
+  ;; (add-to-list 'project-switch-commands '(ghostel-project "Ghostel") t)
+  (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer)))
+
+(use-package ghostel-eshell
+  :ensure nil
+  :after ghostel
+  :hook (eshell-load-hook . ghostel-eshell-visual-command-mode))
+
+(use-package ghostel-compile
+  :ensure nil
+  :after ghostel
+  :hook (after-init . ghostel-compile-global-mode))
 
 ;; theme
 ;; Built-in Modus themes: do not (require 'modus-themes); just load-theme.
@@ -684,7 +712,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :ensure (:type git :host github :repo "manzaltu/claude-code-ide.el")
   :bind ("C-c C-'" . claude-code-ide-menu)
   :custom
-  (claude-code-ide-terminal-backend 'eat)
+  (claude-code-ide-terminal-backend 'ghostel)
   :config
   (claude-code-ide-emacs-tools-setup))
 
