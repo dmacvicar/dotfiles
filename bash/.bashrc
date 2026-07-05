@@ -36,5 +36,9 @@ if exists mise; then
     eval "$(mise activate bash --shims)"
 fi
 
+if exists direnv; then
+    eval "$(direnv hook bash)"
+fi
+
 export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 
