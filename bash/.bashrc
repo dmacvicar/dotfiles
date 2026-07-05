@@ -41,4 +41,5 @@ if exists direnv; then
 fi
 
 export NPM_CONFIG_PREFIX="$HOME/.npm-global"
+export CLAUDE_CODE_TMPDIR="/tmp/claude-$USER"
 
