@@ -867,6 +867,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 ;; can copy paste, based on poppler
 (use-package pdf-tools)
 
+;; fast just-in-time spell-checker
 (use-package jinx
   :hook
   (org-mode . global-jinx-mode)
