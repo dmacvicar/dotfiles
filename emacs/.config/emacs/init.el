@@ -875,11 +875,6 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   :bind (("M-$" . jinx-correct)
          ("C-M-$" . jinx-languages)))
 
-;; markdown
-;; kept for gfm-mode; .md editing uses the tree-sitter mode below
-(use-package markdown-mode)
-
-;; builtin tree-sitter markdown, fontifies code fences natively
 (use-package markdown-ts-mode
   :ensure nil
   :mode (("\\.md\\'" . markdown-ts-mode)
@@ -890,9 +885,10 @@ will be selected, otherwise a light theme will be selected (0 is default)"
   (markdown-ts-mode . mixed-pitch-mode))
 
 ;; use lang modes inside org src blocks
+;; not needed for markdown
 (use-package poly-org
   :mode ("\\.org\\'" . poly-org-mode))
-;; poly-markdown removed: markdown-ts-mode fontifies code fences natively.
+
 (use-package web-mode
   :mode "\\.qtpl\\'")
 (use-package vue-html-mode
