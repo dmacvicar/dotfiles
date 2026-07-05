@@ -692,7 +692,7 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 
 (use-package agent-shell
   :custom
-  (agent-shell-openai-codex-acp-command '("codex" "--full-auto"))
+  (agent-shell-openai-codex-acp-command '("codex" "--dangerously-bypass-approvals-and-sandbox"))
   (agent-shell-agent-configs `(,(agent-shell-openai-make-codex-config)
                                ,(agent-shell-anthropic-make-claude-code-config)))
   :bind (:map agent-shell-mode-map
