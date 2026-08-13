@@ -41,4 +41,4 @@ fi
 
 export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 export CLAUDE_CODE_TMPDIR="/tmp/claude-$USER"
-
+export CLAUDE_CODE_DISABLE_AUTO_MEMORY=1
