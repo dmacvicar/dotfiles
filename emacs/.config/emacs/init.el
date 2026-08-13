@@ -766,8 +766,8 @@ will be selected, otherwise a light theme will be selected (0 is default)"
 (use-package flymake
   :hook (prog-mode . flymake-mode))
 
-(use-package envrc
-  :hook ('elpaca-after-init-hook . envrc-global-mode))
+(use-package mise
+  :hook ('elpaca-after-init-hook . global-mise-mode))
 
 ;; LSP
 (use-package eglot

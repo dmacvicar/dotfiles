@@ -33,7 +33,6 @@ fi
 
 if exists mise; then
     eval "$(mise activate bash)"
-    eval "$(mise activate bash --shims)"
 fi
 
 if exists direnv; then
