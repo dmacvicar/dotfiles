@@ -9,7 +9,7 @@ local session = os.getenv("DESKTOP_SESSION") or ""
 if string.match(session, "hyprland") or string.match(session, "niri") then
     config.window_decorations = "NONE"
 else
-    config.window_decorations = "TITLE"
+    config.window_decorations = "TITLE|RESIZE"
     config.window_frame = {
         border_left_width = '1px',
         border_right_width = '1px',
